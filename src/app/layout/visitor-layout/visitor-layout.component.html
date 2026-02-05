@@ -1,0 +1,144 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
+  <!-- Navigation -->
+  <nav
+    class="sticky top-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a routerLink="/" class="flex items-center space-x-2">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
+            <span class="text-white font-bold text-xl">W</span>
+          </div>
+          <span class="text-xl font-display font-bold text-neutral-900 dark:text-white">
+            WorkSpace
+          </span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a routerLink="/spaces"
+             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            Spaces
+          </a>
+          <a routerLink="/subscription"
+             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            Subscription Plans
+          </a>
+          <a routerLink="/about"
+             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            About
+          </a>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center space-x-4">
+          <button
+            (click)="toggleTheme()"
+            class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {{ (themeService.theme$ | async) === 'light' ? '🌙' : '☀️' }}
+          </button>
+
+          <a
+            routerLink="auth/login"
+            class="hidden md:inline-block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          >
+            Sign In
+          </a>
+
+          <a
+            routerLink="auth/register"
+            class="px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg"
+          >
+            Get Started
+          </a>
+
+          <!-- Mobile menu button -->
+          <button
+            (click)="toggleMobileMenu()"
+            class="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          >
+            {{ mobileMenuOpen ? '✕' : '☰' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (mobileMenuOpen) {
+      <div class="md:hidden border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+        <div class="px-4 py-3 space-y-3">
+          <a
+            routerLink="/spaces"
+            (click)="closeMobileMenu()"
+            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            Spaces
+          </a>
+          <a
+            routerLink="/subscription"
+            (click)="closeMobileMenu()"
+            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            Subscription Plans
+          </a>
+          <a
+            routerLink="/about"
+            (click)="closeMobileMenu()"
+            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            About
+          </a>
+          <a
+            routerLink="/login"
+            (click)="closeMobileMenu()"
+            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            Sign In
+          </a>
+        </div>
+      </div>
+    }
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <ng-content></ng-content>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-neutral-900 dark:bg-black text-neutral-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center space-x-2 mb-4">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
+              <span class="text-white font-bold text-xl">W</span>
+            </div>
+            <span class="text-xl font-display font-bold text-white">
+              WorkSpace
+            </span>
+          </div>
+          <p class="text-neutral-400 max-w-md">
+            Flexible coworking spaces designed for productivity and collaboration.
+            Book your ideal workspace today.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-white mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a routerLink="/spaces" class="hover:text-primary-400 transition-colors">Browse Spaces</a></li>
+            <li><a routerLink="/subscription" class="hover:text-primary-400 transition-colors">Subscription Plans</a>
+            </li>
+            <li><a routerLink="/about" class="hover:text-primary-400 transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
