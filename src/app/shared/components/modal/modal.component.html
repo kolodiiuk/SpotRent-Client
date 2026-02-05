@@ -1,0 +1,26 @@
+@if (isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" (click)="onBackdropClick($event)">
+    <div class="fixed inset-0 bg-black/50 animate-fade-in"></div>
+    <div
+      [class]="'relative bg-white dark:bg-neutral-800 rounded-xl shadow-strong w-full animate-slide-in ' + sizeClass">
+      @if (title) {
+        <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">
+              {{ title }}
+            </h2>
+            <button
+              (click)="onClose()"
+              class="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      }
+      <div class="p-6">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}
