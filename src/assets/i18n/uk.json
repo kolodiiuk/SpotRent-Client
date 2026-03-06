@@ -1,0 +1,131 @@
+{
+    "NAV": {
+        "HOME": "Головна",
+        "SPACES": "Простори",
+        "SUBSCRIPTION": "Плани підписки",
+        "ABOUT": "Про нас",
+        "SIGN_IN": "Увійти",
+        "GET_STARTED": "Розпочати",
+        "DASHBOARD": "Дашборд",
+        "MY_BOOKINGS": "Мої бронювання",
+        "BROWSE_SPACES": "Перегляд просторів",
+        "SUBSCRIPTIONS": "Підписки",
+        "ACCESS_CONTROL": "Контроль доступу",
+        "PROFILE": "Профіль",
+        "BOOK_SPACE": "+ Забронювати",
+        "MY_PROFILE": "Мій профіль",
+        "SIGN_OUT": "Вийти",
+        "QUICK_LINKS": "Швидкі посилання",
+        "BROWSE_SPACES_LINK": "Переглянути простори",
+        "ABOUT_US": "Про нас"
+    },
+    "AUTH": {
+        "LOGIN": "Увійти",
+        "REGISTER": "Зареєструватися",
+        "EMAIL": "Електронна пошта",
+        "PASSWORD": "Пароль",
+        "CONFIRM_PASSWORD": "Підтвердіть пароль",
+        "FIRST_NAME": "Ім'я",
+        "LAST_NAME": "Прізвище",
+        "SIGN_IN_GOOGLE": "Увійти через Google",
+        "REGISTER_GOOGLE": "Зареєструватися через Google",
+        "NO_ACCOUNT": "Немає акаунту?",
+        "ALREADY_ACCOUNT": "Вже маєте акаунт?",
+        "FORGOT_PASSWORD": "Забули пароль?"
+    },
+    "BOOKING": {
+        "TITLE": "Бронювання #{{id}}",
+        "FROM": "Від",
+        "TO": "До",
+        "CONFIRM": "Підтвердити бронювання",
+        "CANCEL": "Скасувати бронювання",
+        "STATUS_PENDING": "Очікується",
+        "STATUS_CONFIRMED": "Підтверджено",
+        "STATUS_CANCELLED": "Скасовано",
+        "NO_BOOKINGS": "Бронювань не знайдено",
+        "BOOK_NOW": "Забронювати"
+    },
+    "SPACES": {
+        "TITLE": "Доступні простори",
+        "SEARCH": "Пошук просторів...",
+        "FILTER": "Фільтр",
+        "CAPACITY": "Місткість",
+        "PRICE_PER_HOUR": "за годину",
+        "BOOK": "Забронювати цей простір",
+        "NO_SPACES": "Немає доступних просторів",
+        "DETAILS": "Детальніше"
+    },
+    "SUBSCRIPTION": {
+        "TITLE": "Плани підписки",
+        "CHOOSE_PLAN": "Оберіть план",
+        "CURRENT_PLAN": "Поточний план",
+        "UPGRADE": "Оновити план",
+        "CANCEL_PLAN": "Скасувати план",
+        "PER_MONTH": "/місяць",
+        "FEATURES": "Можливості"
+    },
+    "PROFILE": {
+        "TITLE": "Мій профіль",
+        "EDIT": "Редагувати профіль",
+        "SAVE": "Зберегти зміни",
+        "CANCEL_EDIT": "Скасувати",
+        "PERSONAL_INFO": "Особиста інформація",
+        "FIRST_NAME": "Ім'я",
+        "LAST_NAME": "Прізвище",
+        "EMAIL": "Електронна пошта",
+        "PHONE": "Телефон"
+    },
+    "ADMIN": {
+        "DASHBOARD": "Дашборд",
+        "ANALYTICS": "Аналітика",
+        "SPACES_ROOMS": "Простори та кімнати",
+        "BOOKINGS": "Бронювання",
+        "USERS": "Користувачі",
+        "SUBSCRIPTIONS": "Підписки",
+        "ACCESS_LOGS": "Журнал доступу",
+        "SMART_LOCKS": "Розумні замки",
+        "PAYMENTS": "Платежі",
+        "REPORTS": "Звіти",
+        "INVOICES": "Рахунки-фактури",
+        "SETTINGS": "Налаштування",
+        "SYSTEM_LOGS": "Системні журнали",
+        "OVERVIEW": "Огляд",
+        "MANAGEMENT": "Управління",
+        "ACCESS_SECURITY": "Доступ і безпека",
+        "FINANCIAL": "Фінанси",
+        "SYSTEM": "Система"
+    },
+    "LOCALE": {
+        "LANGUAGE": "Мова",
+        "DATE_FORMAT": "Формат дати",
+        "TIME_FORMAT": "Формат часу",
+        "DMY": "ДД/ММ/РРРР",
+        "MDY": "ММ/ДД/РРРР",
+        "H12": "12-годинний",
+        "H24": "24-годинний"
+    },
+    "FOOTER": {
+        "TAGLINE": "Гнучкі коворкінг-простори для продуктивності та співпраці. Забронюйте свій ідеальний простір сьогодні."
+    },
+    "ERRORS": {
+        "REQUIRED": "Це поле обов'язкове",
+        "INVALID_EMAIL": "Введіть дійсну адресу електронної пошти",
+        "MIN_LENGTH": "Мінімум {{min}} символів",
+        "PASSWORDS_MISMATCH": "Паролі не збігаються",
+        "GENERIC": "Щось пішло не так. Спробуйте ще раз."
+    },
+    "COMMON": {
+        "LOADING": "Завантаження...",
+        "SAVE": "Зберегти",
+        "CANCEL": "Скасувати",
+        "CONFIRM": "Підтвердити",
+        "DELETE": "Видалити",
+        "EDIT": "Редагувати",
+        "CLOSE": "Закрити",
+        "BACK": "Назад",
+        "NEXT": "Далі",
+        "SEARCH": "Пошук",
+        "YES": "Так",
+        "NO": "Ні"
+    }
+}

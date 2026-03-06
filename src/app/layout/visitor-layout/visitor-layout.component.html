@@ -19,48 +19,43 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-8">
           <a routerLink="/spaces"
-             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-            Spaces
+            class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            {{ 'NAV.SPACES' | translate }}
           </a>
           <a routerLink="/subscription"
-             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-            Subscription Plans
+            class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            {{ 'NAV.SUBSCRIPTION' | translate }}
           </a>
           <a routerLink="/about"
-             class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-            About
+            class="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            {{ 'NAV.ABOUT' | translate }}
           </a>
         </div>
 
         <!-- Actions -->
         <div class="flex items-center space-x-4">
-          <button
-            (click)="toggleTheme()"
+          <button (click)="toggleTheme()"
             class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            aria-label="Toggle theme"
-          >
+            aria-label="Toggle theme">
             {{ (themeService.theme$ | async) === 'light' ? '🌙' : '☀️' }}
           </button>
 
-          <a
-            routerLink="auth/login"
-            class="hidden md:inline-block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            Sign In
+          <!-- Locale Switcher -->
+          <app-locale-switcher></app-locale-switcher>
+
+          <a routerLink="auth/login"
+            class="hidden md:inline-block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            {{ 'NAV.SIGN_IN' | translate }}
           </a>
 
-          <a
-            routerLink="auth/register"
-            class="px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg"
-          >
-            Get Started
+          <a routerLink="auth/register"
+            class="px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg">
+            {{ 'NAV.GET_STARTED' | translate }}
           </a>
 
           <!-- Mobile menu button -->
-          <button
-            (click)="toggleMobileMenu()"
-            class="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
-          >
+          <button (click)="toggleMobileMenu()"
+            class="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800">
             {{ mobileMenuOpen ? '✕' : '☰' }}
           </button>
         </div>
@@ -69,38 +64,26 @@
 
     <!-- Mobile Menu -->
     @if (mobileMenuOpen) {
-      <div class="md:hidden border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-        <div class="px-4 py-3 space-y-3">
-          <a
-            routerLink="/spaces"
-            (click)="closeMobileMenu()"
-            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
-          >
-            Spaces
-          </a>
-          <a
-            routerLink="/subscription"
-            (click)="closeMobileMenu()"
-            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
-          >
-            Subscription Plans
-          </a>
-          <a
-            routerLink="/about"
-            (click)="closeMobileMenu()"
-            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
-          >
-            About
-          </a>
-          <a
-            routerLink="/login"
-            (click)="closeMobileMenu()"
-            class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400"
-          >
-            Sign In
-          </a>
-        </div>
+    <div class="md:hidden border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+      <div class="px-4 py-3 space-y-3">
+        <a routerLink="/spaces" (click)="closeMobileMenu()"
+          class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400">
+          {{ 'NAV.SPACES' | translate }}
+        </a>
+        <a routerLink="/subscription" (click)="closeMobileMenu()"
+          class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400">
+          {{ 'NAV.SUBSCRIPTION' | translate }}
+        </a>
+        <a routerLink="/about" (click)="closeMobileMenu()"
+          class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400">
+          {{ 'NAV.ABOUT' | translate }}
+        </a>
+        <a routerLink="/login" (click)="closeMobileMenu()"
+          class="block text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400">
+          {{ 'NAV.SIGN_IN' | translate }}
+        </a>
       </div>
+    </div>
     }
   </nav>
 
@@ -124,18 +107,20 @@
             </span>
           </div>
           <p class="text-neutral-400 max-w-md">
-            Flexible coworking spaces designed for productivity and collaboration.
-            Book your ideal workspace today.
+            {{ 'FOOTER.TAGLINE' | translate }}
           </p>
         </div>
 
         <div>
-          <h3 class="font-semibold text-white mb-4">Quick Links</h3>
+          <h3 class="font-semibold text-white mb-4">{{ 'NAV.QUICK_LINKS' | translate }}</h3>
           <ul class="space-y-2">
-            <li><a routerLink="/spaces" class="hover:text-primary-400 transition-colors">Browse Spaces</a></li>
-            <li><a routerLink="/subscription" class="hover:text-primary-400 transition-colors">Subscription Plans</a>
+            <li><a routerLink="/spaces" class="hover:text-primary-400 transition-colors">{{ 'NAV.BROWSE_SPACES_LINK' |
+                translate }}</a></li>
+            <li><a routerLink="/subscription" class="hover:text-primary-400 transition-colors">{{ 'NAV.SUBSCRIPTION' |
+                translate }}</a>
             </li>
-            <li><a routerLink="/about" class="hover:text-primary-400 transition-colors">About Us</a></li>
+            <li><a routerLink="/about" class="hover:text-primary-400 transition-colors">{{ 'NAV.ABOUT_US' | translate
+                }}</a></li>
           </ul>
         </div>
       </div>

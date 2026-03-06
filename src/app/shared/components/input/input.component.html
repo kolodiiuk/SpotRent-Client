@@ -1,23 +1,15 @@
 <div class="w-full">
   @if (label) {
-    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-      {{ label }}
-    </label>
+  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+    {{ label }}
+  </label>
   }
-  <input
-    [type]="type"
-    [value]="value"
-    [disabled]="disabled"
-    [placeholder]="placeholder"
-    [class]="inputClasses"
-    (input)="onInput($event)"
-    (blur)="onBlur()"
-  />
+  <input [type]="type" [value]="value" [disabled]="disabled" [placeholder]="placeholder" [class]="inputClasses"
+    (input)="onInput($event)" (blur)="onBlur()" />
   @if (error) {
-    <p class="mt-1 text-sm text-danger-600 dark:text-danger-400">{{ error }}</p>
+  <p class="mt-1 text-sm text-danger-600 dark:text-danger-400">{{ error }}</p>
   }
   @if (helperText && !error) {
-    <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{{ helperText }}</p>
+  <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{{ helperText }}</p>
   }
 </div>
-4

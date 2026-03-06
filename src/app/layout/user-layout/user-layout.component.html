@@ -6,10 +6,8 @@
       <div class="flex justify-between items-center h-16">
         <!-- Logo & Mobile Menu Toggle -->
         <div class="flex items-center space-x-4">
-          <button
-            (click)="toggleSidebar()"
-            class="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
+          <button (click)="toggleSidebar()"
+            class="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
             {{ sidebarOpen ? '✕' : '☰' }}
           </button>
 
@@ -27,19 +25,18 @@
         <!-- Right Side Actions -->
         <div class="flex items-center space-x-3">
           <!-- Theme Toggle -->
-          <button
-            (click)="toggleTheme()"
-            class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
+          <button (click)="toggleTheme()"
+            class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
             {{ (themeService.theme$ | async) === 'light' ? '🌙' : '☀️' }}
           </button>
 
+          <!-- Locale Switcher -->
+          <app-locale-switcher></app-locale-switcher>
+
           <!-- Profile Menu -->
           <div class="relative">
-            <button
-              (click)="toggleProfileMenu()"
-              class="flex items-center space-x-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-            >
+            <button (click)="toggleProfileMenu()"
+              class="flex items-center space-x-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
               <div
                 class="w-8 h-8 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-semibold">
                 {{ getUserInitial() }}
@@ -51,23 +48,18 @@
 
             <!-- Profile Dropdown -->
             @if (profileMenuOpen) {
-              <div
-                class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-xl shadow-strong border border-neutral-200 dark:border-neutral-700 py-2">
-                <a
-                  routerLink="/profile"
-                  (click)="closeProfileMenu()"
-                  class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                >
-                  My Profile
-                </a>
-                <hr class="my-2 border-neutral-200 dark:border-neutral-700"/>
-                <button
-                  (click)="onLogout()"
-                  class="block w-full text-left px-4 py-2 text-sm text-danger-600 dark:text-danger-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                >
-                  Sign Out
-                </button>
-              </div>
+            <div
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-xl shadow-strong border border-neutral-200 dark:border-neutral-700 py-2">
+              <a routerLink="/profile" (click)="closeProfileMenu()"
+                class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                {{ 'NAV.MY_PROFILE' | translate }}
+              </a>
+              <hr class="my-2 border-neutral-200 dark:border-neutral-700" />
+              <button (click)="onLogout()"
+                class="block w-full text-left px-4 py-2 text-sm text-danger-600 dark:text-danger-400 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                {{ 'NAV.SIGN_OUT' | translate }}
+              </button>
+            </div>
             }
           </div>
         </div>
@@ -77,40 +69,31 @@
 
   <!-- Sidebar -->
   <aside
-    [class]="'fixed top-16 left-0 bottom-0 w-64 bg-white dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700 transform transition-transform duration-300 z-30 lg:translate-x-0 ' + (sidebarOpen ? 'translate-x-0' : '-translate-x-full')"
-  >
+    [class]="'fixed top-16 left-0 bottom-0 w-64 bg-white dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700 transform transition-transform duration-300 z-30 lg:translate-x-0 ' + (sidebarOpen ? 'translate-x-0' : '-translate-x-full')">
     <nav class="p-4 space-y-1">
       @for (item of navigationItems; track item.path) {
-        <a
-          [routerLink]="item.path"
-          (click)="closeSidebar()"
-          routerLinkActive="bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-md"
-          [routerLinkActiveOptions]="{exact: true}"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-        >
-          <span class="text-xl">{{ item.icon }}</span>
-          <span class="font-medium">{{ item.label }}</span>
-        </a>
+      <a [routerLink]="item.path" (click)="closeSidebar()"
+        routerLinkActive="bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-md"
+        [routerLinkActiveOptions]="{exact: true}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+        <span class="text-xl">{{ item.icon }}</span>
+        <span class="font-medium">{{ item.label }}</span>
+      </a>
       }
     </nav>
 
     <!-- Quick Actions -->
     <div class="absolute bottom-4 left-4 right-4">
-      <button
-        (click)="navigateToBooking()"
-        class="w-full px-4 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg font-medium"
-      >
-        + Book Space
+      <button (click)="navigateToBooking()"
+        class="w-full px-4 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg font-medium">
+        {{ 'NAV.BOOK_SPACE' | translate }}
       </button>
     </div>
   </aside>
 
   <!-- Overlay for mobile -->
   @if (sidebarOpen) {
-    <div
-      (click)="closeSidebar()"
-      class="fixed inset-0 bg-black/50 z-20 lg:hidden"
-    ></div>
+  <div (click)="closeSidebar()" class="fixed inset-0 bg-black/50 z-20 lg:hidden"></div>
   }
 
   <!-- Main Content -->

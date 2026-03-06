@@ -1,9 +1,11 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, RouterModule, NavigationEnd} from '@angular/router';
-import {AsyncPipe} from '@angular/common';
-import {filter} from 'rxjs/operators';
-import {User} from '../../core/models';
-import {ThemeService} from '../../core/services/theme.service';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { filter } from 'rxjs/operators';
+import { User } from '../../core/models';
+import { ThemeService } from '../../core/services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
 
 interface NavigationItem {
   path: string;
@@ -14,7 +16,7 @@ interface NavigationItem {
 @Component({
   selector: 'app-user-layout',
   standalone: true,
-  imports: [RouterModule, AsyncPipe],
+  imports: [RouterModule, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
   templateUrl: 'user-layout.component.html',
   styleUrls: ['./user-layout.component.css']
 })
@@ -27,12 +29,12 @@ export class UserLayoutComponent implements OnInit {
   currentPath = '';
 
   navigationItems: NavigationItem[] = [
-    {path: '/dashboard', label: 'Dashboard', icon: '📊'},
-    {path: '/bookings', label: 'My Bookings', icon: '📅'},
-    {path: '/spaces', label: 'Browse Spaces', icon: '🏢'},
-    {path: '/subscriptions', label: 'Subscriptions', icon: '💳'},
-    {path: '/access', label: 'Access Control', icon: '🔐'},
-    {path: '/profile', label: 'Profile', icon: '👤'},
+    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/bookings', label: 'My Bookings', icon: '📅' },
+    { path: '/spaces', label: 'Browse Spaces', icon: '🏢' },
+    { path: '/subscriptions', label: 'Subscriptions', icon: '💳' },
+    { path: '/access', label: 'Access Control', icon: '🔐' },
+    { path: '/profile', label: 'Profile', icon: '👤' },
   ];
 
   constructor(

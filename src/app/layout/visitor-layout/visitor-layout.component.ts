@@ -1,12 +1,14 @@
-import {Component} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {AsyncPipe} from '@angular/common';
-import {ThemeService} from '../../core/services/theme.service';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { ThemeService } from '../../core/services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
 
 @Component({
   selector: 'app-visitor-layout',
   standalone: true,
-  imports: [RouterModule, AsyncPipe],
+  imports: [RouterModule, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
   templateUrl: './visitor-layout.component.html',
   styleUrls: ['./visitor-layout.component.css']
 })

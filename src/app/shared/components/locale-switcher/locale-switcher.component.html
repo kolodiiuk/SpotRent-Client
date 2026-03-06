@@ -1,0 +1,90 @@
+<div class="locale-switcher" (clickOutside)="closePanel()">
+    <!-- Trigger Button -->
+    <button (click)="togglePanel()"
+        class="locale-trigger p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors flex items-center space-x-1"
+        [attr.aria-label]="'LOCALE.LANGUAGE' | translate" [attr.aria-expanded]="panelOpen">
+        <span class="text-base">🌐</span>
+        <span class="text-xs font-semibold uppercase text-neutral-700 dark:text-neutral-200 hidden sm:inline">
+            {{ locale.lang() }}
+        </span>
+    </button>
+
+    <!-- Dropdown Panel -->
+    @if (panelOpen) {
+    <div
+        class="locale-panel absolute right-0 mt-2 w-52 bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-700 p-3 z-50 space-y-3">
+        <!-- Language -->
+        <div>
+            <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1.5">
+                {{ 'LOCALE.LANGUAGE' | translate }}
+            </p>
+            <div class="flex gap-2">
+                <button (click)="setLang('en')"
+                    [class]="'flex-1 py-1.5 text-sm rounded-lg font-medium transition-all ' +
+              (locale.lang() === 'en'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    EN
+                </button>
+                <button (click)="setLang('uk')"
+                    [class]="'flex-1 py-1.5 text-sm rounded-lg font-medium transition-all ' +
+              (locale.lang() === 'uk'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    УКР
+                </button>
+            </div>
+        </div>
+
+        <hr class="border-neutral-200 dark:border-neutral-700" />
+
+        <!-- Date Format -->
+        <div>
+            <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1.5">
+                {{ 'LOCALE.DATE_FORMAT' | translate }}
+            </p>
+            <div class="flex gap-2">
+                <button (click)="setDateOrder('mdy')"
+                    [class]="'flex-1 py-1.5 text-xs rounded-lg font-medium transition-all ' +
+              (locale.dateOrder() === 'mdy'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    {{ 'LOCALE.MDY' | translate }}
+                </button>
+                <button (click)="setDateOrder('dmy')"
+                    [class]="'flex-1 py-1.5 text-xs rounded-lg font-medium transition-all ' +
+              (locale.dateOrder() === 'dmy'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    {{ 'LOCALE.DMY' | translate }}
+                </button>
+            </div>
+        </div>
+
+        <hr class="border-neutral-200 dark:border-neutral-700" />
+
+        <!-- Time Format -->
+        <div>
+            <p class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1.5">
+                {{ 'LOCALE.TIME_FORMAT' | translate }}
+            </p>
+            <div class="flex gap-2">
+                <button (click)="setTimeFormat('12h')"
+                    [class]="'flex-1 py-1.5 text-xs rounded-lg font-medium transition-all ' +
+              (locale.timeFormat() === '12h'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    {{ 'LOCALE.H12' | translate }}
+                </button>
+                <button (click)="setTimeFormat('24h')"
+                    [class]="'flex-1 py-1.5 text-xs rounded-lg font-medium transition-all ' +
+              (locale.timeFormat() === '24h'
+                ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600')">
+                    {{ 'LOCALE.H24' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+</div>

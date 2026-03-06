@@ -2,9 +2,11 @@ export * from './access-log.model';
 export * from './address.model';
 export * from './auth.model';
 export * from './booking.model';
+export * from './locale.model';
 export * from './paged-response.model';
 export * from './space.model';
 export * from './subscription-plan.model';
 export * from './subscription.model';
 export * from './user-role.model';
 export * from './user.model';
+

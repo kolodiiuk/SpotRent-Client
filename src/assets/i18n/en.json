@@ -1,0 +1,131 @@
+{
+    "NAV": {
+        "HOME": "Home",
+        "SPACES": "Spaces",
+        "SUBSCRIPTION": "Subscription Plans",
+        "ABOUT": "About",
+        "SIGN_IN": "Sign In",
+        "GET_STARTED": "Get Started",
+        "DASHBOARD": "Dashboard",
+        "MY_BOOKINGS": "My Bookings",
+        "BROWSE_SPACES": "Browse Spaces",
+        "SUBSCRIPTIONS": "Subscriptions",
+        "ACCESS_CONTROL": "Access Control",
+        "PROFILE": "Profile",
+        "BOOK_SPACE": "+ Book Space",
+        "MY_PROFILE": "My Profile",
+        "SIGN_OUT": "Sign Out",
+        "QUICK_LINKS": "Quick Links",
+        "BROWSE_SPACES_LINK": "Browse Spaces",
+        "ABOUT_US": "About Us"
+    },
+    "AUTH": {
+        "LOGIN": "Log In",
+        "REGISTER": "Register",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "CONFIRM_PASSWORD": "Confirm Password",
+        "FIRST_NAME": "First Name",
+        "LAST_NAME": "Last Name",
+        "SIGN_IN_GOOGLE": "Sign in with Google",
+        "REGISTER_GOOGLE": "Register with Google",
+        "NO_ACCOUNT": "Don't have an account?",
+        "ALREADY_ACCOUNT": "Already have an account?",
+        "FORGOT_PASSWORD": "Forgot password?"
+    },
+    "BOOKING": {
+        "TITLE": "Booking #{{id}}",
+        "FROM": "From",
+        "TO": "To",
+        "CONFIRM": "Confirm Booking",
+        "CANCEL": "Cancel Booking",
+        "STATUS_PENDING": "Pending",
+        "STATUS_CONFIRMED": "Confirmed",
+        "STATUS_CANCELLED": "Cancelled",
+        "NO_BOOKINGS": "No bookings found",
+        "BOOK_NOW": "Book Now"
+    },
+    "SPACES": {
+        "TITLE": "Available Spaces",
+        "SEARCH": "Search spaces...",
+        "FILTER": "Filter",
+        "CAPACITY": "Capacity",
+        "PRICE_PER_HOUR": "per hour",
+        "BOOK": "Book This Space",
+        "NO_SPACES": "No spaces available",
+        "DETAILS": "View Details"
+    },
+    "SUBSCRIPTION": {
+        "TITLE": "Subscription Plans",
+        "CHOOSE_PLAN": "Choose Your Plan",
+        "CURRENT_PLAN": "Current Plan",
+        "UPGRADE": "Upgrade",
+        "CANCEL_PLAN": "Cancel Plan",
+        "PER_MONTH": "/month",
+        "FEATURES": "Features"
+    },
+    "PROFILE": {
+        "TITLE": "My Profile",
+        "EDIT": "Edit Profile",
+        "SAVE": "Save Changes",
+        "CANCEL_EDIT": "Cancel",
+        "PERSONAL_INFO": "Personal Information",
+        "FIRST_NAME": "First Name",
+        "LAST_NAME": "Last Name",
+        "EMAIL": "Email",
+        "PHONE": "Phone"
+    },
+    "ADMIN": {
+        "DASHBOARD": "Dashboard",
+        "ANALYTICS": "Analytics",
+        "SPACES_ROOMS": "Spaces & Rooms",
+        "BOOKINGS": "Bookings",
+        "USERS": "Users",
+        "SUBSCRIPTIONS": "Subscriptions",
+        "ACCESS_LOGS": "Access Logs",
+        "SMART_LOCKS": "Smart Locks",
+        "PAYMENTS": "Payments",
+        "REPORTS": "Reports",
+        "INVOICES": "Invoices",
+        "SETTINGS": "Settings",
+        "SYSTEM_LOGS": "System Logs",
+        "OVERVIEW": "Overview",
+        "MANAGEMENT": "Management",
+        "ACCESS_SECURITY": "Access & Security",
+        "FINANCIAL": "Financial",
+        "SYSTEM": "System"
+    },
+    "LOCALE": {
+        "LANGUAGE": "Language",
+        "DATE_FORMAT": "Date Format",
+        "TIME_FORMAT": "Time Format",
+        "DMY": "DD/MM/YYYY",
+        "MDY": "MM/DD/YYYY",
+        "H12": "12-hour",
+        "H24": "24-hour"
+    },
+    "FOOTER": {
+        "TAGLINE": "Flexible coworking spaces designed for productivity and collaboration. Book your ideal workspace today."
+    },
+    "ERRORS": {
+        "REQUIRED": "This field is required",
+        "INVALID_EMAIL": "Please enter a valid email address",
+        "MIN_LENGTH": "Minimum {{min}} characters required",
+        "PASSWORDS_MISMATCH": "Passwords do not match",
+        "GENERIC": "Something went wrong. Please try again."
+    },
+    "COMMON": {
+        "LOADING": "Loading...",
+        "SAVE": "Save",
+        "CANCEL": "Cancel",
+        "CONFIRM": "Confirm",
+        "DELETE": "Delete",
+        "EDIT": "Edit",
+        "CLOSE": "Close",
+        "BACK": "Back",
+        "NEXT": "Next",
+        "SEARCH": "Search",
+        "YES": "Yes",
+        "NO": "No"
+    }
+}

@@ -1,9 +1,11 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, RouterModule, NavigationEnd} from '@angular/router';
-import {AsyncPipe} from '@angular/common';
-import {filter} from 'rxjs/operators';
-import {User} from '../../core/models';
-import {ThemeService} from '../../core/services/theme.service';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { filter } from 'rxjs/operators';
+import { User } from '../../core/models';
+import { ThemeService } from '../../core/services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
 
 interface NavigationItem {
   path: string;
@@ -19,7 +21,7 @@ interface NavigationSection {
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [RouterModule, AsyncPipe],
+  imports: [RouterModule, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css']
 })
@@ -35,39 +37,39 @@ export class AdminLayoutComponent implements OnInit {
     {
       title: 'Overview',
       items: [
-        {path: '/admin/dashboard', label: 'Dashboard', icon: '📊'},
-        {path: '/admin/analytics', label: 'Analytics', icon: '📈'},
+        { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
+        { path: '/admin/analytics', label: 'Analytics', icon: '📈' },
       ],
     },
     {
       title: 'Management',
       items: [
-        {path: '/admin/spaces', label: 'Spaces & Rooms', icon: '🏢'},
-        {path: '/admin/bookings', label: 'Bookings', icon: '📅'},
-        {path: '/admin/users', label: 'Users', icon: '👥'},
-        {path: '/admin/subscriptions', label: 'Subscriptions', icon: '💳'},
+        { path: '/admin/spaces', label: 'Spaces & Rooms', icon: '🏢' },
+        { path: '/admin/bookings', label: 'Bookings', icon: '📅' },
+        { path: '/admin/users', label: 'Users', icon: '👥' },
+        { path: '/admin/subscriptions', label: 'Subscriptions', icon: '💳' },
       ],
     },
     {
       title: 'Access & Security',
       items: [
-        {path: '/admin/access-logs', label: 'Access Logs', icon: '🔐'},
-        {path: '/admin/smart-locks', label: 'Smart Locks', icon: '🔒'},
+        { path: '/admin/access-logs', label: 'Access Logs', icon: '🔐' },
+        { path: '/admin/smart-locks', label: 'Smart Locks', icon: '🔒' },
       ],
     },
     {
       title: 'Financial',
       items: [
-        {path: '/admin/payments', label: 'Payments', icon: '💰'},
-        {path: '/admin/reports', label: 'Reports', icon: '📄'},
-        {path: '/admin/invoices', label: 'Invoices', icon: '🧾'},
+        { path: '/admin/payments', label: 'Payments', icon: '💰' },
+        { path: '/admin/reports', label: 'Reports', icon: '📄' },
+        { path: '/admin/invoices', label: 'Invoices', icon: '🧾' },
       ],
     },
     {
       title: 'System',
       items: [
-        {path: '/admin/settings', label: 'Settings', icon: '⚙️'},
-        {path: '/admin/logs', label: 'System Logs', icon: '📋'},
+        { path: '/admin/settings', label: 'Settings', icon: '⚙️' },
+        { path: '/admin/logs', label: 'System Logs', icon: '📋' },
       ],
     },
   ];
