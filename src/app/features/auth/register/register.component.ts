@@ -45,13 +45,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
-      const role = this.authService.getUserRole();
-      const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
-      this.router.navigate([path], { replaceUrl: true });
-      return;
-    }
-
     this.form = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -66,6 +59,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, {
       validators: this.passwordsMatchValidator
     });
+
+    if (this.authService.isAuthenticated()) {
+      const role = this.authService.getUserRole();
+      const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
+      this.router.navigate([path], { replaceUrl: true });
+      return;
+    }
   }
 
   ngOnDestroy(): void {

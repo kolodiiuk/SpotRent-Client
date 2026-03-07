@@ -41,6 +41,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+
     if (this.authService.isAuthenticated()) {
       this.redirectBasedOnRole();
       return;
@@ -50,11 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (nav?.extras?.state?.['message']) {
       this.successMessage = nav.extras.state['message'];
     }
-
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
   }
 
   ngOnDestroy(): void {
