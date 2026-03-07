@@ -1,5 +1,6 @@
 @if (registrationSuccess) {
-<div class="min-h-screen flex items-center justify-center">
+<div
+  class="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
   <app-card class="p-8 text-center max-w-md w-full">
     <div class="text-6xl mb-4">✅</div>
     <h2 class="text-2xl font-bold mb-2">
@@ -15,7 +16,8 @@
 </div>
 }
 @if (!registrationSuccess) {
-<div class="min-h-screen flex items-center justify-center px-4">
+<div
+  class="min-h-screen flex items-center justify-center px-4 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
   <div class="w-full max-w-2xl">
 
     <div class="text-center mb-8">
@@ -28,12 +30,10 @@
       <h1 class="text-3xl font-bold">Create Your Account</h1>
     </div>
 
-    <app-card class="p-8">
+    <app-card [className]="'p-8'">
 
       @if (errorMessage) {
-      <app-alert
-        type="danger"
-        (close)="clearGlobalError()">
+      <app-alert type="danger" (close)="clearGlobalError()">
         {{ errorMessage }}
       </app-alert>
       }
@@ -41,38 +41,24 @@
       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <app-input
-            label="First Name"
-            formControlName="firstName"
-            placeholder="John">
+          <app-input label="First Name" formControlName="firstName" placeholder="John" [error]="firstNameError">
           </app-input>
 
-          <app-input
-            label="Last Name"
-            formControlName="lastName"
-            placeholder="Doe">
+          <app-input label="Last Name" formControlName="lastName" placeholder="Doe" [error]="lastNameError">
           </app-input>
         </div>
 
-        <app-input
-          label="Email Address"
-          type="email"
-          formControlName="email"
-          placeholder="you@example.com">
+        <app-input label="Email Address" type="email" formControlName="email" placeholder="you@example.com"
+          [error]="emailError">
         </app-input>
 
-        <app-input
-          label="Phone Number"
-          type="tel"
-          formControlName="phoneNumber"
-          placeholder="+380 XX XXX XXXX">
+        <app-input label="Phone Number" type="tel" formControlName="phoneNumber" placeholder="+380 XX XXX XXXX"
+          [error]="phoneError">
         </app-input>
 
         <div class="relative">
-          <app-input
-            label="Password"
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password">
+          <app-input label="Password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            [error]="passwordError">
           </app-input>
 
           <button type="button" class="absolute right-3 top-9" (click)="togglePassword()">
@@ -86,9 +72,7 @@
               <span>{{ passwordStrength.strength }}</span>
             </div>
             <div class="w-full h-1.5 bg-neutral-200 rounded-full">
-              <div
-                class="h-1.5 rounded-full transition-all"
-                [ngClass]="passwordStrength.color"
+              <div class="h-1.5 rounded-full transition-all" [ngClass]="passwordStrength.color"
                 [style.width]="passwordStrength.width">
               </div>
             </div>
@@ -97,10 +81,8 @@
         </div>
 
         <div class="relative">
-          <app-input
-            label="Confirm Password"
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            formControlName="confirmPassword">
+          <app-input label="Confirm Password" [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword" [error]="confirmPasswordError">
           </app-input>
 
           <button type="button" class="absolute right-3 top-9" (click)="toggleConfirmPassword()">
@@ -108,30 +90,26 @@
           </button>
         </div>
 
-        <app-button
-          type="submit"
-          [loading]="isLoading"
-          [disabled]="isLoading"
-          [fullWidth]="true">
+        <app-button type="submit" [loading]="isLoading" [disabled]="isLoading" [fullWidth]="true">
           Create Account
         </app-button>
 
       </form>
 
-<!--      <app-google-login-->
-<!--        (success)="handleGoogleSuccess($event)"-->
-<!--        (error)="console.error('Google Sign-In failed')">-->
-<!--      </app-google-login>-->
+      <!--      <app-google-login-->
+      <!--        (success)="handleGoogleSuccess($event)"-->
+      <!--        (error)="console.error('Google Sign-In failed')">-->
+      <!--      </app-google-login>-->
 
       <div class="mt-6 text-center">
         <p>
           Already have an account?
-          <a routerLink="/login">Sign in</a>
+          <a routerLink="/auth/login" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">Sign in</a>
         </p>
       </div>
 
       <div class="mt-4 text-center">
-        <a routerLink="/">← Back to home</a>
+        <a routerLink="/" class="text-blue-600 dark:text-blue-400 hover:underline">← Back to home</a>
       </div>
 
     </app-card>

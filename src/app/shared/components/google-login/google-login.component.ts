@@ -1,0 +1,75 @@
+import { Component, EventEmitter, Output, OnInit, ElementRef, ViewChild, OnDestroy, Input } from '@angular/core';
+
+declare const google: any;
+
+@Component({
+    selector: 'app-google-login',
+    standalone: true,
+    templateUrl: './google-login.component.html',
+    styleUrls: ['./google-login.component.css']
+})
+export class GoogleLoginComponent implements OnInit, OnDestroy {
+    @Input() clientId: string = ''; // Provide your Google Client ID here or pass it via input
+    @Output() success = new EventEmitter<string>();
+    @Output() error = new EventEmitter<any>();
+
+    @ViewChild('googleBtn', { static: true }) googleBtn!: ElementRef;
+
+    private scriptId = 'google-jssdk';
+
+    ngOnInit(): void {
+        if (typeof google === 'undefined' || !google.accounts) {
+            this.loadGoogleScript();
+        } else {
+            this.initGoogleAuth();
+        }
+    }
+
+    ngOnDestroy(): void {
+        // Optionally remove script or clean up if needed
+    }
+
+    private loadGoogleScript(): void {
+        if (document.getElementById(this.scriptId)) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.id = this.scriptId;
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => this.initGoogleAuth();
+        script.onerror = () => this.error.emit('Failed to load Google script');
+        document.head.appendChild(script);
+    }
+
+    private initGoogleAuth(): void {
+        if (!this.clientId) {
+            console.warn('Google Client ID is missing.');
+            // It will fail in production, but we allow it to render during tests
+        }
+
+        try {
+            google.accounts.id.initialize({
+                client_id: this.clientId || 'YOUR_GOOGLE_CLIENT_ID', // Replace or use input
+                callback: this.handleCredentialResponse.bind(this)
+            });
+
+            google.accounts.id.renderButton(
+                this.googleBtn.nativeElement,
+                { theme: 'outline', size: 'large', width: '100%' }
+            );
+        } catch (err) {
+            this.error.emit(err);
+        }
+    }
+
+    private handleCredentialResponse(response: any): void {
+        if (response && response.credential) {
+            this.success.emit(response.credential);
+        } else {
+            this.error.emit('Invalid Google credential response');
+        }
+    }
+}

@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, switchMap, catchError, finalize, tap} from 'rxjs';
-import {AuthApiService} from './auth-api.service';
-import {AuthStorageService} from './auth-storage.service';
-import {User} from '../models';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, switchMap, catchError, finalize, tap } from 'rxjs';
+import { AuthApiService } from './auth-api.service';
+import { AuthStorageService } from './auth-storage.service';
+import { User, UserRole } from '../models';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly userSubject = new BehaviorSubject<User | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
@@ -60,7 +60,7 @@ export class AuthService {
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
 
-    return this.api.login({email, password}).pipe(
+    return this.api.login({ email, password }).pipe(
       tap(response => {
         this.storage.setTokens(response.token, response.refreshToken);
         this.storage.setUser(response.user);
@@ -82,14 +82,14 @@ export class AuthService {
     const refreshToken = this.storage.getRefreshToken();
 
     return (refreshToken
-        ? this.api.logout(refreshToken).pipe(
-          switchMap(() => of({success: true}))
-        )
-        : of({success: true})
+      ? this.api.logout(refreshToken).pipe(
+        switchMap(() => of({ success: true }))
+      )
+      : of({ success: true })
     ).pipe(
       catchError(error => {
         console.error('Logout error:', error);
-        return of({success: false, error});
+        return of({ success: false, error });
       }),
       finalize(() => {
         this.storage.clearTokens();
@@ -100,11 +100,26 @@ export class AuthService {
     );
   }
 
-  register(payload: unknown) : Observable<boolean>{
-    return new Observable();
+  register(payload: any): Observable<void> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    return this.api.register(payload).pipe(
+      catchError(err => {
+        this.errorSubject.next(err);
+        throw err;
+      }),
+      finalize(() => this.loadingSubject.next(false))
+    );
   }
 
-  getUserRole() {
-    return "string";
+  getUserRole(): string {
+    const user = this.userSubject.value;
+    if (!user) return '';
+    return UserRole[user.role];
+  }
+
+  updateUserState(user: User): void {
+    this.userSubject.next(user);
   }
 }

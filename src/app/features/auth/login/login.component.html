@@ -1,0 +1,75 @@
+<div
+    class="min-h-screen flex items-center justify-center px-4 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+            <a routerLink="/" class="inline-flex items-center mb-6">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center">
+                    <span class="font-bold text-2xl">S</span>
+                </div>
+                <span class="text-2xl font-bold ml-2">SpotRent</span>
+            </a>
+            <h1 class="text-3xl font-bold">Welcome Back</h1>
+        </div>
+
+        <app-card [className]="'p-8 block'">
+            @if (successMessage) {
+            <app-alert type="success" class="mb-6 block">
+                {{ successMessage }}
+            </app-alert>
+            }
+
+            @if (errorMessage) {
+            <app-alert type="danger" (close)="clearGlobalError()">
+                {{ errorMessage }}
+            </app-alert>
+            }
+
+            <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+
+                <app-input label="Email Address" type="email" formControlName="email" placeholder="you@example.com"
+                    [error]="emailError">
+                </app-input>
+
+                <div class="relative">
+                    <app-input label="Password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                        [error]="passwordError">
+                    </app-input>
+
+                    <button type="button" class="absolute right-3 top-9" (click)="togglePassword()">
+                        {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+                    </button>
+                </div>
+
+                <app-button type="submit" [loading]="isLoading" [disabled]="isLoading" [fullWidth]="true">
+                    Sign In
+                </app-button>
+
+            </form>
+
+            <div class="mt-6 flex items-center justify-center">
+                <div class="border-t border-neutral-200 dark:border-neutral-700 flex-grow"></div>
+                <span class="px-4 text-sm text-neutral-500">OR</span>
+                <div class="border-t border-neutral-200 dark:border-neutral-700 flex-grow"></div>
+            </div>
+
+            <div class="mt-6">
+                <app-google-login (success)="handleGoogleSuccess($event)" (error)="handleGoogleError($event)">
+                </app-google-login>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p>
+                    Don't have an account?
+                    <a routerLink="/auth/register"
+                        class="text-blue-600 dark:text-blue-400 font-medium hover:underline">Sign up</a>
+                </p>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a routerLink="/" class="text-blue-600 dark:text-blue-400 hover:underline">← Back to home</a>
+            </div>
+
+        </app-card>
+    </div>
+</div>

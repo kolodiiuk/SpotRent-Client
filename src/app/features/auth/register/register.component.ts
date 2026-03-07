@@ -1,14 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {Subject, takeUntil} from 'rxjs';
-import {AuthService} from '../../../core/services/auth.service';
-import {GoogleAuthService} from '../../../core/services/google-auth.service';
-import {CardComponent} from '../../../shared/components/card/card.component';
-import {ButtonComponent} from '../../../shared/components/button/button.component';
-import {InputComponent} from '../../../shared/components/input/input.component';
-import {AlertComponent} from '../../../shared/components/alert/alert.component';
-import {NgClass} from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
+import { GoogleAuthService } from '../../../core/services/google-auth.service';
+import { CardComponent } from '../../../shared/components/card/card.component';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'register',
@@ -19,7 +19,8 @@ import {NgClass} from '@angular/common';
     InputComponent,
     AlertComponent,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   styleUrl: 'register.component.css'
 })
@@ -45,7 +46,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard'], {replaceUrl: true});
+      const role = this.authService.getUserRole();
+      const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
+      this.router.navigate([path], { replaceUrl: true });
       return;
     }
 
@@ -79,7 +82,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const {confirmPassword, ...payload} = this.form.value;
+    const { confirmPassword, ...payload } = this.form.value;
+
+    if (!payload.phoneNumber || payload.phoneNumber.trim() === '') {
+      payload.phoneNumber = null;
+    }
 
     this.authService.register(payload)
       .pipe(takeUntil(this.destroy$))
@@ -88,7 +95,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.registrationSuccess = true;
 
           setTimeout(() => {
-            this.router.navigate(['/login'], {
+            this.router.navigate(['/auth/login'], {
               state: {
                 message: 'Registration successful! Please check your email to verify your account.'
               }
@@ -128,18 +135,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
     return /^[\d\s\-+()]{10,}$/.test(control.value)
       ? null
-      : {phoneInvalid: true};
+      : { phoneInvalid: true };
   }
 
   private passwordsMatchValidator(group: FormGroup) {
     const password = group.get('password')?.value;
     const confirm = group.get('confirmPassword')?.value;
-    return password === confirm ? null : {passwordsMismatch: true};
+    return password === confirm ? null : { passwordsMismatch: true };
   }
 
   private calculatePasswordStrength(password: string) {
     if (!password) {
-      return {strength: '', color: '', width: '0%'};
+      return { strength: '', color: '', width: '0%' };
     }
 
     let score = 0;
@@ -150,12 +157,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (/[^a-zA-Z\d]/.test(password)) score++;
 
     if (score <= 2) {
-      return {strength: 'Weak', color: 'bg-danger-500', width: '33%'};
+      return { strength: 'Weak', color: 'bg-danger-500', width: '33%' };
     }
     if (score <= 4) {
-      return {strength: 'Medium', color: 'bg-warning-500', width: '66%'};
+      return { strength: 'Medium', color: 'bg-warning-500', width: '66%' };
     }
-    return {strength: 'Strong', color: 'bg-success-500', width: '100%'};
+    return { strength: 'Strong', color: 'bg-success-500', width: '100%' };
   }
 
   // was string instead of any
@@ -163,9 +170,67 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.googleAuthService.loginWithGoogle(credential)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => this.router.navigate(['/dashboard']),
+        next: () => {
+          const role = this.authService.getUserRole();
+          const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
+          this.router.navigate([path]);
+        },
         error: () => console.error('Google Sign-In failed')
       });
+  }
+
+  get firstNameError(): string | undefined {
+    const control = this.form.get('firstName');
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) return 'First name is required';
+      if (control.hasError('minlength')) return 'Must be at least 2 characters';
+    }
+    return undefined;
+  }
+
+  get lastNameError(): string | undefined {
+    const control = this.form.get('lastName');
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) return 'Last name is required';
+      if (control.hasError('minlength')) return 'Must be at least 2 characters';
+    }
+    return undefined;
+  }
+
+  get emailError(): string | undefined {
+    const control = this.form.get('email');
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) return 'Email is required';
+      if (control.hasError('email')) return 'Please enter a valid email address';
+    }
+    return undefined;
+  }
+
+  get phoneError(): string | undefined {
+    const control = this.form.get('phoneNumber');
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('phoneInvalid')) return 'Please enter a valid phone number';
+    }
+    return undefined;
+  }
+
+  get passwordError(): string | undefined {
+    const control = this.form.get('password');
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) return 'Password is required';
+      if (control.hasError('minlength')) return 'Must be at least 8 characters';
+      if (control.hasError('pattern')) return 'Must contain uppercase, lowercase, and a number';
+    }
+    return undefined;
+  }
+
+  get confirmPasswordError(): string | undefined {
+    const control = this.form.get('confirmPassword');
+    if (control?.touched) {
+      if (control.hasError('required')) return 'Please confirm your password';
+      if (this.form.hasError('passwordsMismatch')) return 'Passwords do not match';
+    }
+    return undefined;
   }
 
   protected readonly console = console;

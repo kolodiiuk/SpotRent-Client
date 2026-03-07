@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {User} from '../models';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from '../models';
 
 export interface LoginRequest {
   email: string;
@@ -23,9 +23,9 @@ export interface LoginResponse {
   user: User;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthApiService {
-  private readonly baseUrl = '/api/auth';
+  private readonly baseUrl = 'http://localhost:5271/api/auth';
 
   constructor(private http: HttpClient) {
   }
@@ -34,12 +34,16 @@ export class AuthApiService {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload);
   }
 
+  googleLogin(token: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/google-login`, { token });
+  }
+
   register(payload: RegisterRequest): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/register`, payload);
   }
 
   logout(refreshToken: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/logout`, {refreshToken});
+    return this.http.post<void>(`${this.baseUrl}/logout`, { refreshToken });
   }
 
   verify(): Observable<User> {
