@@ -1,5 +1,5 @@
-import {Routes} from '@angular/router';
-import {AdminLayoutComponent} from './admin-layout.component';
+import { Routes } from '@angular/router';
+import { AdminLayoutComponent } from './admin-layout.component';
 
 export const ADMIN_LAYOUT_ROUTES: Routes = [
   {
@@ -9,7 +9,7 @@ export const ADMIN_LAYOUT_ROUTES: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import('../../features/admin/admin.routes')
+          import('../../../features/admin/admin.routes')
             .then(m => m.ADMIN_ROUTES)
       }
     ]

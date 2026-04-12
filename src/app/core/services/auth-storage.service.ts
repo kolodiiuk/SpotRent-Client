@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthStorageService {
   private readonly tokenKey = 'auth_token';
   private readonly refreshTokenKey = 'refresh_token';

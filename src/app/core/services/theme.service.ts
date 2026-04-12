@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Theme = 'light' | 'dark';
 
@@ -15,8 +15,6 @@ export class ThemeService {
     const savedTheme = this.getThemeFromStorage();
     this.themeSubject = new BehaviorSubject<Theme>(savedTheme);
     this.theme$ = this.themeSubject.asObservable();
-
-    // Apply theme on initialization
     this.applyTheme(savedTheme);
   }
 
@@ -30,7 +28,6 @@ export class ThemeService {
       return stored;
     }
 
-    // Check system preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     return prefersDark ? 'dark' : 'light';
   }

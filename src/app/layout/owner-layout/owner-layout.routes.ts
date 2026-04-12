@@ -1,5 +1,5 @@
-import {Routes} from '@angular/router';
-import {OwnerLayoutComponent} from './owner-layout.component';
+import { Routes } from '@angular/router';
+import { OwnerLayoutComponent } from './owner-layout.component';
 
 export const OWNER_LAYOUT_ROUTES: Routes = [
   {
@@ -9,7 +9,7 @@ export const OWNER_LAYOUT_ROUTES: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import('../../features/owner/owner.routes')
+          import('../../../features/owner/owner.routes')
             .then(m => m.OWNER_ROUTES)
       }
     ]

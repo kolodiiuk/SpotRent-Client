@@ -9,7 +9,7 @@ declare const google: any;
     styleUrls: ['./google-login.component.css']
 })
 export class GoogleLoginComponent implements OnInit, OnDestroy {
-    @Input() clientId: string = ''; // Provide your Google Client ID here or pass it via input
+    @Input() clientId: string = '103104858818-jb3c2g0a3jkflgfif33vsjv66vcm8nrp.apps.googleusercontent.com';
     @Output() success = new EventEmitter<string>();
     @Output() error = new EventEmitter<any>();
 
@@ -26,7 +26,6 @@ export class GoogleLoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        // Optionally remove script or clean up if needed
     }
 
     private loadGoogleScript(): void {
@@ -45,14 +44,9 @@ export class GoogleLoginComponent implements OnInit, OnDestroy {
     }
 
     private initGoogleAuth(): void {
-        if (!this.clientId) {
-            console.warn('Google Client ID is missing.');
-            // It will fail in production, but we allow it to render during tests
-        }
-
         try {
             google.accounts.id.initialize({
-                client_id: this.clientId || 'YOUR_GOOGLE_CLIENT_ID', // Replace or use input
+                client_id: this.clientId,
                 callback: this.handleCredentialResponse.bind(this)
             });
 

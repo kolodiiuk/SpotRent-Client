@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-card',
@@ -15,6 +15,7 @@ export class CardComponent {
   get cardClasses() {
     const baseClasses = 'bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-soft';
     const hoverClass = this.hover ? 'hover:shadow-medium transition-shadow duration-200' : '';
+
     return `${baseClasses} ${hoverClass} ${this.className}`;
   }
 }

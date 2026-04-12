@@ -8,7 +8,7 @@ export const USER_LAYOUT_ROUTES: Routes = [
     children: [{
       path: '',
       loadChildren: () =>
-        import('../../features/user/user.routes')
+        import('../../../features/user/user.routes')
           .then(m => m.USER_ROUTES)
     }]
   }

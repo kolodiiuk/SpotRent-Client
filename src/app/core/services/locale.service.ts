@@ -16,17 +16,14 @@ export class LocaleService {
     readonly timeFormat = signal<TimeFormat>(DEFAULTS.timeFormat);
     readonly dateOrder = signal<DateOrder>(DEFAULTS.dateOrder);
 
-    /** Angular DatePipe format string for dates, e.g. "MM/dd/yyyy" or "dd/MM/yyyy" */
     readonly angularDateFormat = computed<string>(() =>
         this.dateOrder() === 'dmy' ? 'dd/MM/yyyy' : 'MM/dd/yyyy'
     );
 
-    /** Angular DatePipe format string for times, e.g. "HH:mm" or "hh:mm a" */
     readonly angularTimeFormat = computed<string>(() =>
         this.timeFormat() === '24h' ? 'HH:mm' : 'hh:mm a'
     );
 
-    /** Combined date + time format string */
     readonly angularDateTimeFormat = computed<string>(() =>
         `${this.angularDateFormat()} ${this.angularTimeFormat()}`
     );
@@ -35,10 +32,7 @@ export class LocaleService {
         translate.addLangs(['en', 'uk']);
         translate.setDefaultLang('en');
 
-        // Load initial values from storage
         this.loadFromStorage();
-
-        // Explicitly trigger the current language to force the HTTP loader
         const current = this.lang();
         translate.use(current).subscribe({
             next: () => console.log(`[LocaleService] Successfully loaded translations for '${current}'`),
@@ -84,7 +78,6 @@ export class LocaleService {
                 this.dateOrder.set(config.dateOrder ?? DEFAULTS.dateOrder);
             }
         } catch {
-            // Ignore parse errors — fall back to defaults
         }
         this.translate.use(this.lang());
     }

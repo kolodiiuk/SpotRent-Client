@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap, catchError, finalize, tap } from 'rxjs';
-import { AuthApiService } from './auth-api.service';
+import { AuthApiService } from './api/auth-api.service';
 import { AuthStorageService } from './auth-storage.service';
 import { User, UserRole } from '../models';
 
+export interface RegisterPayload {
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  password: string
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   private readonly userSubject = new BehaviorSubject<User | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<unknown | null>(null);
@@ -100,26 +109,33 @@ export class AuthService {
     );
   }
 
-  register(payload: any): Observable<void> {
+  register(payload: RegisterPayload): Observable<void> {
+
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
 
-    return this.api.register(payload).pipe(
-      catchError(err => {
-        this.errorSubject.next(err);
-        throw err;
-      }),
-      finalize(() => this.loadingSubject.next(false))
-    );
+    return this.api.register(payload)
+      .pipe(
+        catchError(err => {
+          this.errorSubject.next(err);
+          throw err;
+        }),
+        finalize(() => this.loadingSubject.next(false))
+      );
   }
 
   getUserRole(): string {
+
     const user = this.userSubject.value;
-    if (!user) return '';
+    if (!user) {
+      return '';
+    }
+
     return UserRole[user.role];
   }
 
   updateUserState(user: User): void {
+
     this.userSubject.next(user);
   }
 }

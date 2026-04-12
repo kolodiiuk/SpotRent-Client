@@ -1,5 +1,5 @@
-import {Routes} from '@angular/router';
-import {VisitorLayoutComponent} from './visitor-layout.component';
+import { Routes } from '@angular/router';
+import { VisitorLayoutComponent } from './visitor-layout.component';
 
 export const VISITOR_LAYOUT_ROUTES: Routes = [
   {
@@ -8,7 +8,7 @@ export const VISITOR_LAYOUT_ROUTES: Routes = [
     children: [{
       path: '',
       loadChildren: () =>
-        import('../../features/visitor/visitor.routes')
+        import('../../../features/visitor/visitor.routes')
           .then(m => m.VISITOR_ROUTES),
     }]
   }

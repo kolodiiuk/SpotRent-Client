@@ -1,0 +1,34 @@
+<div class="availability-section bg-white p-6 rounded-xl border border-gray-100 shadow-sm mt-6">
+  <h3 class="text-xl font-bold text-gray-800 mb-4">Availability Schedule</h3>
+  
+  <div *ngIf="isLoading" class="flex justify-center py-8">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+  </div>
+
+  <div *ngIf="error" class="p-4 bg-red-50 text-red-700 rounded-md">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading && !error && schedule">
+    <div *ngIf="!schedule.bookings || schedule.bookings.length === 0" class="text-gray-500 py-4 italic">
+      No upcoming bookings found. The space is currently completely available.
+    </div>
+
+    <div *ngIf="schedule.bookings && schedule.bookings.length > 0" class="space-y-3">
+      <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Upcoming Bookings (Unavailable Times)</h4>
+      <ul class="divide-y divide-gray-100">
+        <li *ngFor="let booking of schedule.bookings" class="py-3 flex justify-between items-center text-sm text-gray-700">
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="font-medium">{{ formatDate(booking.startTime) }}</span>
+          </div>
+          <span class="text-gray-500 bg-gray-50 px-2 py-1 rounded">
+            {{ formatTime(booking.startTime) }} - {{ formatTime(booking.endTime) }}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

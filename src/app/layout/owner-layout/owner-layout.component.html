@@ -1,0 +1,17 @@
+<div class="flex h-screen overflow-hidden bg-gray-50">
+  <!-- Sidebar -->
+  <app-sidebar [navItems]="ownerNavItems"></app-sidebar>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex flex-col flex-1 overflow-hidden">
+    <!-- Header -->
+    <app-header></app-header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+      <div class="container mx-auto px-6 py-8">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
