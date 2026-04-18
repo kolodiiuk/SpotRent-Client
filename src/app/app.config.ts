@@ -1,12 +1,11 @@
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, HttpClient, withInterceptorsFromDi, withFetch } from '@angular/common/http';
+import {provideHttpClient, HttpClient, withInterceptorsFromDi, withFetch, withInterceptors} from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-
 import { routes } from './app.routes';
+import {authInterceptor} from './core/interceptors/auth.interceptor';
 
-// Custom loader to bypass TS2554 typing error in @ngx-translate/http-loader v17
 export class CustomTranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private prefix: string = '/assets/i18n/', private suffix: string = '.json') { }
 
@@ -23,7 +22,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor]),
+      withFetch()),
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'en',

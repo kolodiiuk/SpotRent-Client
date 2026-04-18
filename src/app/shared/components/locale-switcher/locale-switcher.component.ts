@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { LocaleService } from '../../../core/services/locale.service';
-import { SupportedLang, TimeFormat, DateOrder } from '../../../core/models/locale.model';
+import { LocaleService } from '../../../services/locale.service';
+import { SupportedLang, TimeFormat, DateOrder } from '../../../models/locale.model';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({

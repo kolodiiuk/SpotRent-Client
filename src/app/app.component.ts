@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { LocaleService } from './core/services/locale.service';
+import { LocaleService } from './services/locale.service';
 
 @Component({
   selector: 'app-root',

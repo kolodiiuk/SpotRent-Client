@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { LocaleService } from '../../core/services/locale.service';
+import { LocaleService } from '../../services/locale.service';
 
 /**
  * Locale-aware date pipe.

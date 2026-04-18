@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../../../../core/services/auth.service';
-import { User } from '../../../../core/models/user.model';
+import { AuthService } from '../../../../../features/auth/services/auth.service';
+import { User } from '../../../../../features/auth/models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +13,7 @@ import { User } from '../../../../core/models/user.model';
     <header class="bg-white border-b border-gray-200">
       <div class="px-4 mx-auto sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          
+
           <div class="flex items-center gap-x-4">
             <!-- Mobile Menu Toggle Button (optional, can be linked to sidebar state later) -->
             <button class="p-2 -m-2 text-gray-400 lg:hidden hover:text-gray-500">
@@ -54,7 +54,7 @@ import { User } from '../../../../core/models/user.model';
                 <div class="text-sm font-medium text-gray-500">Loading...</div>
               </ng-template>
             </div>
-            
+
           </div>
         </div>
       </div>

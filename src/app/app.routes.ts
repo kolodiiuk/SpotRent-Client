@@ -6,13 +6,13 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./layout/visitor-layout/visitor-layout.routes')
+      import('./routes/visitor-layout.routes')
         .then(m => m.VISITOR_LAYOUT_ROUTES),
   },
   {
     path: 'auth',
     loadChildren: () =>
-      import('../features/auth/auth.routes')
+      import('./routes/auth.routes')
         .then(m => m.AUTH_ROUTES),
   },
   {
@@ -20,7 +20,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] },
     loadChildren: () =>
-      import('./layout/admin-layout/admin-layout.routes')
+      import('./routes/admin-layout.routes')
         .then(m => m.ADMIN_LAYOUT_ROUTES),
   },
   {
@@ -28,7 +28,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['OWNER', 'ADMIN'] },
     loadChildren: () =>
-      import('./layout/owner-layout/owner-layout.routes')
+      import('./routes/owner-layout.routes')
         .then(m => m.OWNER_LAYOUT_ROUTES),
   },
   {
@@ -36,7 +36,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['USER', 'OWNER', 'ADMIN'] },
     loadChildren: () =>
-      import('./layout/user-layout/user-layout.routes')
+      import('./routes/user-layout.routes')
         .then(m => m.USER_LAYOUT_ROUTES),
   },
   {

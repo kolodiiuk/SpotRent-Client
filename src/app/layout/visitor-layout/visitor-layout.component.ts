@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-import { ThemeService } from '../../core/services/theme.service';
+import { ThemeService } from '../../services/theme.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
 

@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { User } from '../../core/models';
-import { ThemeService } from '../../core/services/theme.service';
+import { User } from '../../models';
+import { ThemeService } from '../../services/theme.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
 
@@ -37,7 +37,7 @@ export class AdminLayoutComponent implements OnInit {
     {
       title: 'Overview',
       items: [
-        { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
+        { path: '/admin/owner-user-admin-dashboard', label: 'Dashboard', icon: '📊' },
         { path: '/admin/analytics', label: 'Analytics', icon: '📈' },
       ],
     },
