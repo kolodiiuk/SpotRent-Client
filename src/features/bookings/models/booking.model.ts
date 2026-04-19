@@ -1,21 +1,8 @@
-import { Address } from "../../user-profile/models/address.model";
-import {LiqPayPaymentData} from '../../subscriptions/models/subscription.model';
+import {Address} from "../../user-profile/models/address.model";
 import {PaginationMeta} from '../../../app/models';
-
-export enum BookingStatus {
-  Pending = 0,
-  Confirmed = 1,
-  Active = 2,
-  Completed = 3,
-  Cancelled = 4,
-}
-
-export enum PaymentStatus {
-  Paid = 0,
-  Failed = 1,
-  TestPaid = 2,
-  NotPaid = 3,
-}
+import {PaymentStatus} from './payment-status';
+import {BookingStatus} from './booking-status';
+import {LiqPayPaymentData} from '../../subscriptions/models/liq-pay-payment-data';
 
 export interface Booking {
   id: number;
@@ -49,25 +36,7 @@ export interface BookingFilterResponse {
   pageSize: number;
 }
 
-export interface CreateBookingPayload {
-  spaceId: number;
-  startTime: string;
-  endTime: string;
-}
-
 export interface BookingCreationResponse {
   bookingId: number;
   liqPayPaymentData?: LiqPayPaymentData | null;
-}
-
-export interface BookingFilterParams {
-  userId: number;
-  spaceId?: number;
-  startTime?: string;
-  endTime?: string;
-  status: BookingStatus;
-  paymentStatus: PaymentStatus;
-  sort?: string;
-  page?: number;
-  pageSize?: number;
 }

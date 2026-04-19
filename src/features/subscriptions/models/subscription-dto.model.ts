@@ -1,21 +1,10 @@
-export enum SubscriptionStatus {
-  Active = 0,
-  Cancelled = 1 << 0,
-  Expired = 1 << 1,
-  NotPaid = 1 << 2,
-}
+import {SubscriptionStatus} from './subscription-status';
+import {SubscriptionPaymentStatus} from './subscription-payment-status';
 
-export enum SubscriptionPaymentStatus {
-  Paid = 0,
-  Failed = 1,
-  TestPaid = 2,
-  NotPaid = 3,
-}
-
-export interface ActiveSubscription {
+export interface SubscriptionDto {
   id: number;
-  subscriptionPlanId: number;
   price: number;
+  subscriptionPlanId: number;
   startDate: string;
   endDate: string;
   status: SubscriptionStatus | number;
@@ -26,31 +15,6 @@ export interface ActiveSubscription {
   paymentFailureReason?: string | null;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface SubscriptionHistoryEntry {
-  id: number;
-  subscriptionPlanId: number;
-  subscriptionPlanName: string;
-  subscriptionStatus: SubscriptionStatus | number;
-  isActive: boolean;
-  startedAt: string;
-  expiresAt: string;
-}
-
-export interface LiqPayPaymentData {
-  data: string;
-  signature: string;
-}
-
-export interface SubscriptionCreationResponse {
-  subscriptionId: number;
-  liqPayPaymentData: LiqPayPaymentData;
-}
-
-export interface CreateSubscriptionRequest {
-  userId: number;
-  planId: number;
 }
 
 export const subscriptionStatusTokens = (status: number): string[] => {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Space, spaceTypeLabels } from '../../models/space.model';
+import { Space } from '../../models/space.model';
 import { SpaceAvailabilityComponent } from './components/space-availability/space-availability.component';
 import {SpacesApiService} from '../../services/spaces-api.service';
+import {spaceTypeLabels} from "../../models/space-type-labels";
 
 @Component({
   selector: 'space-details',

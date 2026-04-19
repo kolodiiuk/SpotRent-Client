@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SpacesApiService } from './spaces-api.service';
-import { SpaceType, CreateSpaceRequest, SpaceFilterParams } from '../models/space.model';
+import {SpaceFilterParams} from "../models/space-filter-params";
+import {CreateSpaceRequest} from '../models/create-space-request';
+import {SpaceType} from '../models/space-type';
 
 describe('SpacesApiService', () => {
   let service: SpacesApiService;
@@ -36,7 +38,7 @@ describe('SpacesApiService', () => {
 
     const mockResponse = { items: [], totalItems: 0, page: 1, pageSize: 10 };
 
-    service.getSpaces(filters).subscribe(res => {
+    service.filterSpaces(filters).subscribe(res => {
       expect(res).toEqual(mockResponse);
     });
 

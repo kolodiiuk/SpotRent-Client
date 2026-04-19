@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { SpaceType, spaceTypeLabels } from '../../models/space.model';
 import {SpacesApiService} from '../../services/spaces-api.service';
+import {spaceTypeLabels} from "../../models/space-type-labels";
+import {SpaceType} from '../../models/space-type';
 
 @Component({
   selector: 'owner-owner-space-form',

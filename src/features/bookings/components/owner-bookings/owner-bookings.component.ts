@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
-import { Booking, BookingStatus } from '../../models/booking.model';
+import { Booking } from '../../models/booking.model';
+import {BookingStatus} from '../../models/booking-status';
 
 @Component({
   selector: 'owner-bookings',
@@ -91,7 +92,7 @@ export class OwnerBookingsComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
-    this.bookingService.getOwnerBookings().subscribe({
+    this.bookingService.getOwnerBookingHistory().subscribe({
       next: (data) => {
         this.bookings = data;
         this.isLoading = false;

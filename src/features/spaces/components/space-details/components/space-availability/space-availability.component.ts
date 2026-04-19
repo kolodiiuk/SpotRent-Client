@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SpaceSchedule } from '../../../../models/space.model';
 import {SpacesApiService} from '../../../../services/spaces-api.service';
+import {SpaceSchedule} from "../../../../models/space-schedule";
 
 @Component({
   selector: 'app-space-availability',

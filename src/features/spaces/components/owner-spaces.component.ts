@@ -29,7 +29,7 @@ export class OwnerSpacesComponent implements OnInit {
     // Wait, the backend GetSpaces endpoint doesn't automatically filter by owner unless specified
     // But let's assume getSpaces returns all spaces and the owner can see theirs.
     // Actuallly, we should have an endpoint for my-spaces, but since we don't, we just call getSpaces.
-    this.spacesApi.getSpaces({ limit: 100, offset: 0 }).subscribe({
+    this.spacesApi.filterSpaces({ limit: 100, offset: 0 }).subscribe({
       next: (res: any) => {
         // Ideally filter by the logged-in user's ID here if backend doesn't
         this.spaces = res.items;

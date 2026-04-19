@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {CreateSubscriptionPlanDto} from '../models/create-subscription-plan-dto';
 import {UpdateSubscriptionPlanDto} from '../models/update-subscription-plan-dto';
 import {SubscriptionPlan} from '../models/subscription-plan';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubscriptionPlanApiService {
-  private apiUrl = '/api/subscription-plans';
+  private apiUrl = `${environment.serverApiUrl}/subscription-plans`;
 
   constructor(private http: HttpClient) {
   }

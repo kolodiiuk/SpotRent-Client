@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SpaceListComponent } from './components/space-list/space-list.component';
 import { SpaceFilterComponent } from './components/space-filter/space-filter.component';
-import { Space, SpaceFilterParams } from '../../models/space.model';
+import { Space } from '../../models/space.model';
 import {SpacesApiService} from '../../services/spaces-api.service';
+import {SpaceFilterParams} from "../../models/space-filter-params";
 
 @Component({
   selector: 'spaces',
@@ -26,7 +27,7 @@ export class SpacesComponent implements OnInit {
 
   loadSpaces() {
     this.isLoading = true;
-    this.spacesApi.getSpaces(this.currentFilters).subscribe({
+    this.spacesApi.filterSpaces(this.currentFilters).subscribe({
       next: (res) => {
         this.spaces = res.items;
         this.totalItems = res.totalItems;

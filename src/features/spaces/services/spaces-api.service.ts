@@ -2,20 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  Space,
-  CreateSpaceRequest,
-  UpdateSpaceRequest,
-  SpaceFilterParams,
-  PagedSpacesResponse,
-  SpaceSchedule,
-  SpaceAvailabilityQuery
+  Space
 } from '../models/space.model';
+import {environment} from '../../../environments/environment';
+import {SpaceFilterParams} from '../models/space-filter-params';
+import {UpdateSpaceRequest} from '../models/update-space-request';
+import {CreateSpaceRequest} from '../models/create-space-request';
+import {SpaceSchedule} from '../models/space-schedule';
+import {SpaceAvailabilityQuery} from '../models/space-availability-query';
+import {PagedSpacesResponse} from '../models/paged-spaces-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpacesApiService {
-  private readonly baseUrl = 'http://localhost:5271/api/spaces';
+  private readonly baseUrl = `${environment.serverApiUrl}/spaces`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,10 +24,10 @@ export class SpacesApiService {
     return this.http.post<{ id: number }>(this.baseUrl, payload);
   }
 
-  getSpaces(filters: SpaceFilterParams): Observable<PagedSpacesResponse> {
+  filterSpaces(filters: SpaceFilterParams): Observable<PagedSpacesResponse> {
     let params = new HttpParams();
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
+      if (value != null) {
         params = params.set(key, value.toString());
       }
     });
@@ -49,14 +50,18 @@ export class SpacesApiService {
 
   getSpaceSchedule(id: number, startDate?: string, endDate?: string): Observable<SpaceSchedule> {
     let params = new HttpParams();
-    if (startDate) params = params.set('startDate', startDate);
-    if (endDate) params = params.set('endDate', endDate);
+    if (startDate) {
+      params = params.set('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.set('endDate', endDate);
+    }
 
     return this.http.get<SpaceSchedule>(`${this.baseUrl}/${id}/schedule`, { params });
   }
 
   updateSpace(id: number, payload: UpdateSpaceRequest): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<void>(`${this.baseUrl}/${id}`, payload);
   }
 
   deleteSpace(id: number): Observable<void> {

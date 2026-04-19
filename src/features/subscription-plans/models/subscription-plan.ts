@@ -7,4 +7,7 @@ export interface SubscriptionPlan {
   price: number;
   duration: Duration;
   includedHours: number;
+  ownerId: number | null;
+  isActive: boolean;
+  updatedAt: Date;
 }
