@@ -15,7 +15,10 @@ export const OWNER_ROUTES: Routes = [
   { path: 'bookings', component: OwnerBookingsComponent },
   { path: 'smart-locks', component: OwnerSmartLocksComponent },
   { path: 'access-logs', component: OwnerAccessLogsComponent },
-  { path: 'subscriptions', component: OwnerSubscriptionsComponent },
-  { path: 'subscriptions/new', loadComponent: () => import('../../features/subscriptions/components/subscription-form/subscription-form.component').then(c => c.SubscriptionFormComponent) },
-  { path: 'subscriptions/:id/edit', loadComponent: () => import('../../features/subscriptions/components/subscription-form/subscription-form.component').then(c => c.SubscriptionFormComponent) }
+  { path: 'subscription-plans', component: OwnerSubscriptionsComponent },
+  { path: 'subscription-plans/new', loadComponent: () => import('../../features/subscriptions/components/subscription-form/subscription-plan-form.component').then(c => c.SubscriptionPlanForm) },
+  { path: 'subscription-plans/:id/edit', loadComponent: () => import('../../features/subscriptions/components/subscription-form/subscription-plan-form.component').then(c => c.SubscriptionPlanForm) },
+  { path: 'subscriptions/new', redirectTo: 'subscription-plans/new', pathMatch: 'full' },
+  { path: 'subscriptions/:id/edit', redirectTo: 'subscription-plans/:id/edit', pathMatch: 'full' },
+  { path: 'subscriptions', redirectTo: 'subscription-plans', pathMatch: 'full' }
 ];

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { Router, RouterModule, NavigationEnd, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { User } from '../../models';
@@ -16,7 +16,7 @@ interface NavigationItem {
 @Component({
   selector: 'app-user-layout',
   standalone: true,
-  imports: [RouterModule, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
+  imports: [RouterModule, RouterOutlet, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
   templateUrl: 'user-layout.component.html',
   styleUrls: ['./user-layout.component.css']
 })
@@ -29,12 +29,14 @@ export class UserLayoutComponent implements OnInit {
   currentPath = '';
 
   navigationItems: NavigationItem[] = [
-    { path: '/owner-user-admin-dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/bookings', label: 'My Bookings', icon: '📅' },
+    { path: '/user', label: 'Dashboard', icon: '📊' },
+    { path: '/user/my-bookings', label: 'My Bookings', icon: '📅' },
+    { path: '/user/subscriptions', label: 'My Subscriptions', icon: '💼' },
+    { path: '/user/subscriptions/history', label: 'Subscription History', icon: '🕘' },
     { path: '/spaces', label: 'Browse Spaces', icon: '🏢' },
-    { path: '/subscriptions', label: 'Subscriptions', icon: '💳' },
-    { path: '/access', label: 'Access Control', icon: '🔐' },
-    { path: '/profile', label: 'Profile', icon: '👤' },
+    { path: '/subscription-plans', label: 'Subscription Plans', icon: '💳' },
+    { path: '/about', label: 'About', icon: 'ℹ️' },
+    { path: '/user/profile', label: 'Profile', icon: '👤' },
   ];
 
   constructor(
@@ -83,7 +85,7 @@ export class UserLayoutComponent implements OnInit {
   }
 
   navigateToBooking(): void {
-    this.router.navigate(['/book-now']);
+    this.router.navigate(['/subscription-plans']);
   }
 
   getUserInitial(): string {
