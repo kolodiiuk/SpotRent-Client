@@ -36,7 +36,7 @@ export class AuthApiService {
   }
 
   googleLogin(token: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/google-login`, { token });
+    return this.http.post<LoginResponse>(`${this.baseUrl}/google`, { IdToken: token });
   }
 
   register(payload: RegisterRequest): Observable<void> {

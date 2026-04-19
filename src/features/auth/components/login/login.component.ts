@@ -4,11 +4,12 @@ import {Router, RouterLink} from '@angular/router';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../services/auth.service';
 import {GoogleAuthService} from '../../services/google-auth.service';
-import {CardComponent} from '../../../../app/shared/components/card/card.component';
-import {ButtonComponent} from '../../../../app/shared/components/button/button.component';
-import {InputComponent} from '../../../../app/shared/components/input/input.component';
-import {AlertComponent} from '../../../../app/shared/components/alert/alert.component';
-import {GoogleLoginComponent} from '../../../../app/shared/components/google-login/google-login.component';
+import {CardComponent} from '../../../../app/shared/components';
+import {ButtonComponent} from '../../../../app/shared/components';
+import {InputComponent} from '../../../../app/shared/components';
+import {AlertComponent} from '../../../../app/shared/components';
+import {GoogleLoginComponent} from '../../../../app/shared/components';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'login',
@@ -24,14 +25,14 @@ import {GoogleLoginComponent} from '../../../../app/shared/components/google-log
     RouterLink
   ]
 })
-export class LoginComponent implements OnInit, OnDestroy
-{
+export class LoginComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
   showPassword = false;
-
+  private returnUrl = '';
+  protected readonly clientId = environment.clientId;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -39,41 +40,37 @@ export class LoginComponent implements OnInit, OnDestroy
     private router: Router,
     private authService: AuthService,
     private googleAuthService: GoogleAuthService
-  )
-  {
+  ) {
   }
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
 
-    if (this.authService.isAuthenticated())
-    {
+    if (this.authService.isAuthenticated()) {
       this.redirectBasedOnRole();
 
       return;
     }
 
     const nav = this.router.getCurrentNavigation();
-    if (nav?.extras?.state?.['message'])
-    {
+    if (nav?.extras?.state?.['returnUrl']) {
+      this.returnUrl = nav.extras.state['returnUrl'];
+    }
+    if (nav?.extras?.state?.['message']) {
       this.successMessage = nav.extras.state['message'];
     }
   }
 
-  ngOnDestroy(): void
-  {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  submit(): void
-  {
-    if (this.form.invalid)
-    {
+  submit(): void {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
@@ -88,8 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.redirectBasedOnRole(),
-        error: (err: any) =>
-        {
+        error: (err: any) => {
           this.errorMessage =
             err?.error?.message ??
             err?.message ??
@@ -99,18 +95,15 @@ export class LoginComponent implements OnInit, OnDestroy
       });
   }
 
-  clearGlobalError(): void
-  {
+  clearGlobalError(): void {
     this.errorMessage = null;
   }
 
-  togglePassword(): void
-  {
+  togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
-  handleGoogleSuccess(credential: string): void
-  {
+  handleGoogleSuccess(credential: string): void {
     this.googleAuthService.loginWithGoogle(credential)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -119,43 +112,39 @@ export class LoginComponent implements OnInit, OnDestroy
       });
   }
 
-  handleGoogleError(error: any): void
-  {
+  handleGoogleError(error: any): void {
     console.error('Google Auth Error:', error);
     this.errorMessage = 'Google Sign-In failed';
   }
 
-  private redirectBasedOnRole(): void
-  {
+  private redirectBasedOnRole(): void {
+    if (this.returnUrl) {
+      this.router.navigateByUrl(this.returnUrl, { replaceUrl: true });
+      return;
+    }
+
     const role = this.authService.getUserRole();
     const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
     this.router.navigate([path], {replaceUrl: true});
   }
 
-  get emailError(): string | undefined
-  {
+  get emailError(): string | undefined {
     const control = this.form.get('email');
-    if (control?.invalid && (control.dirty || control.touched))
-    {
-      if (control.hasError('required'))
-      {
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) {
         return 'Email is required';
       }
-      if (control.hasError('email'))
-      {
+      if (control.hasError('email')) {
         return 'Please enter a valid email address';
       }
     }
     return undefined;
   }
 
-  get passwordError(): string | undefined
-  {
+  get passwordError(): string | undefined {
     const control = this.form.get('password');
-    if (control?.invalid && (control.dirty || control.touched))
-    {
-      if (control.hasError('required'))
-      {
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.hasError('required')) {
         return 'Password is required';
       }
     }

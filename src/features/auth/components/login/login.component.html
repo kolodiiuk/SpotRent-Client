@@ -54,7 +54,7 @@
             </div>
 
             <div class="mt-6">
-                <app-google-login (success)="handleGoogleSuccess($event)" (error)="handleGoogleError($event)">
+                <app-google-login [clientId]=clientId (success)="handleGoogleSuccess($event)" (error)="handleGoogleError($event)">
                 </app-google-login>
             </div>
 
