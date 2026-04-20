@@ -12,16 +12,11 @@ export class AccessLogService {
 
   constructor(private http: HttpClient) {}
 
-  getOwnerAccessLogs(): Observable<AccessLogEntry[]> {
-    return this.http.get<AccessLogEntry[]>(`${this.apiUrl}/owner`);
-  }
-
   getSpaceAccessLogs(id: number) : Observable<AccessLogEntry[]> {
     return this.http.get<AccessLogEntry[]>(`${this.apiUrl}/space/${id}`);
   }
 
-  // ???
-  getOwnerLogs(ownerId: number) : Observable<AccessLogEntry[]> {
+  getOwnerAccessLogs(ownerId: number) : Observable<AccessLogEntry[]> {
     return this.http.get<AccessLogEntry[]>(`${this.apiUrl}/owner/${ownerId}`);
   }
 

@@ -5,5 +5,5 @@ export * from './card/card.component';
 export * from './input/input.component';
 export * from './liqpay-button/liqpay-button.component';
 export * from './modal/modal.component';
-export * from './google-login/google-login.component';
+export * from '../../../features/auth/components/google-login/google-login.component';
 export * from './locale-switcher/locale-switcher.component';

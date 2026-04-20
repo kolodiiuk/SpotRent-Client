@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Space } from '../models/space.model';
 import {SpacesApiService} from '../services/spaces-api.service';
+import {AuthService} from '../../auth/services/auth.service';
+import {AuthStorageService} from '../../auth/services/auth-storage.service';
+import {User} from '../../auth/models/user.model';
+import {PagedSpacesResponse} from '../models/paged-spaces-response';
 
 @Component({
   selector: 'owner-spaces',
@@ -14,7 +18,8 @@ import {SpacesApiService} from '../services/spaces-api.service';
 export class OwnerSpacesComponent implements OnInit {
   spaces: Space[] = [];
   isLoading = false;
-
+  authService = inject(AuthService);
+  cdr = inject(ChangeDetectorRef);
   constructor(private spacesApi: SpacesApiService) { }
 
   ngOnInit() {
@@ -23,17 +28,22 @@ export class OwnerSpacesComponent implements OnInit {
 
   loadOwnerSpaces() {
     this.isLoading = true;
-    // Assuming the API filters by owner internally if we pass no generic filters,
-    // or we might need an endpoint to get current owner's spaces.
-    // For now, let's use the public filter, assuming backend handles ownership or we pass ownerId.
-    // Wait, the backend GetSpaces endpoint doesn't automatically filter by owner unless specified
-    // But let's assume getSpaces returns all spaces and the owner can see theirs.
-    // Actuallly, we should have an endpoint for my-spaces, but since we don't, we just call getSpaces.
-    this.spacesApi.filterSpaces({ limit: 100, offset: 0 }).subscribe({
-      next: (res: any) => {
-        // Ideally filter by the logged-in user's ID here if backend doesn't
-        this.spaces = res.items;
+    let owner = -1;
+    //todo: fix shit
+    this.authService.user$.subscribe({
+      next: (user: User | null) => {
+        owner = user == null ? -1 : user.id;
+      },
+      error: (err: any) => {
         this.isLoading = false;
+        console.error('No user');
+      }
+    });
+    this.spacesApi.filterSpaces({ limit: 100, offset: 0 }).subscribe({
+      next: (res: PagedSpacesResponse) => {
+        this.spaces = res.items.filter(item => item.ownerId === owner);
+        this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err: any) => {
         console.error('Failed to load owner spaces', err);

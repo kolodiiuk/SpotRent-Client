@@ -9,7 +9,7 @@ declare const google: any;
     styleUrls: ['./google-login.component.css']
 })
 export class GoogleLoginComponent implements OnInit, OnDestroy {
-    @Input() clientId: string = '103104858818-jb3c2g0a3jkflgfif33vsjv66vcm8nrp.apps.googleusercontent.com';
+    @Input() clientId: string = '';
     @Output() success = new EventEmitter<string>();
     @Output() error = new EventEmitter<any>();
 

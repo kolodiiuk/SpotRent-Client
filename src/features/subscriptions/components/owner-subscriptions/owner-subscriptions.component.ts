@@ -1,28 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { SubscriptionPlanService } from '../../../subscription-plans/services/subsription-plan.service';
-import { durationLabels } from '../../../subscription-plans/models/duration-labels';
-import { SubscriptionPlan } from '../../../subscription-plans/models/subscription-plan';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Router, RouterModule} from '@angular/router';
+import {SubscriptionPlanService} from '../../../subscription-plans/services/subsription-plan.service';
+import {durationLabels} from '../../../subscription-plans/models/duration-labels';
+import {SubscriptionPlan} from '../../../subscription-plans/models/subscription-plan';
+import {ErrorComponent} from '../../../../app/shared/components/error/error.component';
+import {LoaderComponent} from '../../../../app/shared/components/loader.component';
+import {catchError, Observable, of, tap} from 'rxjs';
 
 @Component({
   selector: 'owner-subscriptions',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ErrorComponent, LoaderComponent],
   templateUrl: 'owner-subscriptions.component.html',
-  styleUrl: 'owner-subscriptions.component.css'
+  styleUrl: 'owner-subscriptions.component.css',
 })
 export class OwnerSubscriptionsComponent implements OnInit {
-  plans: SubscriptionPlan[] = [];
+  plans$!: Observable<SubscriptionPlan[]>;
   isLoading = false;
   error = '';
   actionMessage = '';
   labels = durationLabels;
-
-  constructor(
-    private planService: SubscriptionPlanService,
-    private router: Router
-  ) {}
+  private planService = inject(SubscriptionPlanService);
+  private router = inject(Router);
 
   ngOnInit() {
     this.loadPlans();
@@ -31,17 +31,16 @@ export class OwnerSubscriptionsComponent implements OnInit {
   loadPlans() {
     this.isLoading = true;
     this.error = '';
-    this.planService.getOwnerPlans().subscribe({
-      next: (data) => {
-        this.plans = data;
+    this.actionMessage = '';
+
+    this.plans$ = this.planService.getOwnerPlans().pipe(
+      tap(() => this.isLoading = false),
+      catchError(err => {
         this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching plans', err);
         this.error = 'Failed to load subscription plans.';
-        this.isLoading = false;
-      }
-    });
+        return of([]);
+      })
+    );
   }
 
   openEdit(planId: number) {

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { UserDashboardComponent } from '../../features/user-profile/components/user-dashboard/user-dashboard.component';
 import { MyBookingsComponent } from '../../features/bookings/components/my-bookings/my-bookings.component';
 import { ProfileComponent } from '../../features/user-profile/components/profile/profile.component';
 import { MySubscriptionsComponent } from '../../features/subscriptions/components/my-subscriptions/my-subscriptions.component';
@@ -8,7 +7,7 @@ import { SubscriptionChangeComponent } from '../../features/subscriptions/compon
 import { SubscriptionHistoryComponent } from '../../features/subscriptions/components/subscription-history/subscription-history.component';
 
 export const USER_ROUTES: Routes = [
-  { path: '', component: UserDashboardComponent },
+  { path: '', component: MyBookingsComponent },
   { path: 'my-bookings', component: MyBookingsComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'subscriptions/history', component: SubscriptionHistoryComponent },

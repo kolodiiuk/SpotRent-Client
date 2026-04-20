@@ -5,83 +5,103 @@
       <p class="mt-2 text-sm text-gray-600">Manage subscription plans for your spaces.</p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <button class="btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors block" (click)="createPlan()">
+      <button
+        class="btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors block"
+        (click)="createPlan()">
         Add New Plan
       </button>
     </div>
   </div>
 
-  <div *ngIf="error" class="mb-6 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-    {{ error }}
-  </div>
+  @if (error) {
+    <app-error [error]="error"></app-error>
+  }
 
-  <div *ngIf="actionMessage" class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-    {{ actionMessage }}
-  </div>
-
-  <div *ngIf="isLoading" class="flex justify-center p-8">
-    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-  </div>
-
-  <div *ngIf="!isLoading && plans.length === 0" class="text-center bg-white p-12 rounded-xl shadow-sm border border-gray-100">
-    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-    </svg>
-    <h3 class="mt-2 text-sm font-semibold text-gray-900">No plans</h3>
-    <p class="mt-1 text-sm text-gray-500">Create your first subscription plan.</p>
-    <div class="mt-6">
-      <button (click)="createPlan()" class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-        Add New Plan
-      </button>
+  @if (actionMessage) {
+    <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+      {{ actionMessage }}
     </div>
-  </div>
+  }
 
-  <div *ngIf="!isLoading && plans.length > 0" class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-      <tr>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">Plan</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">Price</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">Duration</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">Hours</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">Status</th>
-        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-600">Actions</th>
-      </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100">
-      <tr *ngFor="let plan of plans"
-          class="cursor-pointer transition-colors hover:bg-gray-50"
-          (click)="openEdit(plan.id)">
-        <td class="px-6 py-4">
-          <p class="font-semibold text-gray-900">{{ plan.name }}</p>
-          <p class="text-sm text-gray-600 line-clamp-1">{{ plan.description }}</p>
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-800">${{ plan.price }}</td>
-        <td class="px-6 py-4 text-sm text-gray-800">{{ labels[plan.duration] }}</td>
-        <td class="px-6 py-4 text-sm text-gray-800">{{ plan.includedHours }}</td>
-        <td class="px-6 py-4">
-          <span class="rounded-full px-2 py-1 text-xs font-semibold"
-                [class.bg-emerald-100]="plan.isActive"
-                [class.text-emerald-700]="plan.isActive"
-                [class.bg-gray-200]="!plan.isActive"
-                [class.text-gray-700]="!plan.isActive">
-            {{ plan.isActive ? 'Active' : 'Inactive' }}
-          </span>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <div class="inline-flex gap-2">
-            <button (click)="deactivate(plan.id, $event)"
-                    class="rounded-md bg-yellow-50 px-3 py-1.5 text-xs font-medium text-yellow-700 hover:bg-yellow-100">
-              Deactivate
-            </button>
-            <button (click)="deletePlan(plan.id, $event)"
-                    class="rounded-md bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100">
-              Delete
-            </button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  @if (isLoading) {
+    <app-loader></app-loader>
+  }
+
+  @if (plans$ | async; as plans) {
+
+    @if (!isLoading) {
+
+      @if (plans.length === 0) {
+        <div class="text-center bg-white p-12 rounded-xl shadow-sm border border-gray-100">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          <h3 class="mt-2 text-sm font-semibold text-gray-900">No plans</h3>
+          <p class="mt-1 text-sm text-gray-500">Create your first subscription plan.</p>
+        </div>
+      } @else {
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Plan
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Price
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Duration
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Hours
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Status
+              </th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-600">
+                Actions
+              </th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              @for (plan of plans; track plan.id) {
+                <tr class="cursor-pointer transition-colors hover:bg-gray-50" (click)="openEdit(plan.id)">
+                  <td class="px-6 py-4">
+                    <p class="font-semibold text-gray-900">{{ plan.name }}</p>
+                    <p class="text-sm text-gray-600 line-clamp-1">{{ plan.description }}</p>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-800">${{ plan.price }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-800">{{ labels[plan.duration] }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-800">{{ plan.includedHours }}</td>
+                  <td class="px-6 py-4">
+                    <span class="rounded-full px-2 py-1 text-xs font-semibold"
+                          [class.bg-emerald-100]="plan.isActive"
+                          [class.text-emerald-700]="plan.isActive"
+                          [class.bg-gray-200]="!plan.isActive"
+                          [class.text-gray-700]="!plan.isActive">
+                      {{ plan.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="inline-flex gap-2">
+                      <button (click)="deactivate(plan.id, $event)"
+                              class="rounded-md bg-yellow-50 px-3 py-1.5 text-xs font-medium text-yellow-700 hover:bg-yellow-100">
+                        Deactivate
+                      </button>
+                      <button (click)="deletePlan(plan.id, $event)"
+                              class="rounded-md bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  }
 </div>
