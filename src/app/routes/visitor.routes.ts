@@ -4,8 +4,8 @@ import { AboutComponent } from '../../features/visitor/about/about.component';
 import { ContactComponent } from '../../features/visitor/contact/contact.component';
 import { SpaceDetailsComponent } from '../../features/spaces/components/space-details/space-details.component';
 import { SpacesComponent } from '../../features/spaces/components/spaces/spaces.component'
-import { UserSubscriptionsComponent } from '../../features/subscriptions/components/user-subsrciptions/user-subscriptions.component';
-import { SubscriptionPlanDetailsComponent } from '../../features/subscriptions/components/subscription-plan-details/subscription-plan-details.component';
+import { VisitorSubscriptionPlansComponent } from '../../features/subscriptions/components/user-subsrciptions/visitor-subscription-plans.component';
+import { SubscriptionPlanDetailsComponent } from '../../features/subscription-plans/components/subscription-plan-details/subscription-plan-details.component';
 
 export const VISITOR_ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -15,6 +15,6 @@ export const VISITOR_ROUTES: Routes = [
   { path: 'spaces/:id', component: SpaceDetailsComponent },
   { path: 'subscription', redirectTo: 'subscription-plans', pathMatch: 'full' },
   { path: 'subscription/:id', redirectTo: 'subscription-plans/:id', pathMatch: 'full' },
-  { path: 'subscription-plans', component: UserSubscriptionsComponent },
+  { path: 'subscription-plans', component: VisitorSubscriptionPlansComponent },
   { path: 'subscription-plans/:id', component: SubscriptionPlanDetailsComponent }
 ];

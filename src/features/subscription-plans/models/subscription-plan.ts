@@ -8,6 +8,7 @@ export interface SubscriptionPlan {
   duration: Duration;
   includedHours: number;
   ownerId: number | null;
+  owner: string | null;
   isActive: boolean;
   updatedAt: string;
 }

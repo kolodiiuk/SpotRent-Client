@@ -26,7 +26,10 @@ export class SpacesApiService {
 
   filterSpaces(filters: SpaceFilterParams): Observable<PagedSpacesResponse> {
     let params = new HttpParams();
-    Object.entries(filters).forEach(([key, value]) => {
+    const safeFilters = { ...filters } as Record<string, unknown>;
+    delete safeFilters['attributes'];
+
+    Object.entries(safeFilters).forEach(([key, value]) => {
       if (value != null) {
         params = params.set(key, value.toString());
       }

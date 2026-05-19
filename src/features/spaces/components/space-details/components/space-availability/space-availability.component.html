@@ -1,5 +1,36 @@
 <div class="availability-section layout-glass-card p-6 mt-6">
-  <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">Availability Schedule</h3>
+  <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">{{ 'SPACE_DETAILS.AVAILABILITY_SCHEDULE' | translate }}</h3>
+@if (schedule$ | async; as schedule) {
+  @if (!isLoading && !error && schedule) {
+    <div>
+      @if (!schedule.bookings || schedule.bookings.length === 0) {
+        <div class="text-neutral-500 dark:text-neutral-400 py-4 italic">
+          {{ 'SPACE_DETAILS.NO_UPCOMING_BOOKINGS' | translate }}
+        </div>
+      }
+      @if (schedule.bookings && schedule.bookings.length > 0) {
+        <div class="space-y-3">
+          <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">{{ 'SPACE_DETAILS.UPCOMING_BOOKINGS' | translate }}</h4>
+          <ul class="divide-y divide-neutral-200 dark:divide-neutral-700">
+            @for (booking of schedule.bookings; track booking) {
+              <li class="py-3 flex justify-between items-center text-sm text-neutral-700 dark:text-neutral-300">
+                <div class="flex items-center gap-2">
+                  <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span class="font-medium">{{ booking.startTime | localDate }}</span>
+                </div>
+                <span class="text-neutral-500 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
+                  {{ booking.startTime | localTime }} - {{ booking.endTime | localTime }}
+                </span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  }
+}
 
   @if (isLoading) {
     <div class="flex justify-center py-8">
@@ -9,37 +40,7 @@
 
   @if (error) {
     <div class="p-4 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300 rounded-md">
-      {{ error }}
-    </div>
-  }
-
-  @if (!isLoading && !error && schedule) {
-    <div>
-      @if (!schedule.bookings || schedule.bookings.length === 0) {
-        <div class="text-neutral-500 dark:text-neutral-400 py-4 italic">
-          No upcoming bookings found. The space is currently completely available.
-        </div>
-      }
-      @if (schedule.bookings && schedule.bookings.length > 0) {
-        <div class="space-y-3">
-          <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">Upcoming Bookings (Unavailable Times)</h4>
-          <ul class="divide-y divide-neutral-200 dark:divide-neutral-700">
-            @for (booking of schedule.bookings; track booking) {
-              <li class="py-3 flex justify-between items-center text-sm text-neutral-700 dark:text-neutral-300">
-                <div class="flex items-center gap-2">
-                  <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span class="font-medium">{{ formatDate(booking.startTime) }}</span>
-                </div>
-                <span class="text-neutral-500 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
-                  {{ formatTime(booking.startTime) }} - {{ formatTime(booking.endTime) }}
-                </span>
-              </li>
-            }
-          </ul>
-        </div>
-      }
+      {{ error | translate }}
     </div>
   }
 </div>

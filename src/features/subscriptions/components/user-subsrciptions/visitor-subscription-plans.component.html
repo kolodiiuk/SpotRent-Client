@@ -1,0 +1,65 @@
+<div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">{{ 'VISITOR_SUBSCRIPTION_PLANS.TITLE' | translate }}</h1>
+    <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+      {{ 'VISITOR_SUBSCRIPTION_PLANS.SUBTITLE' | translate }}
+    </p>
+  </div>
+
+  @if (plans$ | async; as plans) {
+    @if (!isLoading && plans.length === 0) {
+      <div
+        class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-12 text-center shadow-md backdrop-blur-sm">
+        <h3 class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ 'VISITOR_SUBSCRIPTION_PLANS.EMPTY_TITLE' | translate }}</h3>
+        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{{ 'VISITOR_SUBSCRIPTION_PLANS.EMPTY_TEXT' | translate }}</p>
+      </div>
+    }
+
+    @if (!isLoading && plans.length > 0) {
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        @for (plan of plans; track plan) {
+          <a
+            [routerLink]="[plan.id]"
+            class="group flex h-full flex-col rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-6 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg backdrop-blur-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ plan.name }}</h2>
+                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{{ getDurationLabelKey(plan.duration) | translate }}</p>
+              </div>
+            </div>
+            <p class="mt-4 flex-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+              {{ plan.description }}
+            </p>
+            <div
+              class="mt-6 space-y-2 border-t border-neutral-200 dark:border-neutral-700 pt-4 text-sm text-neutral-700 dark:text-neutral-300">
+              <p><span
+                class="font-medium">{{ 'VISITOR_SUBSCRIPTION_PLANS.OWNER' | translate }}</span> {{ plan.owner !== null ? plan.owner : ('VISITOR_SUBSCRIPTION_PLANS.OWNER_UNAVAILABLE' | translate) }}
+              </p>
+              <p><span class="font-medium">{{ 'VISITOR_SUBSCRIPTION_PLANS.PRICE' | translate }}</span> ${{ plan.price }}</p>
+              <p><span class="font-medium">{{ 'VISITOR_SUBSCRIPTION_PLANS.INCLUDED_HOURS' | translate }}</span> {{ plan.includedHours }}</p>
+            </div>
+            <div class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400">
+              {{ 'VISITOR_SUBSCRIPTION_PLANS.VIEW_DETAILS' | translate }}
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  }
+  @if (error) {
+    <div
+      class="mb-6 rounded-lg border border-danger-200 dark:border-danger-800 bg-danger-50 dark:bg-danger-900/20 p-3 text-sm text-danger-700 dark:text-danger-300">
+      {{ error }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="flex justify-center p-8">
+      <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-primary-600"></div>
+    </div>
+  }
+</div>

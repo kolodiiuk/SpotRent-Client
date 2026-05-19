@@ -1,0 +1,80 @@
+<div class="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <a routerLink=".."
+     class="mb-6 inline-flex items-center gap-2 font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m0 0l7 7"/>
+    </svg>
+    {{ 'SUBSCRIPTION_PLAN_DETAILS.BACK_TO_PLANS' | translate }}
+  </a>
+  @if (plan$ | async; as plan) {
+    @if (!isLoading && plan) {
+      <div
+        class="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
+        <div class="border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-6 py-5">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+            {{ 'SUBSCRIPTION_PLAN_DETAILS.HEADER' | translate }}</p>
+          <h1 class="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{{ plan.name }}</h1>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-neutral-700 dark:text-neutral-300">{{ plan.description }}</p>
+        </div>
+        <div class="grid gap-6 p-6 md:grid-cols-3">
+          <div
+            class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+            <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'SUBSCRIPTION_PLAN_DETAILS.PRICE' | translate }}</p>
+            <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ plan.price }}</p>
+          </div>
+          <div
+            class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+            <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'SUBSCRIPTION_PLAN_DETAILS.DURATION' | translate }}</p>
+            <p
+              class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ getDurationLabelKey(plan.duration) | translate }}</p>
+          </div>
+          <div
+            class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+            <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'SUBSCRIPTION_PLAN_DETAILS.INCLUDED_HOURS' | translate }}</p>
+            <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ plan.includedHours }}</p>
+          </div>
+        </div>
+        <div class="grid gap-4 px-6 pb-6 md:grid-cols-2">
+          <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
+            <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'SUBSCRIPTION_PLAN_DETAILS.OWNER' | translate }}</p>
+            <p class="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              {{ plan.owner !== null ? plan.owner : ('SUBSCRIPTION_PLAN_DETAILS.OWNER_UNAVAILABLE' | translate) }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
+            <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'SUBSCRIPTION_PLAN_DETAILS.STATUS' | translate }}</p>
+            <p
+              class="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ plan.isActive ? ('SUBSCRIPTION_PLAN_DETAILS.ACTIVE' | translate) : ('SUBSCRIPTION_PLAN_DETAILS.INACTIVE' | translate) }}</p>
+          </div>
+        </div>
+        <div
+          class="flex flex-wrap items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-700 px-6 py-5">
+          <button type="button" routerLink=".."
+                  class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-5 py-2 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            {{ 'SUBSCRIPTION_PLAN_DETAILS.BACK' | translate }}
+          </button>
+          <button type="button" (click)="subscribe()" [disabled]="isSubmitting || !plan?.isActive"
+                  class="rounded-lg bg-primary-600 px-5 py-2 font-medium text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60">
+            @if (isSubmitting) {
+              <span
+                class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+            }
+            {{ plan?.isActive ? ('SUBSCRIPTION_PLAN_DETAILS.SUBSCRIBE' | translate) : ('SUBSCRIPTION_PLAN_DETAILS.PLAN_UNAVAILABLE' | translate) }}
+          </button>
+        </div>
+      </div>
+    }
+  }
+  @if (error) {
+    <div
+      class="mb-6 rounded-lg border border-danger-200 dark:border-danger-800 bg-danger-50 dark:bg-danger-900/20 p-4 text-sm text-danger-700 dark:text-danger-300">
+      {{ error | translate }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="flex justify-center p-12">
+      <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-primary-600"></div>
+    </div>
+  }
+</div>

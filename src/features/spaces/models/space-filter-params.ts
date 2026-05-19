@@ -9,7 +9,6 @@ export interface SpaceFilterParams {
   minHourlyRate?: number;
   maxHourlyRate?: number;
   city?: string;
-  attributes?: string;
   sort?: string;
   limit?: number;
   offset?: number;

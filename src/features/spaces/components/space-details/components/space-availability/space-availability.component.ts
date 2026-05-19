@@ -1,69 +1,67 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { finalize, take } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import {catchError, finalize, Observable, of, take, timeout} from 'rxjs';
 
 import {SpacesApiService} from '../../../../services/spaces-api.service';
 import {SpaceSchedule} from "../../../../models/space-schedule";
+import { TranslateModule } from '@ngx-translate/core';
+import { LocalDatePipe, LocalTimePipe } from '../../../../../../app/shared/pipes';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-space-availability',
   standalone: true,
-  imports: [],
+  imports: [TranslateModule, LocalDatePipe, LocalTimePipe, AsyncPipe],
   templateUrl: './space-availability.component.html',
   styleUrl: './space-availability.component.css'
 })
-export class SpaceAvailabilityComponent implements OnInit, OnChanges {
-  @Input() spaceId!: number;
+export class SpaceAvailabilityComponent {
+  private _spaceId: number | null = null;
+  schedule$!: Observable<null | SpaceSchedule>;
+
+  @Input()
+  set spaceId(value: number | null | undefined) {
+    const nextId = value != null ? Number(value) : null;
+    if (!nextId || nextId <= 0 || this._spaceId === nextId) {
+      return;
+    }
+
+    this._spaceId = nextId;
+    this.loadSchedule();
+  }
+
+  get spaceId(): number | null {
+    return this._spaceId;
+  }
+
   schedule: SpaceSchedule | null = null;
   isLoading = false;
   error = '';
 
   constructor(private spacesApi: SpacesApiService) { }
 
-  ngOnInit() {
-    if (this.spaceId) {
-      this.loadSchedule();
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['spaceId'] && !changes['spaceId'].isFirstChange()) {
-      this.loadSchedule();
-    }
-  }
-
   loadSchedule() {
+    if (!this.spaceId) {
+      return;
+    }
+
     this.isLoading = true;
     this.error = '';
 
-    // Default load next 7 days
     const start = new Date();
     const end = new Date();
     end.setDate(end.getDate() + 7);
 
-    this.spacesApi.getSpaceSchedule(this.spaceId, start.toISOString(), end.toISOString())
+    this.schedule$ = this.spacesApi.getSpaceSchedule(this.spaceId, start.toISOString(), end.toISOString())
       .pipe(
         take(1),
+        timeout(15000),
+        catchError((err) => {
+          this.error = 'SPACE_DETAILS.SCHEDULE_LOAD_ERROR';
+          return of(null);
+        }),
         finalize(() => {
           this.isLoading = false;
         })
-      )
-      .subscribe({
-        next: (res) => {
-          this.schedule = res;
-        },
-        error: (err) => {
-          console.error('Failed to load schedule', err);
-          this.error = 'Failed to load availability schedule.';
-          this.schedule = null;
-        }
-      });
-  }
-
-  formatTime(dateString: string): string {
-    return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-
-  formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+      );
   }
 }
