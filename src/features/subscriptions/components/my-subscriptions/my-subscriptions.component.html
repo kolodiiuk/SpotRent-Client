@@ -1,74 +1,73 @@
 <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
   <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 md:text-3xl">My Subscriptions</h1>
-      <p class="mt-2 text-sm text-gray-600">Manage the subscriptions you currently own.</p>
-    </div>
-    <div class="flex flex-wrap gap-3">
-      <a routerLink="/subscription-plans"
-         class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Browse plans</a>
-      <a routerLink="/user/subscriptions/history"
-         class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">History</a>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">My Subscriptions</h1>
     </div>
   </div>
 
-  @if (error) {
-    <app-error error="error"></app-error>
-  } @else if (isLoading) {
-    <app-loader></app-loader>
-  } @else if (subscriptions.length === 0) {
-    <div class="rounded-2xl border border-gray-200 bg-white p-12 text-center shadow-sm">
-      <h2 class="text-lg font-semibold text-gray-900">No subscriptions yet</h2>
-      <p class="mt-2 text-sm text-gray-500">Choose a plan from the public catalog to create one.</p>
-      <div class="mt-6">
-        <a routerLink="/subscription-plans"
-           class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-          View plans
-        </a>
+  @if (subscriptions$ | async; as subscriptions) {
+    @if (error) {
+      <app-error [error]="error"></app-error>
+    } @else if (isLoading) {
+      <app-loader></app-loader>
+    } @else if (subscriptions.length === 0) {
+      <div class="layout-glass-card p-12 text-center">
+        <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">No subscriptions yet</h2>
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Choose a plan from the public catalog to create
+          one.</p>
+        <div class="mt-6">
+          <a routerLink="/subscription-plans"
+             class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
+            View plans
+          </a>
+        </div>
       </div>
-    </div>
-  } @else {
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-      @for (item of subscriptions; track item.subscription.id) {
-        <article class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h2 class="text-lg font-semibold text-gray-900">{{ item.plan.name }}</h2>
-              <p class="mt-1 text-sm text-gray-600">{{ item.plan.description }}</p>
-            </div>
-            <span
-              class="rounded-full px-3 py-1 text-xs font-semibold"
-              [class.bg-emerald-100]="subscriptionStatusVariant(item.subscription.status) === 'success'"
-              [class.text-emerald-700]="subscriptionStatusVariant(item.subscription.status) === 'success'"
-              [class.bg-amber-100]="subscriptionStatusVariant(item.subscription.status) === 'warning'"
-              [class.text-amber-700]="subscriptionStatusVariant(item.subscription.status) === 'warning'"
-              [class.bg-red-100]="subscriptionStatusVariant(item.subscription.status) === 'danger'"
-              [class.text-red-700]="subscriptionStatusVariant(item.subscription.status) === 'danger'"
-              [class.bg-sky-100]="subscriptionStatusVariant(item.subscription.status) === 'info'"
-              [class.text-sky-700]="subscriptionStatusVariant(item.subscription.status) === 'info'">
+    } @else {
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        @for (item of subscriptions; track item.subscription.id) {
+          <article
+            class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-6 shadow-md backdrop-blur-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ item.plan.name }}</h2>
+                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{{ item.plan.description }}</p>
+              </div>
+              <span
+                class="rounded-full px-3 py-1 text-xs font-semibold"
+                [class.bg-emerald-100]="subscriptionStatusVariant(item.subscription.status) === 'success'"
+                [class.text-emerald-700]="subscriptionStatusVariant(item.subscription.status) === 'success'"
+                [class.bg-amber-100]="subscriptionStatusVariant(item.subscription.status) === 'warning'"
+                [class.text-amber-700]="subscriptionStatusVariant(item.subscription.status) === 'warning'"
+                [class.bg-red-100]="subscriptionStatusVariant(item.subscription.status) === 'danger'"
+                [class.text-red-700]="subscriptionStatusVariant(item.subscription.status) === 'danger'"
+                [class.bg-sky-100]="subscriptionStatusVariant(item.subscription.status) === 'info'"
+                [class.text-sky-700]="subscriptionStatusVariant(item.subscription.status) === 'info'">
               {{ subscriptionStatusTokens(item.subscription.status).join(', ') }}
             </span>
-          </div>
+            </div>
 
-          <div class="mt-5 grid grid-cols-1 gap-3 text-sm text-gray-700 sm:grid-cols-2">
-            <p><span class="font-medium">Price:</span> {{ item.plan.price }}</p>
-            <p><span class="font-medium">Included hours:</span> {{ item.plan.includedHours }}</p>
-            <p><span class="font-medium">Start:</span> {{ item.subscription.startDate | date:'mediumDate' }}</p>
-            <p><span class="font-medium">End:</span> {{ item.subscription.endDate | date:'mediumDate' }}</p>
-            <p><span class="font-medium">Payment:</span> {{ paymentStatusLabel(item.subscription.paymentStatus) }}</p>
-            <p><span class="font-medium">Hours used:</span> {{ item.subscription.hoursUsed }}</p>
-          </div>
+            <div class="mt-5 grid grid-cols-1 gap-3 text-sm text-neutral-700 dark:text-neutral-300 sm:grid-cols-2">
+              <p><span class="font-medium">Price:</span> {{ item.plan.price }}</p>
+              <p><span class="font-medium">Included hours:</span> {{ item.plan.includedHours }}</p>
+              <p><span class="font-medium">Start:</span> {{ item.subscription.startDate | date:'mediumDate' }}</p>
+              <p><span class="font-medium">End:</span> {{ item.subscription.endDate | date:'mediumDate' }}</p>
+              <p><span class="font-medium">Payment:</span> {{ paymentStatusLabel(item.subscription.paymentStatus) }}</p>
+              <p><span class="font-medium">Hours used:</span> {{ item.subscription.hoursUsed }}</p>
+            </div>
 
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a [routerLink]="['/user/subscriptions', item.subscription.id]"
-               class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">View
-              details</a>
-            <a [routerLink]="['/user/subscriptions', item.subscription.id, 'change']"
-               class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Change
-              plan</a>
-          </div>
-        </article>
-      }
-    </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a [routerLink]="['/user/subscriptions', item.subscription.id]"
+                 class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">View
+                details</a>
+              <a [routerLink]="['/user/subscriptions', item.subscription.id, 'change']"
+                 class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">Change
+                plan</a>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  } @else {
+    <app-loader></app-loader>
   }
 </div>

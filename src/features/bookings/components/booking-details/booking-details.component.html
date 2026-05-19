@@ -1,0 +1,69 @@
+<div class="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <a [routerLink]="listLink"
+     class="mb-6 inline-flex items-center gap-2 font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m0 0l7 7" />
+    </svg>
+    Back to bookings
+  </a>
+
+  @if (error) {
+    <div class="mb-6 rounded-lg border border-danger-200 dark:border-danger-900/50 bg-danger-50 dark:bg-danger-900/20 px-4 py-3 text-sm font-medium text-danger-700 dark:text-danger-300">
+      {{ error }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <app-loader></app-loader>
+  }
+
+  @if (!isLoading && booking) {
+    <div class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm overflow-hidden">
+      <div class="border-b border-neutral-200 dark:border-neutral-700 px-6 py-5">
+        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Booking details</p>
+            <h1 class="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{{ booking.spaceName }}</h1>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+              Booking #{{ booking.id }} for space #{{ booking.spaceId }}
+            </p>
+          </div>
+          <span class="rounded-full px-3 py-1 text-xs font-semibold"
+                [ngClass]="getStatusClass(booking.status)">
+            {{ getStatusLabel(booking.status) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="grid gap-4 p-6 md:grid-cols-3">
+        <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+          <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Total</p>
+          <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">${{ booking.total | number:'1.2-2' }}</p>
+        </div>
+        <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+          <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Hourly rate</p>
+          <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">${{ booking.hourlyRate | number:'1.2-2' }}</p>
+        </div>
+        <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
+          <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Payment</p>
+          <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ getPaymentStatusLabel(booking.paymentStatus) }}</p>
+        </div>
+      </div>
+
+      <div class="grid gap-4 px-6 pb-6 md:grid-cols-2">
+        <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 text-sm text-neutral-700 dark:text-neutral-300">
+          <p><span class="font-medium">Start:</span> {{ booking.startTime | date:'medium' }}</p>
+          <p class="mt-2"><span class="font-medium">End:</span> {{ booking.endTime | date:'medium' }}</p>
+          <p class="mt-2"><span class="font-medium">Created:</span> {{ booking.createdAt | date:'medium' }}</p>
+          <p class="mt-2"><span class="font-medium">Updated:</span> {{ booking.updatedAt | date:'medium' }}</p>
+        </div>
+        <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 text-sm text-neutral-700 dark:text-neutral-300">
+          <p><span class="font-medium">Room:</span> {{ booking.room || 'General Area' }}</p>
+          <p class="mt-2"><span class="font-medium">Address:</span> {{ booking.address?.city || 'N/A' }}</p>
+          <p class="mt-2"><span class="font-medium">Payment processed:</span> {{ booking.paymentProcessedAt ? (booking.paymentProcessedAt | date:'medium') : 'N/A' }}</p>
+          <p class="mt-2"><span class="font-medium">Cancelled:</span> {{ booking.cancelledAt ? (booking.cancelledAt | date:'medium') : 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

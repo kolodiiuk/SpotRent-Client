@@ -1,7 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Booking} from '../models/booking.model';
+import {
+  Booking,
+  BookingCollectionResponse,
+  BookingCreationResponse,
+  BookingFilterResponse
+} from '../models/booking.model';
 import {environment} from '../../../environments/environment';
 import {BookingFilterParams} from '../models/booking-filter-params';
 import {CreateBookingPayload} from '../models/create-booking-payload';
@@ -15,31 +20,27 @@ export class BookingService {
   constructor(private http: HttpClient) {
   }
 
-  createBooking(req: CreateBookingPayload): Observable<void> {
-    return this.http.post<void>(this.apiUrl, req);
+  createBooking(req: CreateBookingPayload): Observable<BookingCreationResponse> {
+    return this.http.post<BookingCreationResponse>(this.apiUrl, req);
   }
 
-  getAllBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.apiUrl);
+  getUserBookingHistory(): Observable<BookingCollectionResponse> {
+    return this.http.get<BookingCollectionResponse>(`${this.apiUrl}/users/history`);
   }
 
-  getUserBookingHistory(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${this.apiUrl}/users/history`);
+  getUserActiveBookings(): Observable<BookingCollectionResponse> {
+    return this.http.get<BookingCollectionResponse>(`${this.apiUrl}/users/active`);
   }
 
-  getUserActiveBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${this.apiUrl}/users/active`);
+  getOwnerBookingHistory(): Observable<BookingCollectionResponse> {
+    return this.http.get<BookingCollectionResponse>(`${this.apiUrl}/owners`);
   }
 
-  getOwnerBookingHistory(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${this.apiUrl}/owners`);
+  getOwnerActiveBookings(): Observable<BookingCollectionResponse> {
+    return this.http.get<BookingCollectionResponse>(`${this.apiUrl}/owners/active`);
   }
 
-  getOwnerActiveBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${this.apiUrl}/owners/active`);
-  }
-
-  filterBookings(filter: BookingFilterParams): Observable<Booking[]> {
+  filterBookings(filter: BookingFilterParams): Observable<BookingFilterResponse> {
     let params = new HttpParams();
     if (filter) {
       Object.keys(filter).forEach((key) => {
@@ -50,7 +51,7 @@ export class BookingService {
       });
     }
 
-    return this.http.get<Booking[]>(`${this.apiUrl}/filter`, {params});
+    return this.http.get<BookingFilterResponse>(`${this.apiUrl}/filter`, {params});
   }
 
   getBooking(id: number) : Observable<Booking> {

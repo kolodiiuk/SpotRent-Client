@@ -1,3 +1,5 @@
+import type { Device } from '../../smart-locks/models/device.model';
+
 export enum AccessType {
   Entry = 0,
   Exit = 1,
@@ -17,35 +19,40 @@ export interface AccessLogSpaceInfo {
   ownerId?: number;
 }
 
-export interface AccessLogDeviceInfo {
-  id: number;
-  name?: string;
-  serialNumber?: string;
-}
+export type AccessLogDeviceInfo = Pick<
+  Device,
+  'id' | 'spaceId' | 'deviceName' | 'status' | 'isOnline' | 'installedAt' | 'updatedAt'
+>;
 
 export interface AccessLogEntry {
   id: number;
-  userId?: number | null;
-  spaceId?: number | null;
-  deviceId?: number | null;
+  userId: number | null;
+  spaceId: number | null;
+  deviceId: number | null;
   accessType: AccessType | number;
   timestamp: string;
-  Timestamp?: string;
   isSuccessful: boolean;
-  errorMessage?: string | null;
-  user?: AccessLogUserInfo | null;
-  space?: AccessLogSpaceInfo | null;
-  device?: AccessLogDeviceInfo | null;
+  errorMessage: string | null;
+  user: AccessLogUserInfo | null;
+  space: AccessLogSpaceInfo | null;
+  device: AccessLogDeviceInfo | null;
 }
 
-export interface LogAccessPayload {
+interface BaseLogAccessPayload {
   userId: number;
   deviceId: number;
   accessType: AccessType;
   isSuccessful: boolean;
-  bookingId?: number;
-  errorMessage?: string;
+  errorMessage?: string | null;
 }
+
+export interface CreateUserAccessLogPayload extends BaseLogAccessPayload {
+  bookingId: number;
+}
+
+export interface CreateOwnerAccessLogPayload extends BaseLogAccessPayload {}
+
+export type LogAccessPayload = CreateUserAccessLogPayload;
 
 export interface AccessLogCreateResponse {
   id: number;

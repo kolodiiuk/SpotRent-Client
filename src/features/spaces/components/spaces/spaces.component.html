@@ -1,26 +1,42 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Discover Spaces</h1>
-    <p class="mt-2 text-lg text-gray-600">Find the perfect space for your next meeting, event, or workday.</p>
-  </div>
+@if (spaces$ | async; as spaces) {
+  @if (isLoading) {
+    <app-loader></app-loader>
+  } @else {
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">Discover Spaces</h1>
+      <p class="mt-2 text-lg text-neutral-600 dark:text-neutral-300">Find the perfect space for your next meeting, event, or workday.</p>
+    </div>
 
-  <div class="flex flex-col lg:flex-row gap-8">
-    <!-- Left Sidebar: Filtration and Search -->
-    <aside class="w-full lg:w-1/4 xl:w-1/5 flex-shrink-0">
-      <div class="sticky top-6">
-        <app-space-filter (filterChanged)="onFilterChanged($event)"></app-space-filter>
-      </div>
-    </aside>
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Left Sidebar: Filtration and Search -->
+      <aside class="w-full lg:w-1/4 xl:w-1/5 flex-shrink-0">
+        <div class="sticky top-6">
+          <app-space-filter (filterChanged)="onFilterChanged($event)"></app-space-filter>
+        </div>
+      </aside>
 
-    <!-- Main Content: Spaces List -->
-    <main class="w-full lg:w-3/4 xl:w-4/5 flex-grow">
-      <div class="flex justify-between items-center mb-6">
-        <p class="text-sm text-gray-600">
-          Showing <span class="font-semibold">{{ spaces.length }}</span> matches
-        </p>
-      </div>
-      
-      <app-space-list [spaces]="spaces" [isLoading]="isLoading"></app-space-list>
-    </main>
+      <!-- Main Content: Spaces List -->
+      <main class="w-full lg:w-3/4 xl:w-4/5 flex-grow">
+        <div class="flex justify-between items-center mb-6">
+          <p class="text-sm text-neutral-600 dark:text-neutral-300">
+            Showing <span class="font-semibold">{{ spaces.length }}</span> matches
+          </p>
+        </div>
+
+        @if (error) {
+          <div class="p-4 mb-6 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300 rounded-lg border border-danger-100 dark:border-danger-800">
+            {{ error }}
+          </div>
+        }
+
+        <app-space-list [spaces]="spaces" [isLoading]="isLoading"></app-space-list>
+      </main>
+    </div>
   </div>
-</div>
+  }
+} @else {
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <app-space-list [spaces]="[]" [isLoading]="true"></app-space-list>
+  </div>
+}

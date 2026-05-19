@@ -9,5 +9,5 @@ export interface SubscriptionPlan {
   includedHours: number;
   ownerId: number | null;
   isActive: boolean;
-  updatedAt: Date;
+  updatedAt: string;
 }

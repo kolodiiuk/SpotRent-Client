@@ -9,3 +9,4 @@ export * from '../../features/subscription-plans/models/create-subscription-plan
 export * from '../../features/subscriptions/models/subscription-dto.model';
 export * from '../../features/auth/models/user-role.model';
 export * from '../../features/auth/models/user.model';
+export * from '../../features/smart-locks/models/device.model';

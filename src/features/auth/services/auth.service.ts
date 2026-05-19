@@ -27,31 +27,27 @@ export class AuthService {
     private api: AuthApiService,
     private storage: AuthStorageService
   ) {
+    this.storage.sessionCleared$.subscribe(() => {
+      this.userSubject.next(null);
+    });
 
     this.initialize();
   }
 
   private initialize(): void {
 
-    const token = this.storage.getAccessToken();
-    const storedUser = this.storage.getStoredUser<User>();
-
-    if (!token) {
-      this.userSubject.next(storedUser);
-      return;
-    }
-
     this.loadingSubject.next(true);
 
-    this.api.verify()
+    this.api.refreshToken()
       .pipe(
-        tap(user => {
-          this.userSubject.next(user);
-          this.storage.setUser(user);
+        tap(response => {
+          this.storage.setAccessToken(response.token);
+          this.storage.setUser(response.user);
+          this.userSubject.next(response.user);
         }),
-        catchError(err => {
-          this.userSubject.next(storedUser);
-          this.errorSubject.next(err);
+        catchError(() => {
+          this.storage.clearSession();
+          this.userSubject.next(null);
           return of(null);
         }),
         finalize(() => this.loadingSubject.next(false))
@@ -61,7 +57,12 @@ export class AuthService {
 
   isAuthenticated(): boolean {
 
-    return !!this.userSubject.value;
+    return this.storage.hasValidToken() && !!this.userSubject.value;
+  }
+
+  isLoading(): boolean {
+
+    return this.loadingSubject.value;
   }
 
   login(email: string, password: string): Observable<void> {
@@ -71,7 +72,7 @@ export class AuthService {
 
     return this.api.login({ email, password }).pipe(
       tap(response => {
-        this.storage.setTokens(response.token, response.refreshToken);
+        this.storage.setAccessToken(response.token);
         this.storage.setUser(response.user);
         this.userSubject.next(response.user);
       }),
@@ -87,22 +88,15 @@ export class AuthService {
   logout(): Observable<{ success: boolean; error?: unknown }> {
 
     this.loadingSubject.next(true);
-
-    const refreshToken = this.storage.getRefreshToken();
-
-    return (refreshToken
-      ? this.api.logout(refreshToken).pipe(
-        switchMap(() => of({ success: true }))
-      )
-      : of({ success: true })
-    ).pipe(
+console.log("heelfdksn");
+    return this.api.logout().pipe(
+      switchMap(() => of({ success: true })),
       catchError(error => {
         console.error('Logout error:', error);
         return of({ success: false, error });
       }),
       finalize(() => {
-        this.storage.clearTokens();
-        this.storage.clearUser();
+        this.storage.clearSession();
         this.userSubject.next(null);
         this.loadingSubject.next(false);
       })
@@ -136,6 +130,7 @@ export class AuthService {
 
   updateUserState(user: User): void {
 
+    this.storage.setUser(user);
     this.userSubject.next(user);
   }
 }

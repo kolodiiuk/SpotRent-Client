@@ -1,52 +1,37 @@
 import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStorageService {
-  private readonly tokenKey = 'auth_token';
-  private readonly refreshTokenKey = 'refresh_token';
-  private readonly userKey = 'user';
+  private accessToken: string | null = null;
+  private user: unknown | null = null;
+  private readonly sessionClearedSubject = new Subject<void>();
+  readonly sessionCleared$: Observable<void> = this.sessionClearedSubject.asObservable();
 
-  setTokens(token: string, refreshToken: string): void {
-    try {
-      localStorage.setItem(this.tokenKey, token);
-      localStorage.setItem(this.refreshTokenKey, refreshToken);
-    } catch (error) {
-      console.error('Error saving tokens:', error);
-    }
+  setAccessToken(token: string): void {
+    this.accessToken = token;
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return this.accessToken;
   }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem(this.refreshTokenKey);
-  }
-
-  clearTokens(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.refreshTokenKey);
+  clearSession(): void {
+    this.accessToken = null;
+    this.user = null;
+    this.sessionClearedSubject.next();
   }
 
   setUser(user: unknown): void {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
+    this.user = user;
   }
 
   getStoredUser<T>(): T | null {
-    const raw = localStorage.getItem(this.userKey);
-    if (!raw) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(raw) as T;
-    } catch {
-      return null;
-    }
+    return (this.user as T) ?? null;
   }
 
   clearUser(): void {
-    localStorage.removeItem(this.userKey);
+    this.user = null;
   }
 
   hasValidToken(): boolean {
@@ -55,11 +40,34 @@ export class AuthStorageService {
       return false;
     }
 
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp * 1000 > Date.now();
-    } catch {
+    const payload = this.getPayload(token);
+    if (!payload) {
       return false;
+    }
+
+    const exp = Number(payload['exp']);
+    if (!Number.isFinite(exp)) {
+      return false;
+    }
+
+    return exp * 1000 > Date.now();
+  }
+
+  private getPayload(token: string): Record<string, unknown> | null {
+    try {
+      const parts = token.split('.');
+      if (parts.length < 2) {
+        return null;
+      }
+
+      const base64Url = parts[1];
+      const base64 = base64Url
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(base64Url.length + ((4 - (base64Url.length % 4)) % 4), '=');
+      return JSON.parse(atob(base64)) as Record<string, unknown>;
+    } catch {
+      return null;
     }
   }
 }

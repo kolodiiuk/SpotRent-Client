@@ -1,8 +1,8 @@
 <div class="px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-7xl w-full">
   <div class="sm:flex sm:items-center sm:justify-between mb-8">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 md:text-3xl">Access Logs</h1>
-      <p class="mt-2 text-sm text-gray-600">Review entries and exits across your spaces in real-time.</p>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">Access Logs</h1>
+      <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Review entries and exits across your spaces in real-time.</p>
     </div>
   </div>
 
@@ -12,50 +12,57 @@
 
   @if (logs$ | async; as logs) {
     @if (!isLoading && logs.length === 0) {
-      <div class="text-center bg-white p-12 rounded-xl shadow-sm border border-gray-100">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="text-center bg-white/85 dark:bg-neutral-900/85 p-12 rounded-xl shadow-md border border-neutral-200 dark:border-neutral-700 backdrop-blur-sm">
+        <svg class="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <h3 class="mt-2 text-sm font-semibold text-gray-900">No logs</h3>
-        <p class="mt-1 text-sm text-gray-500">There are no access events recorded yet.</p>
+        <h3 class="mt-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">No logs</h3>
+        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">There are no access events recorded yet.</p>
       </div>
     }
   }
 
   @if (logs$ | async; as logs) {
     @if (!isLoading && logs.length > 0) {
-      <div class="bg-white shadow-sm flex flex-col rounded-xl border border-gray-100 overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+      <div class="bg-white/85 dark:bg-neutral-900/85 shadow-md flex flex-col rounded-xl border border-neutral-200 dark:border-neutral-700 backdrop-blur-sm overflow-hidden">
+        <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+          <thead class="bg-neutral-100/80 dark:bg-neutral-800/80">
           <tr>
-            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Time</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Event</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">User</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Space</th>
-            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Result</th>
+            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100 sm:pl-6">Time</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Event</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">User</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Space</th>
+            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-neutral-900 dark:text-neutral-100">Result</th>
+            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-neutral-900 dark:text-neutral-100">Details</th>
           </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 bg-white">
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
             @for (log of logs; track log.id) {
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
-                  {{ (log.timestamp || log.Timestamp) | date:'medium' }}
+              <tr class="hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 transition-colors">
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-neutral-500 dark:text-neutral-400 sm:pl-6">
+                  {{ log.timestamp | date:'medium' }}
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">
+                <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-neutral-900 dark:text-neutral-100">
                   {{ getTypeLabel(log.accessType) }}
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-neutral-500 dark:text-neutral-400">
                   {{ log.user ? log.user.firstName + ' ' + log.user.lastName : 'Unknown' }}
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-neutral-500 dark:text-neutral-400">
                   {{ log.space ? log.space.name : 'Unknown Space' }}
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-right">
                   <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5"
-                        [ngClass]="log.isSuccessful ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                        [ngClass]="log.isSuccessful ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
                     {{ log.isSuccessful ? 'Success' : 'Denied' }}
                   </span>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-right">
+                  <a [routerLink]="['/owner/access-logs', log.id]"
+                     class="font-semibold text-primary-600 hover:text-primary-700">
+                    Open
+                  </a>
                 </td>
               </tr>
             }

@@ -10,6 +10,8 @@ import {InputComponent} from '../../../../app/shared/components';
 import {AlertComponent} from '../../../../app/shared/components';
 import {GoogleLoginComponent} from '../../../../app/shared/components';
 import {environment} from '../../../../environments/environment';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'login',
@@ -21,11 +23,15 @@ import {environment} from '../../../../environments/environment';
     InputComponent,
     AlertComponent,
     GoogleLoginComponent,
+    FontAwesomeModule,
     ReactiveFormsModule,
     RouterLink
   ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  readonly faEye = faEye;
+  readonly faEyeSlash = faEyeSlash;
+  readonly faArrowLeft = faArrowLeft;
   form!: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
@@ -124,7 +130,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     const role = this.authService.getUserRole();
-    const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
+    const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner/bookings' : '/user';
     this.router.navigate([path], {replaceUrl: true});
   }
 

@@ -6,6 +6,7 @@ import { SubscriptionHistoryEntry } from '../../models/subscription-history-entr
 import { subscriptionStatusTokens, subscriptionStatusVariant } from '../../models/subscription-dto.model';
 import {ErrorComponent} from '../../../../app/shared/components/error/error.component';
 import {LoaderComponent} from '../../../../app/shared/components/loader.component';
+import { catchError, finalize, Observable, of, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-subscription-history',
@@ -14,7 +15,7 @@ import {LoaderComponent} from '../../../../app/shared/components/loader.componen
   templateUrl: 'subscription-history.component.html'
 })
 export class SubscriptionHistoryComponent implements OnInit {
-  history: SubscriptionHistoryEntry[] = [];
+  history$!: Observable<SubscriptionHistoryEntry[]>;
   isLoading = false;
   error = '';
   readonly subscriptionStatusTokens = subscriptionStatusTokens;
@@ -30,16 +31,16 @@ export class SubscriptionHistoryComponent implements OnInit {
     this.isLoading = true;
     this.error = '';
 
-    this.userSubscriptionService.getSubscriptionHistory().subscribe({
-      next: (history) => {
-        this.history = history;
-        this.isLoading = false;
-      },
-      error: (err) => {
+    this.history$ = this.userSubscriptionService.getSubscriptionHistory().pipe(
+      catchError((err) => {
         console.error('Failed to load subscription history', err);
-        this.error = 'Failed to load subscription history.';
+        this.error = err?.error ?? 'Failed to load subscription history.';
+        return of([]);
+      }),
+      finalize(() => {
         this.isLoading = false;
-      }
-    });
+      }),
+      shareReplay(1)
+    );
   }
 }

@@ -1,63 +1,37 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking.model';
 import { BookingStatus } from '../../models/booking-status';
-import { catchError, Observable, of, tap, map, shareReplay } from 'rxjs';
+import { catchError, Observable, of, map } from 'rxjs';
 import { LoaderComponent } from '../../../../app/shared/components/loader.component';
 
 @Component({
   selector: 'owner-bookings',
   standalone: true,
-  imports: [CommonModule, DatePipe, LoaderComponent],
+  imports: [CommonModule, DatePipe, RouterModule, LoaderComponent],
   templateUrl: 'owner-bookings.component.html'
 })
 export class OwnerBookingsComponent implements OnInit {
-  bookings$!: Observable<Booking[]>;
   activeBookings$!: Observable<Booking[]>;
-  historyBookings$!: Observable<Booking[]>;
-
-  currentTab: 'active' | 'history' = 'active';
   private bookingService = inject(BookingService);
 
   ngOnInit() {
-    this.bookings$ = this.bookingService.getOwnerBookingHistory().pipe(
-      catchError(_ => of([])),
-      shareReplay(1)
+    this.activeBookings$ = this.bookingService.getOwnerActiveBookings().pipe(
+      map(response => response.data),
+      catchError(_ => of([]))
     );
-
-    this.activeBookings$ = this.bookings$.pipe(
-      map(bookings => bookings.filter(b =>
-        b.status === BookingStatus.Pending ||
-        b.status === BookingStatus.Confirmed ||
-        b.status === BookingStatus.Active
-      ))
-    );
-
-    this.historyBookings$ = this.bookings$.pipe(
-      map(bookings => bookings.filter(b =>
-        b.status === BookingStatus.Completed ||
-        b.status === BookingStatus.Cancelled
-      ))
-    );
-  }
-
-  get displayedBookings$() {
-    return this.currentTab === 'active' ? this.activeBookings$ : this.historyBookings$;
-  }
-
-  setTab(tab: 'active' | 'history') {
-    this.currentTab = tab;
   }
 
   getStatusClass(status: BookingStatus) {
     switch(status) {
-      case BookingStatus.Pending: return 'bg-yellow-100 text-yellow-800';
-      case BookingStatus.Confirmed: return 'bg-blue-100 text-blue-800';
-      case BookingStatus.Active: return 'bg-green-100 text-green-800';
-      case BookingStatus.Completed: return 'bg-gray-100 text-gray-800';
-      case BookingStatus.Cancelled: return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case BookingStatus.Pending: return 'bg-warning-100 text-warning-800 dark:bg-warning-900/40 dark:text-warning-300';
+      case BookingStatus.Confirmed: return 'bg-primary-100 text-primary-800 dark:bg-primary-900/40 dark:text-primary-300';
+      case BookingStatus.Active: return 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300';
+      case BookingStatus.Completed: return 'bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300';
+      case BookingStatus.Cancelled: return 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300';
+      default: return 'bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300';
     }
   }
 

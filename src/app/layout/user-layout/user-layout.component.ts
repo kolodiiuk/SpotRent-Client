@@ -6,21 +6,37 @@ import { User } from '../../models';
 import { ThemeService } from '../../services/theme.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocaleSwitcherComponent } from '../../shared/components/locale-switcher/locale-switcher.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+  faBars,
+  faCalendarDays,
+  faClockRotateLeft,
+  faMoon,
+  faSun,
+  faWallet,
+  faXmark
+} from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 interface NavigationItem {
   path: string;
   label: string;
-  icon: string;
+  icon: IconDefinition;
 }
 
 @Component({
   selector: 'app-user-layout',
   standalone: true,
-  imports: [RouterModule, RouterOutlet, AsyncPipe, TranslateModule, LocaleSwitcherComponent],
+  imports: [RouterModule, RouterOutlet, AsyncPipe, TranslateModule, LocaleSwitcherComponent, FontAwesomeModule],
   templateUrl: 'user-layout.component.html',
   styleUrls: ['./user-layout.component.css']
 })
 export class UserLayoutComponent implements OnInit {
+  readonly faBars = faBars;
+  readonly faXmark = faXmark;
+  readonly faMoon = faMoon;
+  readonly faSun = faSun;
+
   @Input() user!: User;
   @Output() logout = new EventEmitter<void>();
 
@@ -29,14 +45,10 @@ export class UserLayoutComponent implements OnInit {
   currentPath = '';
 
   navigationItems: NavigationItem[] = [
-    { path: '/user', label: 'Dashboard', icon: '📊' },
-    { path: '/user/my-bookings', label: 'My Bookings', icon: '📅' },
-    { path: '/user/subscriptions', label: 'My Subscriptions', icon: '💼' },
-    { path: '/user/subscriptions/history', label: 'Subscription History', icon: '🕘' },
-    { path: '/spaces', label: 'Browse Spaces', icon: '🏢' },
-    { path: '/subscription-plans', label: 'Subscription Plans', icon: '💳' },
-    { path: '/about', label: 'About', icon: 'ℹ️' },
-    { path: '/user/profile', label: 'Profile', icon: '👤' },
+    { path: '/user/my-bookings', label: 'My Bookings', icon: faCalendarDays },
+    { path: '/user/my-bookings/history', label: 'Booking History', icon: faClockRotateLeft },
+    { path: '/user/subscriptions', label: 'My Subscriptions', icon: faWallet },
+    { path: '/user/subscriptions/history', label: 'Subscription History', icon: faClockRotateLeft }
   ];
 
   constructor(

@@ -1,0 +1,86 @@
+<section class="layout-glass-card p-6 mb-8">
+  <div class="flex items-center justify-between mb-4 gap-3">
+    <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Create Booking</h2>
+    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+      POST /api/bookings
+    </span>
+  </div>
+
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Space ID</label>
+      <input
+        type="number"
+        min="1"
+        formControlName="spaceId"
+        placeholder="12"
+        class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500" />
+      @if (form.controls.spaceId.touched && form.controls.spaceId.invalid) {
+        <p class="mt-1 text-xs text-danger-600 dark:text-danger-300">Space ID must be greater than 0.</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Space Availability</label>
+      <div class="rounded-md border border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-900/70 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300">
+        {{ isSpaceAvailable ? 'Available for booking' : 'Currently unavailable' }}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Start Time</label>
+      <input
+        type="datetime-local"
+        formControlName="startTime"
+        class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500" />
+      @if (form.controls.startTime.touched && form.controls.startTime.invalid) {
+        <p class="mt-1 text-xs text-danger-600 dark:text-danger-300">Start time is required.</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">End Time</label>
+      <input
+        type="datetime-local"
+        formControlName="endTime"
+        class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500" />
+      @if (form.controls.endTime.touched && form.controls.endTime.invalid) {
+        <p class="mt-1 text-xs text-danger-600 dark:text-danger-300">End time is required.</p>
+      }
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="inline-flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+        <input type="checkbox" formControlName="hasSubscriptionForSpace" class="rounded border-neutral-300 text-primary-600 focus:ring-primary-500" />
+        Assume active subscription exists for this space (temporary UI stub, not wired)
+      </label>
+    </div>
+
+    @if (estimatedTotal !== null) {
+      <div class="md:col-span-2 rounded-md border border-neutral-200 dark:border-neutral-700 bg-neutral-100/80 dark:bg-neutral-800/70 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300">
+        Estimated total: <span class="font-semibold text-neutral-900 dark:text-neutral-100">${{ estimatedTotal | number:'1.2-2' }}</span>
+      </div>
+    }
+
+    <div class="md:col-span-2 flex justify-end">
+      <button
+        type="submit"
+        class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 shadow-md hover:shadow-lg transition-all disabled:opacity-60"
+        [disabled]="!isSpaceAvailable">
+        Create Booking
+      </button>
+    </div>
+  </form>
+
+  @if (submitMessage) {
+    <div
+      class="mt-4 rounded-md border px-3 py-2 text-sm"
+      [ngClass]="{
+        'border-neutral-300 dark:border-neutral-700 bg-neutral-100/80 dark:bg-neutral-800/70 text-neutral-700 dark:text-neutral-300': submitState === 'invalid',
+        'border-success-200 dark:border-success-900/50 bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300': submitState === 'subscription-covered',
+        'border-warning-200 dark:border-warning-900/50 bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-300': submitState === 'payment-required'
+      }">
+      {{ submitMessage }}
+    </div>
+  }
+</section>

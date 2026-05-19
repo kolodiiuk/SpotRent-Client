@@ -8,12 +8,11 @@
         <div class="flex items-center space-x-4">
           <button (click)="toggleSidebar()"
             class="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
-            {{ sidebarOpen ? '✕' : '☰' }}
+            <fa-icon [icon]="sidebarOpen ? faXmark : faBars"></fa-icon>
           </button>
 
           <a routerLink="/subscription-plans" class="flex items-center space-x-2">
-            <div
-              class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold">W</span>
             </div>
             <span class="hidden sm:block text-lg font-display font-bold text-neutral-900 dark:text-white">
@@ -27,7 +26,7 @@
           <!-- Theme Toggle -->
           <button (click)="toggleTheme()"
             class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
-            {{ (themeService.theme$ | async) === 'light' ? '🌙' : '☀️' }}
+            <fa-icon [icon]="(themeService.theme$ | async) === 'light' ? faMoon : faSun"></fa-icon>
           </button>
 
           <!-- Locale Switcher -->
@@ -37,12 +36,11 @@
           <div class="relative">
             <button (click)="toggleProfileMenu()"
               class="flex items-center space-x-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
-              <div
-                class="w-8 h-8 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-semibold">
+              <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold">
                 {{ getUserInitial() }}
               </div>
               <span class="hidden sm:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
-                {{ user?.secondName || 'User' }}
+                {{ user?.email || 'User' }}
               </span>
             </button>
 
@@ -50,11 +48,6 @@
             @if (profileMenuOpen) {
             <div
               class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-xl shadow-strong border border-neutral-200 dark:border-neutral-700 py-2">
-              <a routerLink="/user/profile" (click)="closeProfileMenu()"
-                class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                {{ 'NAV.MY_PROFILE' | translate }}
-              </a>
-              <hr class="my-2 border-neutral-200 dark:border-neutral-700" />
               <button (click)="onLogout()"
                 class="block w-full text-left px-4 py-2 text-sm text-danger-600 dark:text-danger-400 hover:bg-neutral-100 dark:hover:bg-neutral-700">
                 {{ 'NAV.SIGN_OUT' | translate }}
@@ -73,22 +66,15 @@
     <nav class="p-4 space-y-1">
       @for (item of navigationItems; track item.path) {
       <a [routerLink]="item.path" (click)="closeSidebar()"
-        routerLinkActive="bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-md"
+        routerLinkActive="bg-primary-600 text-white shadow-md"
         [routerLinkActiveOptions]="{exact: true}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-        <span class="text-xl">{{ item.icon }}</span>
+        <fa-icon [icon]="item.icon" class="text-base w-5"></fa-icon>
         <span class="font-medium">{{ item.label }}</span>
       </a>
       }
     </nav>
 
-    <!-- Quick Actions -->
-    <div class="absolute bottom-4 left-4 right-4">
-      <button (click)="navigateToBooking()"
-        class="w-full px-4 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all shadow-md hover:shadow-lg font-medium">
-        Browse Plans
-      </button>
-    </div>
   </aside>
 
   <!-- Overlay for mobile -->

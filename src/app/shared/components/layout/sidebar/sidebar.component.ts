@@ -1,38 +1,39 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { RouterModule } from '@angular/router';
 
 export interface NavigationItem {
   label: string;
-  icon: string;
+  icon: IconDefinition;
   path: string;
+  exact?: boolean;
 }
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule, FontAwesomeModule],
   standalone: true,
   template: `
-    <aside class="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white border-r border-gray-200">
-      <div class="flex items-center justify-center -mx-2 mb-8">
-        <h2 class="text-2xl font-bold text-blue-600">SpotRent</h2>
-      </div>
-
-      <div class="flex flex-col justify-between flex-1 mt-6">
+    <aside class="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white/80 dark:bg-neutral-900/85 backdrop-blur-md border-r border-neutral-200 dark:border-neutral-800 shadow-lg">
+      <div class="flex flex-col flex-1 mt-2">
         <nav>
-          <a *ngFor="let item of navItems" 
-             [routerLink]="item.path" 
-             routerLinkActive="bg-blue-50 text-blue-700"
-             [routerLinkActiveOptions]="{exact: item.path === '/owner' || item.path === '/admin'}"
-             class="flex items-center px-4 py-2 mt-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 hover:text-gray-700">
-            
-            <span class="mx-2 font-medium" [innerHTML]="item.icon"></span>
-            <span class="mx-2 font-medium">{{ item.label }}</span>
-          </a>
+          @for (item of navItems; track item) {
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="bg-primary-600 text-white shadow-md"
+              [routerLinkActiveOptions]="{exact: item.exact ?? false}"
+              class="flex items-center px-4 py-2.5 mt-2 text-neutral-700 dark:text-neutral-200 transition-colors duration-300 transform rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800">
+              <span class="mx-2 font-medium inline-flex items-center justify-center">
+                <fa-icon [icon]="item.icon"></fa-icon>
+              </span>
+              <span class="mx-2 font-medium">{{ item.label }}</span>
+            </a>
+          }
         </nav>
       </div>
     </aside>
-  `,
+    `,
   styles: []
 })
 export class SidebarComponent {

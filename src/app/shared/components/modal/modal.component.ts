@@ -1,16 +1,19 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {CommonModule} from '@angular/common';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [FontAwesomeModule],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css'
 })
 export class ModalComponent {
+  readonly faXmark = faXmark;
   @Input() isOpen: boolean = false;
   @Input() title?: string;
   @Input() size: ModalSize = 'md';

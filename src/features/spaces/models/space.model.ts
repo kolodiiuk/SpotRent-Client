@@ -20,7 +20,7 @@ export interface Space {
   isAvailable: boolean;
   createdAt: string;
   ownerId: number;
-  ownerDto: UserDto;
+  ownerDto: UserDto | null;
   workingHours: WorkingHours[];
   attributes?: AttributeInfo[];
   attributeValues?: AttributeValue[];

@@ -1,0 +1,66 @@
+<div class="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="user-log-shell">
+    <div class="user-log-headline">
+      <p class="user-log-kicker">Personal timeline</p>
+      <h1>My Access Logs</h1>
+      <p>Endpoint scaffold: <code>GET /api/access-log/user/:userId</code></p>
+    </div>
+    <span class="user-log-chip">Preview mode</span>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-3 mb-6">
+    <div class="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+      <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Entries</p>
+      <p class="mt-2 text-2xl font-extrabold text-neutral-900 dark:text-neutral-100">12</p>
+    </div>
+    <div class="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+      <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Denied</p>
+      <p class="mt-2 text-2xl font-extrabold text-danger-700 dark:text-danger-300">1</p>
+    </div>
+    <div class="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+      <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Active Spaces</p>
+      <p class="mt-2 text-2xl font-extrabold text-neutral-900 dark:text-neutral-100">4</p>
+    </div>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+    <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+      <thead class="bg-neutral-100/90 dark:bg-neutral-800/90">
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Date & Time</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Space</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Event</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Device</th>
+        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Details</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+        @for (log of logsPreview; track log.id) {
+          <tr class="transition-colors hover:bg-neutral-100/70 dark:hover:bg-neutral-800/70">
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+              {{ log.timestamp | date:'medium' }}
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-neutral-800 dark:text-neutral-200">
+              {{ log.space?.name || 'Unknown space' }}
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+              <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
+                    [ngClass]="log.isSuccessful ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
+                {{ getTypeLabel(log.accessType) }}
+              </span>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+              {{ log.device?.deviceName || 'N/A' }}
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+              <a [routerLink]="['/user/access-logs', log.id]"
+                 class="font-semibold text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                Open
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

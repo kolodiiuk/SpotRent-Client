@@ -3,5 +3,5 @@
 }
 
 a.active {
-  @apply bg-gradient-to-r from-danger-500 to-warning-500 text-white shadow-md;
+  @apply bg-primary-600 text-white shadow-md;
 }

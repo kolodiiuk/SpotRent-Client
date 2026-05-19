@@ -7,15 +7,18 @@ import {AuthService} from '../../auth/services/auth.service';
 import {AuthStorageService} from '../../auth/services/auth-storage.service';
 import {User} from '../../auth/models/user.model';
 import {PagedSpacesResponse} from '../models/paged-spaces-response';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'owner-spaces',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   templateUrl: './owner-spaces.component.html',
   styleUrl: './owner-spaces.component.css'
 })
 export class OwnerSpacesComponent implements OnInit {
+  readonly faBuilding = faBuilding;
   spaces: Space[] = [];
   isLoading = false;
   authService = inject(AuthService);

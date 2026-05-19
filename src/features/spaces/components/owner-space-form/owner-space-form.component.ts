@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {SpacesApiService} from '../../services/spaces-api.service';
 import {spaceTypeLabels} from "../../models/space-type-labels";
 import {SpaceType} from '../../models/space-type';
+import {UpdateSpaceRequest} from '../../models/update-space-request';
 
 @Component({
   selector: 'owner-owner-space-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './owner-space-form.component.html',
   styleUrl: './owner-space-form.component.css'
 })
@@ -20,6 +21,7 @@ export class OwnerSpaceFormComponent implements OnInit {
   isLoading = false;
   isSaving = false;
   error = '';
+  private ownerId: number | null = null;
 
   // Expose Enum and Labels to template
   spaceTypes = Object.keys(spaceTypeLabels).map(key => ({
@@ -68,6 +70,7 @@ export class OwnerSpaceFormComponent implements OnInit {
 
     this.spacesApi.getSpace(this.spaceId).subscribe({
       next: (space: any) => {
+        this.ownerId = space.ownerId ?? null;
         this.spaceForm.patchValue({
           name: space.name,
           description: space.description,
@@ -100,11 +103,10 @@ export class OwnerSpaceFormComponent implements OnInit {
 
     this.isSaving = true;
     this.error = '';
-    const payload = this.spaceForm.value;
 
     const request$ = this.isEditMode && this.spaceId
-      ? this.spacesApi.updateSpace(this.spaceId, payload)
-      : this.spacesApi.createSpace(payload);
+      ? this.spacesApi.updateSpace(this.spaceId, this.buildUpdatePayload())
+      : this.spacesApi.createSpace(this.spaceForm.value);
 
     (request$ as any).subscribe({
       next: () => {
@@ -117,5 +119,13 @@ export class OwnerSpaceFormComponent implements OnInit {
         this.isSaving = false;
       }
     });
+  }
+
+  private buildUpdatePayload(): UpdateSpaceRequest {
+    const formValue = this.spaceForm.value;
+    return {
+      ...formValue,
+      ownerId: this.ownerId ?? 0
+    } as UpdateSpaceRequest;
   }
 }

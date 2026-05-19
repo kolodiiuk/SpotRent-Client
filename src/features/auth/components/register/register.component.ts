@@ -9,6 +9,8 @@ import {ButtonComponent} from '../../../../app/shared/components/button/button.c
 import {InputComponent} from '../../../../app/shared/components/input/input.component';
 import {AlertComponent} from '../../../../app/shared/components/alert/alert.component';
 import {NgClass} from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft, faCircleCheck, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'register',
@@ -20,12 +22,17 @@ import {NgClass} from '@angular/common';
     AlertComponent,
     ReactiveFormsModule,
     NgClass,
+    FontAwesomeModule,
     RouterLink,
   ],
   styleUrl: 'register.component.css'
 })
 export class RegisterComponent implements OnInit, OnDestroy
 {
+  readonly faEye = faEye;
+  readonly faEyeSlash = faEyeSlash;
+  readonly faArrowLeft = faArrowLeft;
+  readonly faCircleCheck = faCircleCheck;
   form!: FormGroup;
 
   isLoading = false;
@@ -66,7 +73,7 @@ export class RegisterComponent implements OnInit, OnDestroy
     if (this.authService.isAuthenticated())
     {
       const role = this.authService.getUserRole();
-      const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner' : '/user';
+      const path = role === 'ADMIN' ? '/admin' : role === 'OWNER' ? '/owner/bookings' : '/user';
       this.router.navigate([path], {replaceUrl: true});
 
       return;

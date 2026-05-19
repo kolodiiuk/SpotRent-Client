@@ -1,5 +1,5 @@
 export interface UpdateSubscriptionPlanDto {
-  name: string | null;
-  description: string | null;
+  name: string;
+  description: string;
   price: number;
 }

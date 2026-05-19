@@ -1,11 +1,11 @@
 import {Component, Input, forwardRef} from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
   providers: [{

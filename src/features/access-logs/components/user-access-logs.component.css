@@ -1,0 +1,68 @@
+.user-log-shell {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background:
+    linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.06) 40%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.user-log-headline h1 {
+  margin: 0.2rem 0;
+  color: rgb(15 23 42);
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+
+.user-log-headline p {
+  margin: 0;
+  color: rgb(82 82 91);
+  font-size: 0.9rem;
+}
+
+.user-log-kicker {
+  margin: 0;
+  color: rgb(180 83 9);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.user-log-chip {
+  align-self: flex-start;
+  border: 1px solid rgba(180, 83, 9, 0.24);
+  background-color: rgba(254, 243, 199, 0.7);
+  color: rgb(146 64 14);
+  border-radius: 9999px;
+  padding: 0.32rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+:host-context(.dark) .user-log-shell {
+  border-color: rgba(148, 163, 184, 0.24);
+  background:
+    linear-gradient(100deg, rgba(120, 53, 15, 0.5), rgba(120, 53, 15, 0.25), rgba(15, 23, 42, 0.7));
+}
+
+:host-context(.dark) .user-log-headline h1 {
+  color: rgb(241 245 249);
+}
+
+:host-context(.dark) .user-log-headline p {
+  color: rgb(148 163 184);
+}
+
+:host-context(.dark) .user-log-kicker {
+  color: rgb(253 186 116);
+}
+
+:host-context(.dark) .user-log-chip {
+  border-color: rgba(251, 146, 60, 0.45);
+  background-color: rgba(124, 45, 18, 0.35);
+  color: rgb(254 215 170);
+}

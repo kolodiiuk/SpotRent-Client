@@ -14,11 +14,11 @@ export interface RegisterRequest {
 }
 
 export interface RefreshTokenRequest {
-    refreshToken: string;
+    refreshToken?: string;
 }
 
 export interface LogoutRequest {
-    refreshToken: string;
+    refreshToken?: string;
 }
 
 export interface GoogleSignInRequest {
@@ -27,7 +27,7 @@ export interface GoogleSignInRequest {
 
 export interface LoginResponse {
     token: string;
-    refreshToken: string;
+    refreshToken?: string;
     expiration: string;
     user: User;
 }

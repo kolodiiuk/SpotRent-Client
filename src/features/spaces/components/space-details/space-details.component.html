@@ -1,125 +1,162 @@
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-  <div class="mb-4">
-    <a routerLink="/spaces" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2">
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-      </svg>
-      Back to Spaces
-    </a>
-  </div>
-
-  <div *ngIf="isLoading" class="flex justify-center items-center py-20">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-  </div>
-
-  <div *ngIf="error" class="p-4 bg-red-50 text-red-700 rounded-lg text-center font-medium my-10 border border-red-100">
-    {{ error }}
-  </div>
-
-  <div *ngIf="!isLoading && !error && space" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <!-- Hero Image Area -->
-    <div class="h-80 bg-gray-200 relative">
-      <img *ngIf="space.imageUrl" [src]="space.imageUrl" [alt]="space.name" class="w-full h-full object-cover">
-      <div *ngIf="!space.imageUrl" class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-100">
-        <svg class="h-16 w-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+@if (space$ | async; as space) {
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-4">
+      <a routerLink="/spaces"
+         class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium flex items-center gap-2">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
-        <span class="text-sm">No image provided</span>
-      </div>
-      
-      <!-- Badges -->
-      <div class="absolute top-4 left-4 flex gap-2">
-        <span class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-800 shadow-sm border border-gray-100">
-          {{ spaceTypeLabels[space.spaceType] || 'Space' }}
-        </span>
-        <span *ngIf="!space.isAvailable" class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
-          Currently Unavailable
-        </span>
-      </div>
+        Back to Spaces
+      </a>
     </div>
-    
-    <!-- Content Area -->
-    <div class="p-8">
-      <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-6 border-b border-gray-100 pb-8 mb-8">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ space.name }}</h1>
-          <p class="text-lg text-gray-500 flex items-center gap-2">
-            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {{ space.address?.city }} <!-- Add full address if you prefer -->
-          </p>
-        </div>
-        
-        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-center min-w-[150px]">
-          <div class="text-3xl font-extrabold text-blue-700">${{ space.hourlyRate }}</div>
-          <div class="text-sm font-medium text-blue-600/80 uppercase tracking-wide">per hour</div>
-        </div>
+    @if (isLoading) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
+    }
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Main Details -->
-        <div class="md:col-span-2 space-y-8">
-          <section>
-            <h2 class="text-xl font-bold text-gray-900 mb-3">About this space</h2>
-            <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ space.description || 'No description provided.' }}</p>
-          </section>
+    @if (error) {
+      <div
+        class="p-4 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300 rounded-lg text-center font-medium my-10 border border-danger-100 dark:border-danger-800">
+        {{ error }}
+      </div>
+    }
 
-          <section>
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Highlights</h2>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <div class="bg-white p-2 rounded-full shadow-sm">
-                  <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-sm text-gray-500">Capacity</div>
-                  <div class="font-semibold text-gray-900">Up to {{ space.capacity }}</div>
-                </div>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <div class="bg-white p-2 rounded-full shadow-sm">
-                   <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-sm text-gray-500">Area</div>
-                  <div class="font-semibold text-gray-900">{{ space.areaSqm }} m²</div>
-                </div>
-              </div>
-              <div *ngIf="space.room" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <div class="bg-white p-2 rounded-full shadow-sm">
-                   <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-sm text-gray-500">Room Info</div>
-                  <div class="font-semibold text-gray-900">{{ space.room }}</div>
-                </div>
-              </div>
+    @if (!isLoading && !error && space) {
+      <div
+        class="bg-white/85 dark:bg-neutral-900/85 rounded-2xl shadow-md border border-neutral-200 dark:border-neutral-700 overflow-hidden backdrop-blur-sm">
+        <!-- Hero Image Area -->
+        <div class="h-80 bg-neutral-200 dark:bg-neutral-700 relative">
+          @if (space.imageUrl) {
+            <img [src]="space.imageUrl" [alt]="space.name" class="w-full h-full object-cover">
+          }
+          @if (!space.imageUrl) {
+            <div
+              class="w-full h-full flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800">
+              <svg class="h-16 w-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span class="text-sm">No image provided</span>
             </div>
-          </section>
-        </div>
-
-        <!-- Sidebar Details -->
-        <div class="space-y-6">
-          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 text-center">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Ready to book?</h3>
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors" [disabled]="!space.isAvailable">
-              {{ space.isAvailable ? 'Request Booking' : 'Currently Unavailable' }}
-            </button>
-            <p class="mt-3 text-xs text-gray-500">You won't be charged yet</p>
+          }
+          <!-- Badges -->
+          <div class="absolute top-4 left-4 flex gap-2">
+          <span
+            class="bg-white/90 dark:bg-neutral-900/85 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-neutral-800 dark:text-neutral-100 shadow-sm border border-neutral-200 dark:border-neutral-700">
+            {{ spaceTypeLabels[space.spaceType] || 'Space' }}
+          </span>
+            @if (!space.isAvailable) {
+              <span class="bg-danger-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
+              Currently Unavailable
+            </span>
+            }
           </div>
         </div>
+        <!-- Content Area -->
+        <div class="p-8">
+          <div
+            class="flex flex-col md:flex-row md:justify-between md:items-start gap-6 border-b border-neutral-200 dark:border-neutral-700 pb-8 mb-8">
+            <div>
+              <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ space.name }}</h1>
+              <p class="text-lg text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                <svg class="h-5 w-5 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                {{ space.address?.city }} <!-- Add full address if you prefer -->
+              </p>
+            </div>
+            <div
+              class="bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 rounded-xl p-4 text-center min-w-[150px]">
+              <div class="text-3xl font-extrabold text-primary-700 dark:text-primary-300">${{ space.hourlyRate }}</div>
+              <div class="text-sm font-medium text-primary-600/80 dark:text-primary-300 uppercase tracking-wide">per
+                hour
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Main Details -->
+            <div class="md:col-span-2 space-y-8">
+              <section>
+                <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">About this space</h2>
+                <p
+                  class="text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-line">{{ space.description || 'No description provided.' }}</p>
+              </section>
+              <section>
+                <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">Highlights</h2>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex items-center gap-3 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                    <div class="bg-white dark:bg-neutral-900 p-2 rounded-full shadow-sm">
+                      <svg class="h-5 w-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-sm text-neutral-500 dark:text-neutral-400">Capacity</div>
+                      <div class="font-semibold text-neutral-900 dark:text-neutral-100">Up to {{ space.capacity }}</div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                    <div class="bg-white dark:bg-neutral-900 p-2 rounded-full shadow-sm">
+                      <svg class="h-5 w-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-sm text-neutral-500 dark:text-neutral-400">Area</div>
+                      <div class="font-semibold text-neutral-900 dark:text-neutral-100">{{ space.areaSqm }} m²</div>
+                    </div>
+                  </div>
+                  @if (space.room) {
+                    <div class="flex items-center gap-3 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                      <div class="bg-white dark:bg-neutral-900 p-2 rounded-full shadow-sm">
+                        <svg class="h-5 w-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">Room Info</div>
+                        <div class="font-semibold text-neutral-900 dark:text-neutral-100">{{ space.room }}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </section>
+            </div>
+            <!-- Sidebar Details -->
+            <div class="space-y-6">
+              <div
+                class="bg-neutral-100 dark:bg-neutral-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 text-center">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4">Ready to book?</h3>
+                <button
+                  class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:opacity-60"
+                  [disabled]="!space.isAvailable">
+                  {{ space.isAvailable ? 'Request Booking' : 'Currently Unavailable' }}
+                </button>
+                <p class="mt-3 text-xs text-neutral-500 dark:text-neutral-400">You won't be charged yet</p>
+              </div>
+            </div>
+          </div>
+          <!-- Schedule Section -->
+          <app-space-availability [spaceId]="spaceId"></app-space-availability>
+        </div>
       </div>
-
-      <!-- Schedule Section -->
-      <app-space-availability [spaceId]="spaceId"></app-space-availability>
+    }
+  </div>
+} @else {
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
     </div>
   </div>
-</div>
+}

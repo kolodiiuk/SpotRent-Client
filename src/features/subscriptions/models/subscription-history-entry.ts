@@ -7,5 +7,5 @@ export interface SubscriptionHistoryEntry {
   subscriptionStatus: SubscriptionStatus | number;
   isActive: boolean;
   startedAt: string;
-  expiresAt: string;
+  expiresAt: string | null;
 }

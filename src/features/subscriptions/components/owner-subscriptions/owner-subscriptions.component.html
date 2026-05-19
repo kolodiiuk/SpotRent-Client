@@ -1,12 +1,12 @@
 <div class="px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-7xl w-full">
   <div class="sm:flex sm:items-center sm:justify-between mb-8">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 md:text-3xl">Subscription Plans</h1>
-      <p class="mt-2 text-sm text-gray-600">Manage subscription plans for your spaces.</p>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">Subscription Plans</h1>
+      <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Manage subscription plans for your spaces.</p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
       <button
-        class="btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors block"
+        class="btn bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors block"
         (click)="createPlan()">
         Add New Plan
       </button>
@@ -32,55 +32,55 @@
     @if (!isLoading) {
 
       @if (plans.length === 0) {
-        <div class="text-center bg-white p-12 rounded-xl shadow-sm border border-gray-100">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="text-center bg-white/85 dark:bg-neutral-900/85 p-12 rounded-xl shadow-md border border-neutral-200 dark:border-neutral-700 backdrop-blur-sm">
+          <svg class="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
           </svg>
-          <h3 class="mt-2 text-sm font-semibold text-gray-900">No plans</h3>
-          <p class="mt-1 text-sm text-gray-500">Create your first subscription plan.</p>
+          <h3 class="mt-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">No plans</h3>
+          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Create your first subscription plan.</p>
         </div>
       } @else {
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+        <div class="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
+          <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+            <thead class="bg-neutral-100/80 dark:bg-neutral-800/80">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Plan
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Price
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Duration
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Hours
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Status
               </th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-600">
+              <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">
                 Actions
               </th>
             </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
+            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
               @for (plan of plans; track plan.id) {
-                <tr class="cursor-pointer transition-colors hover:bg-gray-50" (click)="openEdit(plan.id)">
+                <tr class="cursor-pointer transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80" (click)="openEdit(plan.id)">
                   <td class="px-6 py-4">
-                    <p class="font-semibold text-gray-900">{{ plan.name }}</p>
-                    <p class="text-sm text-gray-600 line-clamp-1">{{ plan.description }}</p>
+                    <p class="font-semibold text-neutral-900 dark:text-neutral-100">{{ plan.name }}</p>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-300 line-clamp-1">{{ plan.description }}</p>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-800">${{ plan.price }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-800">{{ labels[plan.duration] }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-800">{{ plan.includedHours }}</td>
+                  <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">${{ plan.price }}</td>
+                  <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{ labels[plan.duration] }}</td>
+                  <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{ plan.includedHours }}</td>
                   <td class="px-6 py-4">
                     <span class="rounded-full px-2 py-1 text-xs font-semibold"
                           [class.bg-emerald-100]="plan.isActive"
                           [class.text-emerald-700]="plan.isActive"
-                          [class.bg-gray-200]="!plan.isActive"
-                          [class.text-gray-700]="!plan.isActive">
+                          [class.bg-neutral-200]="!plan.isActive"
+                          [class.text-neutral-700]="!plan.isActive">
                       {{ plan.isActive ? 'Active' : 'Inactive' }}
                     </span>
                   </td>
@@ -91,7 +91,7 @@
                         Deactivate
                       </button>
                       <button (click)="deletePlan(plan.id, $event)"
-                              class="rounded-md bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100">
+                              class="rounded-md bg-danger-50 dark:bg-danger-900/30 px-3 py-1.5 text-xs font-medium text-danger-700 dark:text-danger-300 hover:bg-danger-100 dark:hover:bg-danger-900/50">
                         Delete
                       </button>
                     </div>

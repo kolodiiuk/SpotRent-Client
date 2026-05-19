@@ -17,7 +17,7 @@ export class GoogleAuthService {
     return this.api.googleLogin(credential)
       .pipe(
         tap(response => {
-          this.storage.setTokens(response.token, response.refreshToken);
+          this.storage.setAccessToken(response.token);
           this.storage.setUser(response.user);
           this.authService.updateUserState(response.user);
         }),

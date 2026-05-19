@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SubscriptionPlan } from '../../../subscription-plans/models/subscription-plan';
@@ -8,7 +8,7 @@ import { SubscriptionPlanService } from '../../../subscription-plans/services/su
 @Component({
   selector: 'app-subscription-plans',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: 'user-subscriptions.component.html',
   styleUrl: 'user-subscriptions.component.css'
 })

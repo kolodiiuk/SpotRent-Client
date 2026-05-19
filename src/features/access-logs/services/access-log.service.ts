@@ -12,8 +12,8 @@ export class AccessLogService {
 
   constructor(private http: HttpClient) {}
 
-  getSpaceAccessLogs(id: number) : Observable<AccessLogEntry[]> {
-    return this.http.get<AccessLogEntry[]>(`${this.apiUrl}/space/${id}`);
+  getSpaceAccessLogs(spaceId: number) : Observable<AccessLogEntry[]> {
+    return this.http.get<AccessLogEntry[]>(`${this.apiUrl}/space/${spaceId}`);
   }
 
   getOwnerAccessLogs(ownerId: number) : Observable<AccessLogEntry[]> {

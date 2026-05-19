@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { finalize, take } from 'rxjs';
+
 import {SpacesApiService} from '../../../../services/spaces-api.service';
 import {SpaceSchedule} from "../../../../models/space-schedule";
 
 @Component({
   selector: 'app-space-availability',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './space-availability.component.html',
   styleUrl: './space-availability.component.css'
 })
@@ -40,15 +41,20 @@ export class SpaceAvailabilityComponent implements OnInit, OnChanges {
     end.setDate(end.getDate() + 7);
 
     this.spacesApi.getSpaceSchedule(this.spaceId, start.toISOString(), end.toISOString())
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
       .subscribe({
         next: (res) => {
           this.schedule = res;
-          this.isLoading = false;
         },
         error: (err) => {
           console.error('Failed to load schedule', err);
           this.error = 'Failed to load availability schedule.';
-          this.isLoading = false;
+          this.schedule = null;
         }
       });
   }

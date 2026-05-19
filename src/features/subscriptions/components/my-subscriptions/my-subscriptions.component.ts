@@ -1,17 +1,18 @@
-import {CommonModule} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {UserSubscriptionService} from '../../services/user-subscription.service';
-import {SubscriptionWithPlan} from '../../models/subscription-view.model';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { catchError, finalize, Observable, of, shareReplay } from 'rxjs';
+
+import { ErrorComponent } from '../../../../app/shared/components/error/error.component';
+import { LoaderComponent } from '../../../../app/shared/components/loader.component';
 import {
   paymentStatusLabel,
   paymentStatusVariant,
   subscriptionStatusTokens,
   subscriptionStatusVariant
 } from '../../models/subscription-dto.model';
-import {tap} from 'rxjs';
-import {ErrorComponent} from '../../../../app/shared/components/error/error.component';
-import {LoaderComponent} from '../../../../app/shared/components/loader.component';
+import { SubscriptionWithPlan } from '../../models/subscription-view.model';
+import { UserSubscriptionService } from '../../services/user-subscription.service';
 
 @Component({
   selector: 'app-my-subscriptions',
@@ -20,7 +21,7 @@ import {LoaderComponent} from '../../../../app/shared/components/loader.componen
   templateUrl: 'my-subscriptions.component.html'
 })
 export class MySubscriptionsComponent implements OnInit {
-  subscriptions: SubscriptionWithPlan[] = [];
+  subscriptions$!: Observable<SubscriptionWithPlan[]>;
   isLoading = false;
   error = '';
 
@@ -29,8 +30,7 @@ export class MySubscriptionsComponent implements OnInit {
   readonly paymentStatusLabel = paymentStatusLabel;
   readonly paymentStatusVariant = paymentStatusVariant;
 
-  constructor(private userSubscriptionService: UserSubscriptionService) {
-  }
+  constructor(private userSubscriptionService: UserSubscriptionService) {}
 
   ngOnInit(): void {
     this.loadSubscriptions();
@@ -40,16 +40,15 @@ export class MySubscriptionsComponent implements OnInit {
     this.isLoading = true;
     this.error = '';
 
-    this.userSubscriptionService.getMySubscriptions().pipe(tap(_ => alert("from hell"))).subscribe({
-      next: (subscriptions) => {
-        this.subscriptions = subscriptions;
+    this.subscriptions$ = this.userSubscriptionService.getMySubscriptions().pipe(
+      catchError((err) => {
+        this.error = err?.error ?? 'Failed to load subscriptions';
+        return of([]);
+      }),
+      finalize(() => {
         this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load subscriptions', err);
-        this.error = 'Failed to load your subscriptions.';
-        this.isLoading = false;
-      }
-    });
+      }),
+      shareReplay(1)
+    );
   }
 }

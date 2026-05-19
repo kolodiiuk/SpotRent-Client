@@ -1,8 +1,10 @@
 @if (registrationSuccess) {
 <div
-  class="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
-  <app-card class="p-8 text-center max-w-md w-full">
-    <div class="text-6xl mb-4">✅</div>
+  class="auth-shell layout-shell min-h-screen flex items-center justify-center text-neutral-900 dark:text-neutral-100">
+  <app-card class="p-8 text-center max-w-md w-full bg-white/85 dark:bg-neutral-900/85 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-strong">
+    <div class="text-6xl mb-4 text-success-500">
+      <fa-icon [icon]="faCircleCheck"></fa-icon>
+    </div>
     <h2 class="text-2xl font-bold mb-2">
       Registration Successful!
     </h2>
@@ -17,12 +19,12 @@
 }
 @if (!registrationSuccess) {
 <div
-  class="min-h-screen flex items-center justify-center px-4 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+  class="auth-shell layout-shell min-h-screen flex items-center justify-center px-4 text-neutral-900 dark:text-neutral-100">
   <div class="w-full max-w-2xl">
 
     <div class="text-center mb-8">
       <a routerLink="/" class="inline-flex items-center mb-6">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-primary-600 text-white shadow-md">
           <span class="font-bold text-2xl">S</span>
         </div>
         <span class="text-2xl font-bold ml-2">SpotRent</span>
@@ -30,7 +32,7 @@
       <h1 class="text-3xl font-bold">Create Your Account</h1>
     </div>
 
-    <app-card [className]="'p-8'">
+    <app-card [className]="'p-8 bg-white/85 dark:bg-neutral-900/85 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-strong'">
 
       @if (errorMessage) {
       <app-alert type="danger" (close)="clearGlobalError()">
@@ -62,7 +64,7 @@
           </app-input>
 
           <button type="button" class="absolute right-3 top-9" (click)="togglePassword()">
-            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+            <fa-icon [icon]="showPassword ? faEyeSlash : faEye"></fa-icon>
           </button>
 
           @if (form.get('password')?.value) {
@@ -86,7 +88,7 @@
           </app-input>
 
           <button type="button" class="absolute right-3 top-9" (click)="toggleConfirmPassword()">
-            {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+            <fa-icon [icon]="showConfirmPassword ? faEyeSlash : faEye"></fa-icon>
           </button>
         </div>
 
@@ -104,12 +106,15 @@
       <div class="mt-6 text-center">
         <p>
           Already have an account?
-          <a routerLink="/auth/login" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">Sign in</a>
+          <a routerLink="/auth/login" class="text-primary-600 dark:text-primary-400 font-medium hover:underline">Sign in</a>
         </p>
       </div>
 
       <div class="mt-4 text-center">
-        <a routerLink="/" class="text-blue-600 dark:text-blue-400 hover:underline">← Back to home</a>
+        <a routerLink="/" class="text-primary-600 dark:text-primary-400 hover:underline inline-flex items-center gap-2">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+          <span>Back to home</span>
+        </a>
       </div>
 
     </app-card>

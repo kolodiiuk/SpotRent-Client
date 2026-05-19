@@ -7,11 +7,12 @@ import {User} from '../../auth/models/user.model';
 import {filter} from 'rxjs/operators';
 import {catchError, Observable, of, switchMap, tap} from 'rxjs';
 import {LoaderComponent} from '../../../app/shared/components/loader.component';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'owner-access-logs',
   standalone: true,
-  imports: [CommonModule, DatePipe, LoaderComponent],
+  imports: [CommonModule, DatePipe, LoaderComponent, RouterModule],
   templateUrl: 'owner-access-logs.component.html'
 })
 export class OwnerAccessLogsComponent implements OnInit {
