@@ -2,19 +2,20 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {SpacesApiService} from '../../services/spaces-api.service';
-import {spaceTypeLabels} from "../../models/space-type-labels";
 import {SpaceType} from '../../models/space-type';
 import {UpdateSpaceRequest} from '../../models/update-space-request';
 import {CreateSpaceRequest} from '../../models/create-space-request';
 import {AttributeInfo} from '../../models/attribute-info';
 import {CreateSpaceAddressRequest} from '../../models/space-address';
 import {AttributeValue} from '../../models/attribute-value';
+import { StringSpaceTypePipe } from '../../../../app/shared/pipes';
 
 @Component({
   selector: 'owner-owner-space-form',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, TranslateModule, StringSpaceTypePipe],
   templateUrl: './owner-space-form.component.html',
   styleUrl: './owner-space-form.component.css'
 })
@@ -28,30 +29,38 @@ export class OwnerSpaceFormComponent implements OnInit {
   private ownerId: number | null = null;
   availableAttributes: AttributeInfo[] = [];
 
-  // Expose Enum and Labels to template
-  spaceTypes = Object.keys(spaceTypeLabels).map(key => ({
-    value: Number(key),
-    label: spaceTypeLabels[Number(key) as SpaceType]
+  spaceTypes = [
+    SpaceType.None,
+    SpaceType.Desk,
+    SpaceType.Coworking,
+    SpaceType.PrivateOffice,
+    SpaceType.ConferenceRoom,
+    SpaceType.PhotoShoot,
+    SpaceType.Workshop
+  ].map(value => ({
+    value,
+    label: value
   }));
   readonly daysOfWeek = [
-    { value: 1, label: 'Monday' },
-    { value: 2, label: 'Tuesday' },
-    { value: 3, label: 'Wednesday' },
-    { value: 4, label: 'Thursday' },
-    { value: 5, label: 'Friday' },
-    { value: 6, label: 'Saturday' },
-    { value: 0, label: 'Sunday' }
+    { value: 1, key: 'OWNER_SPACE_FORM.MONDAY' },
+    { value: 2, key: 'OWNER_SPACE_FORM.TUESDAY' },
+    { value: 3, key: 'OWNER_SPACE_FORM.WEDNESDAY' },
+    { value: 4, key: 'OWNER_SPACE_FORM.THURSDAY' },
+    { value: 5, key: 'OWNER_SPACE_FORM.FRIDAY' },
+    { value: 6, key: 'OWNER_SPACE_FORM.SATURDAY' },
+    { value: 0, key: 'OWNER_SPACE_FORM.SUNDAY' }
   ];
 
-  getDayLabel(dayOfWeek: number): string {
-    return this.daysOfWeek.find((d) => d.value === dayOfWeek)?.label ?? 'Unknown day';
+  getDayKey(dayOfWeek: number): string {
+    return this.daysOfWeek.find((d) => d.value === dayOfWeek)?.key ?? 'OWNER_SPACE_FORM.UNKNOWN_DAY';
   }
 
   constructor(
     private fb: FormBuilder,
     private spacesApi: SpacesApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -119,7 +128,7 @@ export class OwnerSpaceFormComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Failed to load space', err);
-        this.error = 'Failed to load space details.';
+        this.error = this.translate.instant('OWNER_SPACE_FORM.ERROR_LOAD');
         this.isLoading = false;
       }
     });
@@ -147,7 +156,7 @@ export class OwnerSpaceFormComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Failed to save space', err);
-        this.error = 'Failed to save space. Please check the form data and try again.';
+        this.error = this.translate.instant('OWNER_SPACE_FORM.ERROR_SAVE');
         this.isSaving = false;
       }
     });

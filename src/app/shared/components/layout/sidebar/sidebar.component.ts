@@ -2,9 +2,11 @@ import { Component, Input } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface NavigationItem {
   label: string;
+  labelKey?: string;
   icon: IconDefinition;
   path: string;
   exact?: boolean;
@@ -12,7 +14,7 @@ export interface NavigationItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterModule, FontAwesomeModule],
+  imports: [RouterModule, FontAwesomeModule, TranslateModule],
   standalone: true,
   template: `
     <aside class="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white/80 dark:bg-neutral-900/85 backdrop-blur-md border-r border-neutral-200 dark:border-neutral-800 shadow-lg">
@@ -27,7 +29,7 @@ export interface NavigationItem {
               <span class="mx-2 font-medium inline-flex items-center justify-center">
                 <fa-icon [icon]="item.icon"></fa-icon>
               </span>
-              <span class="mx-2 font-medium">{{ item.label }}</span>
+              <span class="mx-2 font-medium">{{ item.labelKey ? (item.labelKey | translate) : item.label }}</span>
             </a>
           }
         </nav>

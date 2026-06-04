@@ -3,7 +3,7 @@
     <div class="mb-4 sm:mb-0">
       <h1 class="text-2xl md:text-3xl text-neutral-900 dark:text-neutral-100 font-bold inline-flex items-center gap-2">
         <fa-icon [icon]="faBuilding"></fa-icon>
-        <span>My Spaces</span>
+        <span>{{ 'OWNER_SPACES.TITLE' | translate }}</span>
       </h1>
     </div>
     <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
@@ -11,7 +11,7 @@
         <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2 inline-block" viewBox="0 0 16 16">
           <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
         </svg>
-        <span>Add Space</span>
+        <span>{{ 'OWNER_SPACES.ADD_SPACE' | translate }}</span>
       </button>
     </div>
   </div>
@@ -24,10 +24,10 @@
 
   @if (loadState === 'error') {
     <div class="layout-glass-card p-8 text-center">
-      <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-1">Could not load spaces</h3>
+      <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-1">{{ 'OWNER_SPACES.LOAD_FAILED_TITLE' | translate }}</h3>
       <p class="text-neutral-500 dark:text-neutral-400 mb-4">{{ errorMessage }}</p>
       <button class="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/60 px-4 py-2 rounded-md font-medium transition-colors" (click)="loadOwnerSpaces()">
-        Try Again
+        {{ 'COMMON.TRY_AGAIN' | translate }}
       </button>
     </div>
   }
@@ -37,10 +37,10 @@
       <svg class="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
       </svg>
-      <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-1">No spaces created yet</h3>
-      <p class="text-neutral-500 dark:text-neutral-400 mb-4">Start by adding your first space for rent.</p>
+      <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-1">{{ 'OWNER_SPACES.EMPTY_TITLE' | translate }}</h3>
+      <p class="text-neutral-500 dark:text-neutral-400 mb-4">{{ 'OWNER_SPACES.EMPTY_TEXT' | translate }}</p>
       <button class="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/60 px-4 py-2 rounded-md font-medium transition-colors" routerLink="/owner/spaces/new">
-        Create a Space
+        {{ 'OWNER_SPACES.CREATE_SPACE' | translate }}
       </button>
     </div>
   }
@@ -51,12 +51,12 @@
         <table class="table-auto w-full border-collapse">
           <thead class="text-xs uppercase text-neutral-500 dark:text-neutral-400 bg-neutral-100/80 dark:bg-neutral-800/80 border-b border-neutral-200 dark:border-neutral-700">
             <tr>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">Space Name</th>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">Type</th>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">Location</th>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">Rate</th>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-center">Status</th>
-              <th class="px-6 py-4 whitespace-nowrap font-semibold text-right">Actions</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">{{ 'OWNER_SPACES.SPACE_NAME' | translate }}</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">{{ 'OWNER_SPACES.TYPE' | translate }}</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">{{ 'OWNER_SPACES.LOCATION' | translate }}</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-left">{{ 'OWNER_SPACES.RATE' | translate }}</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-center">{{ 'OWNER_SPACES.STATUS' | translate }}</th>
+              <th class="px-6 py-4 whitespace-nowrap font-semibold text-right">{{ 'OWNER_SPACES.ACTIONS' | translate }}</th>
             </tr>
           </thead>
           <tbody class="text-sm divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -68,24 +68,24 @@
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="text-neutral-600 dark:text-neutral-300">{{ space.spaceType }}</span>
+                  <span class="text-neutral-600 dark:text-neutral-300">{{ space.spaceType | stringSpaceType }}</span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-neutral-600 dark:text-neutral-300">
                   {{ space.address?.city }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap font-medium text-neutral-900 dark:text-neutral-100">
-                  ${{ space.hourlyRate }}/hr
+                  ${{ space.hourlyRate }}/{{ 'OWNER_SPACES.HOUR_SHORT' | translate }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
                   <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
                     [ngClass]="space.isAvailable ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
-                    {{ space.isAvailable ? 'Available' : 'Hidden' }}
+                    {{ (space.isAvailable ? 'OWNER_SPACES.AVAILABLE' : 'OWNER_SPACES.HIDDEN') | translate }}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button [routerLink]="['/owner/spaces', space.id, 'edit']" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mr-4 transition-colors">Edit</button>
-                  <button [routerLink]="['/owner/spaces', space.id, 'access-logs']" class="text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white mr-4 transition-colors">Logs</button>
-                  <button (click)="deleteSpace(space.id)" class="text-danger-600 dark:text-danger-400 hover:text-danger-700 dark:hover:text-danger-300 transition-colors">Delete</button>
+                  <button [routerLink]="['/owner/spaces', space.id, 'edit']" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mr-4 transition-colors">{{ 'COMMON.EDIT' | translate }}</button>
+                  <button [routerLink]="['/owner/spaces', space.id, 'access-logs']" class="text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white mr-4 transition-colors">{{ 'OWNER_SPACES.LOGS' | translate }}</button>
+                  <button (click)="deleteSpace(space.id)" class="text-danger-600 dark:text-danger-400 hover:text-danger-700 dark:hover:text-danger-300 transition-colors">{{ 'COMMON.DELETE' | translate }}</button>
                 </td>
               </tr>
             }

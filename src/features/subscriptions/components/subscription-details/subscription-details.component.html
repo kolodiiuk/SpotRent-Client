@@ -15,13 +15,13 @@
     }
 
     @if (!isLoading && subscription) {
-    <div class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
-        <div class="border-b border-neutral-200 dark:border-neutral-700 px-6 py-5">
+    <section class="border-y border-neutral-200 bg-white/70 dark:border-neutral-700 dark:bg-neutral-900/55">
+        <div class="px-1 py-6 sm:px-0">
             <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.DETAILS_TITLE' | translate }}</p>
                     <h1 class="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{{ subscription.plan.name }}</h1>
-                    <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{{ subscription.plan.description }}</p>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-neutral-600 dark:text-neutral-300">{{ subscription.plan.description }}</p>
                 </div>
                 <span class="rounded-full px-3 py-1 text-xs font-semibold"
                     [class.bg-emerald-100]="subscriptionStatusVariant(subscription.subscription.status) === 'success'"
@@ -39,38 +39,35 @@
             </div>
         </div>
 
-        <div class="grid gap-4 p-6 md:grid-cols-3">
-            <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
-                <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.PLAN_PRICE' | translate }}</p>
+        <div class="grid border-t border-neutral-200 dark:border-neutral-700 md:grid-cols-3">
+            <div class="py-5 md:border-r md:border-neutral-200 md:pr-6 dark:md:border-neutral-700">
+                <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.PLAN_PRICE' | translate }}</p>
                 <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ subscription.plan.price }}</p>
             </div>
-            <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
-                <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.INCLUDED_HOURS' | translate }}</p>
+            <div class="border-t border-neutral-200 py-5 md:border-t-0 md:border-r md:pl-6 md:pr-6 dark:border-neutral-700 dark:md:border-neutral-700">
+                <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.INCLUDED_HOURS' | translate }}</p>
                 <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ subscription.plan.includedHours }}</p>
             </div>
-            <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4">
-                <p class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.PAYMENT' | translate }}</p>
+            <div class="border-t border-neutral-200 py-5 md:border-t-0 md:pl-6 dark:border-neutral-700">
+                <p class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.PAYMENT' | translate }}</p>
                 <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{
                     getPaymentStatusKey(subscription.subscription.paymentStatus) | translate }}</p>
             </div>
         </div>
 
-        <div class="grid gap-4 px-6 pb-6 md:grid-cols-2">
-            <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 text-sm text-neutral-700 dark:text-neutral-300">
-                <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.START_DATE' | translate }}:</span> {{ subscription.subscription.startDate | localDate }} {{ subscription.subscription.startDate | localTime }}</p>
-                <p class="mt-2"><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.END_DATE' | translate }}:</span> {{ subscription.subscription.endDate | localDate }} {{ subscription.subscription.endDate | localTime }}</p>
-                <p class="mt-2"><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.HOURS_USED' | translate }}:</span> {{ subscription.subscription.hoursUsed }}
+        <div class="grid border-t border-neutral-200 py-5 text-sm text-neutral-700 dark:border-neutral-700 dark:text-neutral-300 md:grid-cols-2 md:gap-8">
+            <div class="space-y-3">
+                <p class="flex items-center justify-between gap-4"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.START_DATE' | translate }}</span> <span>{{ subscription.subscription.startDate | localDate }} {{ subscription.subscription.startDate | localTime }}</span></p>
+                <p class="flex items-center justify-between gap-4"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.END_DATE' | translate }}</span> <span>{{ subscription.subscription.endDate | localDate }} {{ subscription.subscription.endDate | localTime }}</span></p>
+                <p class="flex items-center justify-between gap-4"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.HOURS_USED' | translate }}</span> <span>{{ subscription.subscription.hoursUsed }}</span>
                 </p>
             </div>
-            <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 text-sm text-neutral-700 dark:text-neutral-300">
-                <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.TOTAL_AMOUNT' | translate }}:</span> {{ subscription.subscription.totalAmount }}</p>
-                <p class="mt-2"><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.SUBSCRIPTION_ID' | translate }}:</span> {{ subscription.subscription.id }}</p>
-                <p class="mt-2"><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.PLAN_ID' | translate }}:</span> {{
-                    subscription.subscription.subscriptionPlanId }}</p>
+            <div class="mt-3 border-t border-neutral-200 pt-3 dark:border-neutral-700 md:mt-0 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+                <p class="flex items-center justify-between gap-4"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.TOTAL_AMOUNT' | translate }}</span> <span>{{ subscription.subscription.totalAmount }}</span></p>
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-700 px-6 py-5">
+        <div class="flex flex-wrap items-center justify-end gap-3 border-t border-neutral-200 py-5 dark:border-neutral-700">
             <a [routerLink]="['/user/subscriptions', subscription.subscription.id, 'change']"
                 class="rounded-lg bg-primary-600 px-5 py-2 font-medium text-white hover:bg-primary-700">
                 {{ 'USER_SUBSCRIPTIONS.CHANGE_PLAN' | translate }}
@@ -80,6 +77,6 @@
                 {{ 'USER_SUBSCRIPTIONS.BACK_TO_LIST' | translate }}
             </a>
         </div>
-    </div>
+    </section>
     }
 </div>

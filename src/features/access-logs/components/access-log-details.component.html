@@ -55,13 +55,11 @@
           <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.USER' | translate }}</h3>
           <p class="mt-2 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.NAME' | translate }}:</span> {{ log.user?.firstName || ('COMMON.NOT_AVAILABLE' | translate) }} {{ log.user?.lastName || '' }}</p>
           <p class="mt-1 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.EMAIL' | translate }}:</span> {{ log.user?.email || ('COMMON.NOT_AVAILABLE' | translate) }}</p>
-          <p class="mt-1 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.USER_ID' | translate }}:</span> {{ log.userId || ('COMMON.NOT_AVAILABLE' | translate) }}</p>
         </section>
         <section class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900/50 p-4">
           <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.SPACE' | translate }}</h3>
           <p class="mt-2 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.NAME' | translate }}:</span> {{ log.space?.name || ('COMMON.NOT_AVAILABLE' | translate) }}</p>
           <p class="mt-1 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.SPACE_ID' | translate }}:</span> {{ log.spaceId || ('COMMON.NOT_AVAILABLE' | translate) }}</p>
-          <p class="mt-1 text-sm text-neutral-700 dark:text-neutral-300"><span class="font-medium text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.OWNER_ID' | translate }}:</span> {{ log.space?.ownerId || ('COMMON.NOT_AVAILABLE' | translate) }}</p>
         </section>
         <section class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900/50 p-4">
           <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-neutral-900 dark:text-neutral-100">{{ 'USER_ACCESS_LOGS.DEVICE' | translate }}</h3>

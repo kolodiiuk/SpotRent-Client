@@ -2,17 +2,17 @@
   <section class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-6 shadow-md backdrop-blur-sm">
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">My Subscription Plans</h1>
+        <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ 'OWNER_DASHBOARD.TITLE' | translate }}</h1>
         <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-          Plans below belong to you and can be edited, deactivated, or deleted from the management page.
+          {{ 'OWNER_DASHBOARD.SUBTITLE' | translate }}
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
         <a routerLink="/owner/subscription-plans/new" class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">
-          Add new plan
+          {{ 'OWNER_SUBSCRIPTIONS.ADD_NEW_PLAN' | translate }}
         </a>
         <a routerLink="/owner/subscription-plans" class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
-          Manage plans
+          {{ 'OWNER_DASHBOARD.MANAGE_PLANS' | translate }}
         </a>
       </div>
     </div>
@@ -32,11 +32,11 @@
 
   @if (!isLoading && plans.length === 0) {
     <div class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-12 text-center shadow-md backdrop-blur-sm">
-      <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">No plans yet</h2>
-      <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Create your first plan from the management page.</p>
+      <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ 'OWNER_SUBSCRIPTIONS.EMPTY_TITLE' | translate }}</h2>
+      <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ 'OWNER_DASHBOARD.EMPTY_TEXT' | translate }}</p>
       <div class="mt-6">
         <a routerLink="/owner/subscription-plans/new" class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
-          Add new plan
+          {{ 'OWNER_SUBSCRIPTIONS.ADD_NEW_PLAN' | translate }}
         </a>
       </div>
     </div>
@@ -57,21 +57,21 @@
               [class.text-emerald-700]="plan.isActive"
               [class.bg-neutral-200]="!plan.isActive"
               [class.text-neutral-700]="!plan.isActive">
-              {{ plan.isActive ? 'Active' : 'Inactive' }}
+              {{ (plan.isActive ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') | translate }}
             </span>
           </div>
           <div class="mt-5 grid grid-cols-1 gap-3 text-sm text-neutral-700 dark:text-neutral-300 sm:grid-cols-2">
-            <p><span class="font-medium">Price:</span> ${{ plan.price }}</p>
-            <p><span class="font-medium">Duration:</span> {{ labels[plan.duration] }}</p>
-            <p><span class="font-medium">Included hours:</span> {{ plan.includedHours }}</p>
-            <p><span class="font-medium">Updated:</span> {{ plan.updatedAt | date:'mediumDate' }}</p>
+            <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.PRICE' | translate }}:</span> ${{ plan.price }}</p>
+            <p><span class="font-medium">{{ 'SUBSCRIPTION_PLAN_DETAILS.DURATION' | translate }}:</span> {{ getDurationKey(plan.duration) | translate }}</p>
+            <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.INCLUDED_HOURS' | translate }}:</span> {{ plan.includedHours }}</p>
+            <p><span class="font-medium">{{ 'USER_BOOKINGS.UPDATED' | translate }}:</span> {{ plan.updatedAt | localDate }}</p>
           </div>
           <div class="mt-6 flex flex-wrap gap-3">
             <a [routerLink]="['/owner/subscription-plans', plan.id, 'edit']" class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
-              Edit
+              {{ 'COMMON.EDIT' | translate }}
             </a>
             <a [routerLink]="['/subscription-plans', plan.id]" class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">
-              View public page
+              {{ 'OWNER_DASHBOARD.VIEW_PUBLIC_PAGE' | translate }}
             </a>
           </div>
         </article>

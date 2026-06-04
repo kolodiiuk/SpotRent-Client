@@ -19,10 +19,10 @@ import {
 })
 export class OwnerLayoutComponent {
   ownerNavItems: NavigationItem[] = [
-    { label: 'Bookings', icon: faCalendarDays, path: '/owner/bookings', exact: true },
-    { label: 'Booking History', icon: faClockRotateLeft, path: '/owner/bookings/history', exact: true },
-    { label: 'Spaces', icon: faBuilding, path: '/owner/spaces' },
-    { label: 'Subscription Plans', icon: faCreditCard, path: '/owner/subscription-plans' },
-    { label: 'Access Logs', icon: faClipboardList, path: '/owner/access-logs' },
+    { label: 'Bookings', labelKey: 'ADMIN.BOOKINGS', icon: faCalendarDays, path: '/owner/bookings', exact: true },
+    { label: 'Booking History', labelKey: 'NAV.BOOKING_HISTORY', icon: faClockRotateLeft, path: '/owner/bookings/history', exact: true },
+    { label: 'Spaces', labelKey: 'NAV.SPACES', icon: faBuilding, path: '/owner/spaces' },
+    { label: 'Subscription Plans', labelKey: 'NAV.SUBSCRIPTION', icon: faCreditCard, path: '/owner/subscription-plans' },
+    { label: 'Access Logs', labelKey: 'ADMIN.ACCESS_LOGS', icon: faClipboardList, path: '/owner/access-logs' },
   ];
 }

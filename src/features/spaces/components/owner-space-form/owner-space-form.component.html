@@ -4,10 +4,10 @@
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-      Back to Spaces
+      {{ 'OWNER_SPACE_FORM.BACK_TO_SPACES' | translate }}
     </a>
-    <h1 class="text-2xl md:text-3xl text-neutral-900 dark:text-neutral-100 font-bold">{{ isEditMode ? 'Edit Space' : 'Create a New Space' }}</h1>
-    <p class="mt-2 text-neutral-600 dark:text-neutral-300">Provide details about your space to attract the right people.</p>
+    <h1 class="text-2xl md:text-3xl text-neutral-900 dark:text-neutral-100 font-bold">{{ (isEditMode ? 'OWNER_SPACE_FORM.EDIT_TITLE' : 'OWNER_SPACE_FORM.CREATE_TITLE') | translate }}</h1>
+    <p class="mt-2 text-neutral-600 dark:text-neutral-300">{{ 'OWNER_SPACE_FORM.SUBTITLE' | translate }}</p>
   </div>
 
   @if (isLoading) {
@@ -27,93 +27,93 @@
       <div class="space-y-6">
         <!-- Basics Section -->
         <div>
-          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">Basic Info</h2>
+          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">{{ 'OWNER_SPACE_FORM.BASIC_INFO' | translate }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="col-span-2">
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Space Name *</label>
-              <input type="text" formControlName="name" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., Bright Corner Office">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.SPACE_NAME' | translate }} *</label>
+              <input type="text" formControlName="name" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.SPACE_NAME_PLACEHOLDER' | translate">
               @if (spaceForm.get('name')?.invalid && spaceForm.get('name')?.touched) {
-                <div class="text-danger-500 text-xs mt-1">Name is required.</div>
+                <div class="text-danger-500 text-xs mt-1">{{ 'OWNER_SPACE_FORM.NAME_REQUIRED' | translate }}</div>
               }
             </div>
             <div class="col-span-2">
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Description *</label>
-              <textarea formControlName="description" rows="4" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Describe the space..."></textarea>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.DESCRIPTION' | translate }} *</label>
+              <textarea formControlName="description" rows="4" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Space Type *</label>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.SPACE_TYPE' | translate }} *</label>
               <select formControlName="spaceType" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
                 @for (type of spaceTypes; track type) {
-                  <option [value]="type.value">{{ type.label }}</option>
+                  <option [value]="type.value">{{ type.label | stringSpaceType }}</option>
                 }
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Room Identifier</label>
-              <input type="text" formControlName="room" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., Room 101">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.ROOM_IDENTIFIER' | translate }}</label>
+              <input type="text" formControlName="room" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.ROOM_PLACEHOLDER' | translate">
             </div>
           </div>
         </div>
         <!-- Specs Section -->
         <div class="mt-8">
-          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">Specifications & Pricing</h2>
+          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">{{ 'OWNER_SPACE_FORM.SPECS_PRICING' | translate }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Capacity (people) *</label>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.CAPACITY' | translate }} *</label>
               <input type="number" formControlName="capacity" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" min="1">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Area (sqm) *</label>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.AREA' | translate }} *</label>
               <input type="number" formControlName="areaSqm" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" step="0.1" min="1">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Hourly Rate ($) *</label>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.HOURLY_RATE' | translate }} *</label>
               <input type="number" formControlName="hourlyRate" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" step="0.01" min="0">
             </div>
           </div>
         </div>
         <!-- Settings Section -->
         <div class="mt-8">
-          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">Media & Settings</h2>
+          <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">{{ 'OWNER_SPACE_FORM.MEDIA_SETTINGS' | translate }}</h2>
           <div class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Image URL</label>
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.IMAGE_URL' | translate }}</label>
               <input type="text" formControlName="imageUrl" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="https://example.com/image.jpg">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Building *</label>
-              <input type="text" formControlName="building" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., A1">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.BUILDING' | translate }} *</label>
+              <input type="text" formControlName="building" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.BUILDING_PLACEHOLDER' | translate">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Street *</label>
-              <input type="text" formControlName="street" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., Main St 22">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.STREET' | translate }} *</label>
+              <input type="text" formControlName="street" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.STREET_PLACEHOLDER' | translate">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">City</label>
-              <input type="text" formControlName="city" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., Kyiv">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.CITY' | translate }}</label>
+              <input type="text" formControlName="city" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.CITY_PLACEHOLDER' | translate">
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Region *</label>
-              <input type="text" formControlName="region" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g., Kyiv Oblast">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.REGION' | translate }} *</label>
+              <input type="text" formControlName="region" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 text-neutral-900 dark:text-neutral-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500" [placeholder]="'OWNER_SPACE_FORM.REGION_PLACEHOLDER' | translate">
             </div>
             <div class="flex items-center gap-3 mt-4">
               <input type="checkbox" formControlName="isAvailable" id="isAvailable" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 dark:border-neutral-600 rounded cursor-pointer">
-              <label for="isAvailable" class="text-sm font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">Available for Booking</label>
+              <label for="isAvailable" class="text-sm font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">{{ 'OWNER_SPACE_FORM.AVAILABLE_FOR_BOOKING' | translate }}</label>
             </div>
           </div>
         </div>
 
         <div class="mt-8">
           <div class="flex items-center justify-between mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">
-            <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Working Hours</h2>
-            <button type="button" (click)="addWorkingHour()" class="px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Add</button>
+            <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{{ 'OWNER_SPACE_FORM.WORKING_HOURS' | translate }}</h2>
+            <button type="button" (click)="addWorkingHour()" class="px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">{{ 'OWNER_SPACE_FORM.ADD' | translate }}</button>
           </div>
           @if (workingHoursControls.length === 0) {
             <div class="rounded-md border border-dashed border-neutral-300 dark:border-neutral-700 p-4 bg-neutral-50/60 dark:bg-neutral-900/40">
               <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                No availability slots added yet. Add your first availability to let users know when this space can be booked.
+                {{ 'OWNER_SPACE_FORM.NO_AVAILABILITY' | translate }}
               </p>
-              <button type="button" (click)="addWorkingHour()" class="mt-3 px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Create first availability</button>
+              <button type="button" (click)="addWorkingHour()" class="mt-3 px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">{{ 'OWNER_SPACE_FORM.CREATE_FIRST_AVAILABILITY' | translate }}</button>
             </div>
           }
           <div formArrayName="workingHours" class="space-y-4">
@@ -121,33 +121,33 @@
               <div [formGroupName]="$index" class="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-neutral-200 dark:border-neutral-700 rounded-md">
                 <div class="md:col-span-5 flex items-center justify-between">
                   <div class="text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">
-                    Availability #{{ $index + 1 }}: {{ getDayLabel(control.get('dayOfWeek')?.value) }}
+                    {{ 'OWNER_SPACE_FORM.AVAILABILITY' | translate }} #{{ $index + 1 }}: {{ getDayKey(control.get('dayOfWeek')?.value) | translate }}
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Day</label>
+                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.DAY' | translate }}</label>
                   <select formControlName="dayOfWeek" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                     @for (day of daysOfWeek; track day.value) {
-                      <option [ngValue]="day.value">{{ day.label }}</option>
+                      <option [ngValue]="day.value">{{ day.key | translate }}</option>
                     }
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Open</label>
+                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.OPEN' | translate }}</label>
                   <input type="time" formControlName="openTime" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Close</label>
+                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.CLOSE' | translate }}</label>
                   <input type="time" formControlName="closeTime" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                 </div>
                 <div class="flex items-end">
                   <label class="inline-flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
                     <input type="checkbox" formControlName="isClosed" class="h-4 w-4">
-                    Closed
+                    {{ 'OWNER_SPACE_FORM.CLOSED' | translate }}
                   </label>
                 </div>
                 <div class="flex items-end justify-end">
-                  <button type="button" (click)="removeWorkingHour($index)" class="px-3 py-2 rounded-md border border-danger-300 text-danger-600 hover:bg-danger-50">Remove</button>
+                  <button type="button" (click)="removeWorkingHour($index)" class="px-3 py-2 rounded-md border border-danger-300 text-danger-600 hover:bg-danger-50">{{ 'OWNER_SPACE_FORM.REMOVE' | translate }}</button>
                 </div>
               </div>
             }
@@ -156,16 +156,16 @@
 
         <div class="mt-8">
           <div class="flex items-center justify-between mb-4 border-b border-neutral-200 dark:border-neutral-700 pb-2">
-            <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Attribute Values</h2>
-            <button type="button" (click)="addAttributeValue()" class="px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Add</button>
+            <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{{ 'OWNER_SPACE_FORM.ATTRIBUTE_VALUES' | translate }}</h2>
+            <button type="button" (click)="addAttributeValue()" class="px-3 py-1 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">{{ 'OWNER_SPACE_FORM.ADD' | translate }}</button>
           </div>
           <div formArrayName="attributeValues" class="space-y-4">
             @for (control of attributeValuesControls.controls; track $index) {
               <div [formGroupName]="$index" class="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-neutral-200 dark:border-neutral-700 rounded-md">
                 <div>
-                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Attribute *</label>
+                  <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.ATTRIBUTE' | translate }} *</label>
                   <select formControlName="attributeId" (change)="onAttributeSelectionChange($index)" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
-                    <option [ngValue]="0" disabled>Select attribute</option>
+                    <option [ngValue]="0" disabled>{{ 'OWNER_SPACE_FORM.SELECT_ATTRIBUTE' | translate }}</option>
                     @for (attribute of availableAttributes; track attribute.id) {
                       <option [ngValue]="attribute.id">{{ attribute.name }} ({{ attribute.dataType }})</option>
                     }
@@ -173,38 +173,38 @@
                 </div>
                 @if (getAttributeTypeByIndex($index) === 'boolean') {
                   <div>
-                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Value</label>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.VALUE' | translate }}</label>
                     <select formControlName="value" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
-                      <option [ngValue]="'true'">True</option>
-                      <option [ngValue]="'false'">False</option>
+                      <option [ngValue]="'true'">{{ 'COMMON.YES' | translate }}</option>
+                      <option [ngValue]="'false'">{{ 'COMMON.NO' | translate }}</option>
                     </select>
                   </div>
                   <div></div>
                   <div></div>
                 } @else if (getAttributeTypeByIndex($index) === 'integer') {
                   <div>
-                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Value</label>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.VALUE' | translate }}</label>
                     <input type="number" formControlName="value" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Min Value</label>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.MIN_VALUE' | translate }}</label>
                     <input type="number" formControlName="minValue" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Max Value</label>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.MAX_VALUE' | translate }}</label>
                     <input type="number" formControlName="maxValue" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                   </div>
                   <div></div>
                 } @else {
                   <div>
-                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Value</label>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{{ 'OWNER_SPACE_FORM.VALUE' | translate }}</label>
                     <input type="text" formControlName="value" class="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/80 rounded-md">
                   </div>
                   <div></div>
                   <div></div>
                 }
                 <div class="flex items-end justify-end">
-                  <button type="button" (click)="removeAttributeValue($index)" class="px-3 py-2 rounded-md border border-danger-300 text-danger-600 hover:bg-danger-50">Remove</button>
+                  <button type="button" (click)="removeAttributeValue($index)" class="px-3 py-2 rounded-md border border-danger-300 text-danger-600 hover:bg-danger-50">{{ 'OWNER_SPACE_FORM.REMOVE' | translate }}</button>
                 </div>
               </div>
             }
@@ -214,13 +214,13 @@
       <!-- Actions -->
       <div class="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-4">
         <button type="button" routerLink="/owner/spaces" class="btn bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 px-6 py-2 rounded-lg font-medium transition-colors">
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
         <button type="submit" [disabled]="spaceForm.invalid || isSaving" class="btn bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           @if (isSaving) {
             <span class="mr-2 inline-block animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent"></span>
           }
-          {{ isEditMode ? 'Update Space' : 'Create Space' }}
+          {{ (isEditMode ? 'OWNER_SPACE_FORM.UPDATE_SPACE' : 'OWNER_SPACE_FORM.CREATE_SPACE') | translate }}
         </button>
       </div>
     </form>

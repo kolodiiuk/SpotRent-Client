@@ -1,16 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Booking } from '../../models/booking.model';
 import { BookingStatus } from '../../models/booking-status';
 import { BookingService } from '../../services/booking.service';
 import { LoaderComponent } from '../../../../app/shared/components/loader.component';
+import { LocalDatePipe, LocalTimePipe } from '../../../../app/shared/pipes';
 
 @Component({
   selector: 'owner-booking-history',
   standalone: true,
-  imports: [CommonModule, DatePipe, RouterModule, LoaderComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, LoaderComponent, LocalDatePipe, LocalTimePipe],
   templateUrl: 'owner-booking-history.component.html'
 })
 export class OwnerBookingHistoryComponent implements OnInit {
@@ -38,7 +40,7 @@ export class OwnerBookingHistoryComponent implements OnInit {
     }
   }
 
-  getStatusLabel(status: BookingStatus) {
-    return BookingStatus[status];
+  getStatusKey(status: BookingStatus) {
+    return `BOOKING_STATUS.${BookingStatus[status].toUpperCase()}`;
   }
 }

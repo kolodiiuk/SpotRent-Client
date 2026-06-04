@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Space } from '../models/space.model';
 import { SpacesApiService } from '../services/spaces-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 import { catchError, of, tap } from 'rxjs';
+import { StringSpaceTypePipe } from '../../../app/shared/pipes';
 
 type OwnerSpacesLoadState = 'loading' | 'success' | 'empty' | 'error';
 
 @Component({
   selector: 'owner-spaces',
   standalone: true,
-  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, TranslateModule, FontAwesomeModule, StringSpaceTypePipe],
   templateUrl: './owner-spaces.component.html',
   styleUrl: './owner-spaces.component.css'
 })
@@ -22,7 +24,10 @@ export class OwnerSpacesComponent implements OnInit {
   loadState: OwnerSpacesLoadState = 'loading';
   errorMessage: string | null = null;
 
-  constructor(private spacesApi: SpacesApiService) { }
+  constructor(
+    private spacesApi: SpacesApiService,
+    private translate: TranslateService
+  ) { }
 
   get isLoading(): boolean {
     return this.loadState === 'loading';
@@ -44,7 +49,7 @@ export class OwnerSpacesComponent implements OnInit {
       catchError((err: unknown) => {
         console.error('Failed to load owner spaces', err);
         this.spaces = [];
-        this.errorMessage = 'Failed to load your spaces. Please try again.';
+        this.errorMessage = this.translate.instant('OWNER_SPACES.ERROR_LOAD');
         this.loadState = 'error';
         return of([]);
       })
@@ -52,7 +57,7 @@ export class OwnerSpacesComponent implements OnInit {
   }
 
   deleteSpace(spaceId: number): void {
-    if (confirm('Are you sure you want to delete this space? This action cannot be undone.')) {
+    if (confirm(this.translate.instant('OWNER_SPACES.CONFIRM_DELETE'))) {
       this.spacesApi.deleteSpace(spaceId).subscribe({
         next: () => {
           this.spaces = this.spaces.filter(s => s.id !== spaceId);
@@ -62,7 +67,7 @@ export class OwnerSpacesComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Failed to delete space', err);
-          alert('Failed to delete space.');
+          alert(this.translate.instant('OWNER_SPACES.ERROR_DELETE'));
         }
       });
     }

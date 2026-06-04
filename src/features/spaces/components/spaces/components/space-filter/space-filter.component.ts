@@ -137,6 +137,6 @@ export class SpaceFilterComponent implements OnInit {
     );
     this.lastRawFilters = { ...nextValue };
 
-    return changedKeys.some((key) => SpaceFilterComponent.RANGE_FILTER_KEYS.has(key)) ? 500 : 150;
+    return changedKeys.some((key) => SpaceFilterComponent.RANGE_FILTER_KEYS.has(key)) ? 500 : 500;
   }
 }

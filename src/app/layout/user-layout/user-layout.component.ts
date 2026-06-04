@@ -21,6 +21,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 interface NavigationItem {
   path: string;
   label: string;
+  labelKey: string;
   icon: IconDefinition;
 }
 
@@ -45,10 +46,10 @@ export class UserLayoutComponent implements OnInit {
   currentPath = '';
 
   navigationItems: NavigationItem[] = [
-    { path: '/user/my-bookings', label: 'My Bookings', icon: faCalendarDays },
-    { path: '/user/my-bookings/history', label: 'Booking History', icon: faClockRotateLeft },
-    { path: '/user/subscriptions', label: 'My Subscriptions', icon: faWallet },
-    { path: '/user/subscriptions/history', label: 'Subscription History', icon: faClockRotateLeft }
+    { path: '/user/my-bookings', label: 'My Bookings', labelKey: 'NAV.MY_BOOKINGS', icon: faCalendarDays },
+    { path: '/user/my-bookings/history', label: 'Booking History', labelKey: 'NAV.BOOKING_HISTORY', icon: faClockRotateLeft },
+    { path: '/user/subscriptions', label: 'My Subscriptions', labelKey: 'NAV.MY_SUBSCRIPTIONS', icon: faWallet },
+    { path: '/user/subscriptions/history', label: 'Subscription History', labelKey: 'NAV.SUBSCRIPTION_HISTORY', icon: faClockRotateLeft }
   ];
 
   constructor(

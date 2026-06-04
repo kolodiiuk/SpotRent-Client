@@ -4,26 +4,26 @@
     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m0 0l7 7" />
     </svg>
-    Back to spaces
+    {{ 'OWNER_SPACE_FORM.BACK_TO_SPACES' | translate }}
   </a>
 
   <div class="mb-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-6 shadow-md backdrop-blur-sm">
     <div class="flex items-start justify-between gap-4">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600 dark:text-primary-300">Space-level audit stream</p>
-        <h1 class="mt-2 text-2xl font-bold text-neutral-900 dark:text-neutral-100">Space Access Logs</h1>
+        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600 dark:text-primary-300">{{ 'OWNER_ACCESS_LOGS.SPACE_KICKER' | translate }}</p>
+        <h1 class="mt-2 text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ 'OWNER_ACCESS_LOGS.SPACE_TITLE' | translate }}</h1>
         <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
-        Access events recorded for this space.
+        {{ 'OWNER_ACCESS_LOGS.SPACE_SUBTITLE' | translate }}
         </p>
       </div>
     </div>
   </div>
 
   @if (spaceId) {
-    <p class="mb-4 text-sm text-neutral-500 dark:text-neutral-400">Showing access records for space #{{ spaceId }}</p>
+    <p class="mb-4 text-sm text-neutral-500 dark:text-neutral-400">{{ 'OWNER_ACCESS_LOGS.SHOWING_SPACE' | translate:{ id: spaceId } }}</p>
   } @else {
     <div class="mb-4 rounded-lg border border-danger-200 bg-danger-50 px-4 py-3 text-sm text-danger-700 dark:border-danger-900/50 dark:bg-danger-900/20 dark:text-danger-300">
-      Invalid or missing space id in route.
+      {{ 'OWNER_ACCESS_LOGS.INVALID_SPACE_ID' | translate }}
     </div>
   }
 
@@ -35,7 +35,7 @@
           type="button"
           class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
           (click)="loadSpaceAccessLogs()">
-          Try again
+          {{ 'COMMON.TRY_AGAIN' | translate }}
         </button>
       </div>
     } @else if (spaceId) {
@@ -43,18 +43,18 @@
         <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
           <thead class="bg-neutral-100/90 dark:bg-neutral-800/90">
           <tr>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Time</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Event</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">User</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Device</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Result</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_ACCESS_LOGS.DATE_TIME' | translate }}</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_ACCESS_LOGS.EVENT' | translate }}</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_ACCESS_LOGS.USER' | translate }}</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_ACCESS_LOGS.DEVICE' | translate }}</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_ACCESS_LOGS.RESULT' | translate }}</th>
           </tr>
           </thead>
           <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
             @if (logs.length === 0) {
               <tr>
                 <td colspan="5" class="px-4 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
-                  No access logs recorded for this space.
+                  {{ 'OWNER_ACCESS_LOGS.NO_SPACE_LOGS' | translate }}
                 </td>
               </tr>
             }
@@ -62,21 +62,21 @@
             @for (log of logs; track log.id) {
               <tr class="transition-colors hover:bg-neutral-100/70 dark:hover:bg-neutral-800/70">
                 <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-                  {{ log.timestamp | date:'medium' }}
+                  {{ log.timestamp | localDate }} {{ log.timestamp | localTime }}
                 </td>
                 <td class="whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                  {{ getTypeLabel(log.accessType) }}
+                  {{ getTypeKey(log.accessType) | translate }}
                 </td>
                 <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-                  {{ log.user?.firstName || 'Unknown' }} {{ log.user?.lastName || '' }}
+                  {{ log.user?.firstName || ('COMMON.UNKNOWN' | translate) }} {{ log.user?.lastName || '' }}
                 </td>
                 <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-                  {{ log.device?.deviceName || 'Unknown device' }}
+                  {{ log.device?.deviceName || ('OWNER_ACCESS_LOGS.UNKNOWN_DEVICE' | translate) }}
                 </td>
                 <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
                   <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
                         [ngClass]="log.isSuccessful ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
-                    {{ log.isSuccessful ? 'Success' : 'Denied' }}
+                    {{ (log.isSuccessful ? 'COMMON.SUCCESS' : 'COMMON.DENIED') | translate }}
                   </span>
                 </td>
               </tr>

@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SubscriptionPlanService } from '../../../subscription-plans/services/subsription-plan.service';
-import { durationLabels } from '../../../subscription-plans/models/duration-labels';
 import { Duration } from '../../../subscription-plans/models/duration';
 import { SubscriptionPlan } from '../../../subscription-plans/models/subscription-plan';
+import { LocalDatePipe, LocalTimePipe } from '../../../../app/shared/pipes';
 
 @Component({
   selector: 'app-subscription-plan-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, LocalDatePipe, LocalTimePipe],
   template: `
     <div class="px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-3xl w-full">
       <div class="mb-8">
@@ -18,13 +19,13 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to Subscription Plans
+          {{ 'OWNER_PLAN_FORM.BACK_TO_PLANS' | translate }}
         </a>
         <h1 class="text-2xl md:text-3xl text-neutral-900 dark:text-neutral-100 font-bold">
-          {{ isEditMode ? 'Edit Subscription Plan' : 'Create Subscription Plan' }}
+          {{ (isEditMode ? 'OWNER_PLAN_FORM.EDIT_TITLE' : 'OWNER_PLAN_FORM.CREATE_TITLE') | translate }}
         </h1>
         <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-          {{ isEditMode ? 'Update pricing and description for your plan.' : 'Create a new plan for your spaces.' }}
+          {{ (isEditMode ? 'OWNER_PLAN_FORM.EDIT_SUBTITLE' : 'OWNER_PLAN_FORM.CREATE_SUBTITLE') | translate }}
         </p>
       </div>
     
@@ -49,32 +50,32 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
       @if (!isLoading) {
         <form [formGroup]="form" (ngSubmit)="save()" class="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-8 shadow-md backdrop-blur-sm space-y-6">
           <div>
-            <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Plan Name *</label>
+            <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ 'OWNER_PLAN_FORM.PLAN_NAME' | translate }} *</label>
             <input
               type="text"
               formControlName="name"
               class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500"
-              placeholder="e.g. Flex Starter"
+              [placeholder]="'OWNER_PLAN_FORM.PLAN_NAME_PLACEHOLDER' | translate"
               />
             @if (nameInvalid) {
-              <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">Plan name is required.</p>
+              <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">{{ 'OWNER_PLAN_FORM.NAME_REQUIRED' | translate }}</p>
             }
           </div>
           <div>
-            <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Description *</label>
+            <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ 'OWNER_SPACE_FORM.DESCRIPTION' | translate }} *</label>
             <textarea
               formControlName="description"
               rows="4"
               class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500"
-              placeholder="Describe the discount and included benefits"
+              [placeholder]="'OWNER_PLAN_FORM.DESCRIPTION_PLACEHOLDER' | translate"
             ></textarea>
             @if (descriptionInvalid) {
-              <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">Description is required.</p>
+              <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">{{ 'OWNER_PLAN_FORM.DESCRIPTION_REQUIRED' | translate }}</p>
             }
           </div>
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
-              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Price ($) *</label>
+              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ 'OWNER_PLAN_FORM.PRICE' | translate }} *</label>
               <input
                 type="number"
                 formControlName="price"
@@ -83,11 +84,11 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
                 class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500"
                 />
               @if (priceInvalid) {
-                <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">Price must be 0 or greater.</p>
+                <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">{{ 'OWNER_PLAN_FORM.PRICE_INVALID' | translate }}</p>
               }
             </div>
             <div>
-              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Included Hours *</label>
+              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ 'USER_SUBSCRIPTIONS.INCLUDED_HOURS' | translate }} *</label>
               <input
                 type="number"
                 formControlName="includedHours"
@@ -95,49 +96,49 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
                 class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500"
                 />
               @if (includedHoursInvalid) {
-                <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">Included hours must be 0 or greater.</p>
+                <p class="mt-1 text-xs text-danger-600 dark:text-danger-400">{{ 'OWNER_PLAN_FORM.HOURS_INVALID' | translate }}</p>
               }
             </div>
             <div class="md:col-span-2">
-              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Duration *</label>
+              <label class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ 'SUBSCRIPTION_PLAN_DETAILS.DURATION' | translate }} *</label>
               <select
                 formControlName="duration"
                 class="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 focus:ring-primary-500 disabled:bg-neutral-100 dark:disabled:bg-neutral-800"
                 >
                 @for (option of durationOptions; track option) {
-                  <option [ngValue]="option.value">{{ option.label }}</option>
+                  <option [ngValue]="option.value">{{ option.key | translate }}</option>
                 }
               </select>
               <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                {{ isEditMode ? 'Duration cannot be changed for an existing plan.' : 'Choose the plan duration.' }}
+                {{ (isEditMode ? 'OWNER_PLAN_FORM.DURATION_LOCKED' : 'OWNER_PLAN_FORM.DURATION_HINT') | translate }}
               </p>
             </div>
           </div>
           @if (isEditMode && plan) {
             <div class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 p-4 text-sm text-neutral-700 dark:text-neutral-300">
-              <p><span class="font-medium">Status:</span> {{ plan.isActive ? 'Active' : 'Inactive' }}</p>
-              <p><span class="font-medium">Owner ID:</span> {{ plan.ownerId ?? 'N/A' }}</p>
-              <p><span class="font-medium">Last updated:</span> {{ plan.updatedAt | date:'medium' }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.STATUS' | translate }}:</span> {{ (plan.isActive ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') | translate }}</p>
+              <p><span class="font-medium">{{ 'OWNER_PLAN_FORM.OWNER_ID' | translate }}:</span> {{ plan.ownerId ?? ('COMMON.NOT_AVAILABLE' | translate) }}</p>
+              <p><span class="font-medium">{{ 'OWNER_PLAN_FORM.LAST_UPDATED' | translate }}:</span> {{ plan.updatedAt | localDate }} {{ plan.updatedAt | localTime }}</p>
             </div>
           }
           <div class="flex flex-wrap items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-700 pt-6">
             <button type="button" routerLink="/owner/subscription-plans" class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-5 py-2 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">
-              Cancel
+              {{ 'COMMON.CANCEL' | translate }}
             </button>
             @if (isEditMode) {
               @if (plan?.isActive) {
                 <button type="button" (click)="deactivate()" class="rounded-lg bg-yellow-50 px-5 py-2 font-medium text-yellow-700 hover:bg-yellow-100">
-                  Deactivate
+                  {{ 'OWNER_SUBSCRIPTIONS.DEACTIVATE' | translate }}
                 </button>
               } @else {
                 <button type="button" (click)="activate()" class="rounded-lg bg-emerald-50 px-5 py-2 font-medium text-emerald-700 hover:bg-emerald-100">
-                  Activate
+                  {{ 'OWNER_SUBSCRIPTIONS.ACTIVATE' | translate }}
                 </button>
               }
             }
             @if (isEditMode) {
               <button type="button" (click)="delete()" class="rounded-lg bg-danger-50 dark:bg-danger-900/30 px-5 py-2 font-medium text-danger-700 dark:text-danger-300 hover:bg-danger-100 dark:hover:bg-danger-900/50">
-                Delete
+                {{ 'COMMON.DELETE' | translate }}
               </button>
             }
             <button
@@ -147,7 +148,7 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
               @if (isSaving) {
                 <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
               }
-              {{ isEditMode ? 'Update Plan' : 'Create Plan' }}
+              {{ (isEditMode ? 'OWNER_PLAN_FORM.UPDATE_PLAN' : 'OWNER_PLAN_FORM.CREATE_PLAN') | translate }}
             </button>
           </div>
         </form>
@@ -165,16 +166,19 @@ export class SubscriptionPlanForm implements OnInit {
   isSaving = false;
   error = '';
   infoMessage = '';
-  durationOptions = Object.keys(durationLabels).map((key) => {
-    const value = Number(key) as Duration;
-    return { value, label: durationLabels[value] };
-  });
+  durationOptions = [
+    Duration.Week,
+    Duration.TwoWeeks,
+    Duration.Month,
+    Duration.ThreeMonths
+  ].map((value) => ({ value, key: this.getDurationKey(value) }));
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private planService: SubscriptionPlanService
+    private planService: SubscriptionPlanService,
+    private translate: TranslateService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -236,7 +240,7 @@ export class SubscriptionPlanForm implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load subscription plan', err);
-        this.error = 'Failed to load subscription plan details.';
+        this.error = this.translate.instant('OWNER_PLAN_FORM.ERROR_LOAD');
         this.isLoading = false;
       }
     });
@@ -276,7 +280,7 @@ export class SubscriptionPlanForm implements OnInit {
       },
       error: (err) => {
         console.error('Failed to save subscription plan', err);
-        this.error = 'Failed to save subscription plan.';
+        this.error = this.translate.instant('OWNER_PLAN_FORM.ERROR_SAVE');
         this.isSaving = false;
       }
     });
@@ -287,7 +291,7 @@ export class SubscriptionPlanForm implements OnInit {
       return;
     }
 
-    if (!confirm('Deactivate this subscription plan?')) {
+    if (!confirm(this.translate.instant('OWNER_SUBSCRIPTIONS.CONFIRM_DEACTIVATE'))) {
       return;
     }
 
@@ -295,7 +299,7 @@ export class SubscriptionPlanForm implements OnInit {
       next: () => this.router.navigate(['/owner/subscription-plans']),
       error: (err) => {
         console.error('Failed to deactivate subscription plan', err);
-        this.error = 'Failed to deactivate subscription plan.';
+        this.error = this.translate.instant('OWNER_SUBSCRIPTIONS.ERROR_DEACTIVATE');
       }
     });
   }
@@ -305,7 +309,7 @@ export class SubscriptionPlanForm implements OnInit {
       return;
     }
 
-    if (!confirm('Activate this subscription plan?')) {
+    if (!confirm(this.translate.instant('OWNER_SUBSCRIPTIONS.CONFIRM_ACTIVATE'))) {
       return;
     }
 
@@ -313,7 +317,7 @@ export class SubscriptionPlanForm implements OnInit {
       next: () => this.router.navigate(['/owner/subscription-plans']),
       error: (err) => {
         console.error('Failed to activate subscription plan', err);
-        this.error = 'Failed to activate subscription plan.';
+        this.error = this.translate.instant('OWNER_SUBSCRIPTIONS.ERROR_ACTIVATE');
       }
     });
   }
@@ -323,7 +327,7 @@ export class SubscriptionPlanForm implements OnInit {
       return;
     }
 
-    if (!confirm('Delete this subscription plan permanently?')) {
+    if (!confirm(this.translate.instant('OWNER_SUBSCRIPTIONS.CONFIRM_DELETE'))) {
       return;
     }
 
@@ -331,7 +335,7 @@ export class SubscriptionPlanForm implements OnInit {
       next: () => this.router.navigate(['/owner/subscription-plans']),
       error: (err) => {
         console.error('Failed to delete subscription plan', err);
-        this.error = 'Failed to delete subscription plan.';
+        this.error = this.translate.instant('OWNER_SUBSCRIPTIONS.ERROR_DELETE');
       }
     });
   }
@@ -354,5 +358,20 @@ export class SubscriptionPlanForm implements OnInit {
   get includedHoursInvalid(): boolean {
     const control = this.form.get('includedHours');
     return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  private getDurationKey(duration: Duration): string {
+    switch (duration) {
+      case Duration.Week:
+        return 'SUBSCRIPTION_DURATION.WEEK';
+      case Duration.TwoWeeks:
+        return 'SUBSCRIPTION_DURATION.TWO_WEEKS';
+      case Duration.Month:
+        return 'SUBSCRIPTION_DURATION.MONTH';
+      case Duration.ThreeMonths:
+        return 'SUBSCRIPTION_DURATION.THREE_MONTHS';
+      default:
+        return 'SUBSCRIPTION_DURATION.UNKNOWN';
+    }
   }
 }
