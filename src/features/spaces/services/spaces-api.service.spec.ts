@@ -89,6 +89,18 @@ describe('SpacesApiService', () => {
     req.flush(mockSpace);
   });
 
+  it('should call getOwnerSpaces', () => {
+    const mockSpaces = [{ id: 2, name: 'Owner Space' }];
+
+    service.getOwnerSpaces().subscribe((res: any) => {
+      expect(res).toEqual(mockSpaces);
+    });
+
+    const req = httpMock.expectOne(`${mockBaseUrl}/owner`);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockSpaces);
+  });
+
   it('should call deleteSpace', () => {
     service.deleteSpace(1).subscribe();
 

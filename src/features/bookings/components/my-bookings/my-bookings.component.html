@@ -1,9 +1,27 @@
 <div class="px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-7xl w-full">
   <div class="sm:flex sm:items-center sm:justify-between mb-8">
     <div>
-      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">My Bookings</h1>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">{{ 'USER_BOOKINGS.MY_BOOKINGS' | translate }}</h1>
     </div>
   </div>
 
-  <active-bookings [bookings]="activeBookings"></active-bookings>
+  @if (activeBookings$ | async; as activeBookings) {
+    @if (error) {
+      <div class="layout-glass-card p-6">
+        <app-error [error]="error"></app-error>
+        <button
+          type="button"
+          class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+          (click)="loadActiveBookings()">
+          {{ 'COMMON.TRY_AGAIN' | translate }}
+        </button>
+      </div>
+    } @else if (isLoading) {
+      <app-loader></app-loader>
+    } @else {
+      <active-bookings [bookings]="activeBookings"></active-bookings>
+    }
+  } @else {
+    <app-loader></app-loader>
+  }
 </div>

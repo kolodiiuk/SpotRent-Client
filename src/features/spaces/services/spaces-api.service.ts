@@ -11,6 +11,8 @@ import {CreateSpaceRequest} from '../models/create-space-request';
 import {SpaceSchedule} from '../models/space-schedule';
 import {SpaceAvailabilityQuery} from '../models/space-availability-query';
 import {PagedSpacesResponse} from '../models/paged-spaces-response';
+import {CreateSpaceAddressRequest, SpaceAddress} from '../models/space-address';
+import {AttributeInfo} from '../models/attribute-info';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,14 @@ export class SpacesApiService {
 
   createSpace(payload: CreateSpaceRequest): Observable<{ id: number }> {
     return this.http.post<{ id: number }>(this.baseUrl, payload);
+  }
+
+  getOrCreateAddress(payload: CreateSpaceAddressRequest): Observable<SpaceAddress> {
+    return this.http.post<SpaceAddress>(`${this.baseUrl}/address`, payload);
+  }
+
+  getAttributes(): Observable<AttributeInfo[]> {
+    return this.http.get<AttributeInfo[]>(`${this.baseUrl}/attributes`);
   }
 
   filterSpaces(filters: SpaceFilterParams): Observable<PagedSpacesResponse> {
@@ -49,6 +59,10 @@ export class SpacesApiService {
       .set('city', query.city);
 
     return this.http.get<Space[]>(`${this.baseUrl}/available`, { params });
+  }
+
+  getOwnerSpaces(): Observable<Space[]> {
+    return this.http.get<Space[]>(`${this.baseUrl}/owner`);
   }
 
   getSpaceSchedule(id: number, startDate?: string, endDate?: string): Observable<SpaceSchedule> {

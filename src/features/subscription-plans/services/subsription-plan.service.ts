@@ -35,6 +35,10 @@ export class SubscriptionPlanService {
     return this.apiService.deactivateSubscriptionPlan(id);
   }
 
+  activatePlan(id: number): Observable<void> {
+    return this.apiService.activateSubscriptionPlan(id);
+  }
+
   deletePlan(id: number): Observable<void> {
     return this.apiService.deleteSubscriptionPlan(id);
   }

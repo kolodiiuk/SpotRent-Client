@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { catchError, finalize, Observable, of, shareReplay } from 'rxjs';
 
 import { ErrorComponent } from '../../../../app/shared/components/error/error.component';
 import { LoaderComponent } from '../../../../app/shared/components/loader.component';
+import { LocalDatePipe } from '../../../../app/shared/pipes';
 import {
   paymentStatusLabel,
   paymentStatusVariant,
@@ -17,7 +19,7 @@ import { UserSubscriptionService } from '../../services/user-subscription.servic
 @Component({
   selector: 'app-my-subscriptions',
   standalone: true,
-  imports: [CommonModule, RouterModule, ErrorComponent, LoaderComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, ErrorComponent, LoaderComponent, LocalDatePipe],
   templateUrl: 'my-subscriptions.component.html'
 })
 export class MySubscriptionsComponent implements OnInit {
@@ -30,7 +32,10 @@ export class MySubscriptionsComponent implements OnInit {
   readonly paymentStatusLabel = paymentStatusLabel;
   readonly paymentStatusVariant = paymentStatusVariant;
 
-  constructor(private userSubscriptionService: UserSubscriptionService) {}
+  constructor(
+    private userSubscriptionService: UserSubscriptionService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.loadSubscriptions();
@@ -42,7 +47,7 @@ export class MySubscriptionsComponent implements OnInit {
 
     this.subscriptions$ = this.userSubscriptionService.getMySubscriptions().pipe(
       catchError((err) => {
-        this.error = err?.error ?? 'Failed to load subscriptions';
+        this.error = err?.error ?? this.translate.instant('USER_SUBSCRIPTIONS.ERROR_LOAD');
         return of([]);
       }),
       finalize(() => {
@@ -50,5 +55,13 @@ export class MySubscriptionsComponent implements OnInit {
       }),
       shareReplay(1)
     );
+  }
+
+  getSubscriptionStatusKeys(status: number): string[] {
+    return this.subscriptionStatusTokens(status).map(token => `SUBSCRIPTION_STATUS.${token.toUpperCase().replace(/ /g, '_')}`);
+  }
+
+  getPaymentStatusKey(status: number): string {
+    return `PAYMENT_STATUS.${this.paymentStatusLabel(status).toUpperCase().replace(/ /g, '_')}`;
   }
 }

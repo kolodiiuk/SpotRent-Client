@@ -3,17 +3,17 @@
     <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
       <thead class="bg-neutral-100/80 dark:bg-neutral-800/80">
         <tr>
-          <th class="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Space</th>
-          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Period</th>
-          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Status</th>
-          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">Total</th>
+          <th class="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_BOOKINGS.SPACE' | translate }}</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_BOOKINGS.PERIOD' | translate }}</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_BOOKINGS.STATUS' | translate }}</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_BOOKINGS.TOTAL' | translate }}</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700 bg-white/70 dark:bg-neutral-900/50">
         @if (bookings.length === 0) {
           <tr>
             <td colspan="4" class="px-6 py-10 text-center text-sm text-neutral-500 dark:text-neutral-400">
-              No active bookings yet
+              {{ 'USER_BOOKINGS.NO_ACTIVE' | translate }}
             </td>
           </tr>
         } @else {
@@ -21,15 +21,15 @@
             <tr
               [routerLink]="['/user/my-bookings', booking.id]"
               class="cursor-pointer hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80"
-              title="Open booking details">
+              [title]="'USER_BOOKINGS.OPEN_DETAILS' | translate">
               <td class="py-4 pl-6 pr-3 text-sm text-neutral-900 dark:text-neutral-100 font-medium">{{ booking.spaceName }}</td>
               <td class="px-3 py-4 text-sm text-neutral-600 dark:text-neutral-300">
-                {{ booking.startTime | date:'medium' }} - {{ booking.endTime | date:'shortTime' }}
+                {{ booking.startTime | localDate }} {{ booking.startTime | localTime }} - {{ booking.endTime | localTime }}
               </td>
               <td class="px-3 py-4 text-sm">
                 <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5"
                       [ngClass]="getStatusClass(booking.status)">
-                  {{ getStatusLabel(booking.status) }}
+                  {{ getStatusKey(booking.status) | translate }}
                 </span>
               </td>
               <td class="px-3 py-4 text-sm text-neutral-700 dark:text-neutral-200">${{ booking.total | number:'1.2-2' }}</td>

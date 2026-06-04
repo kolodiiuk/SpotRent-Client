@@ -146,13 +146,22 @@
                 <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-4">{{ 'SPACE_DETAILS.READY_TO_BOOK' | translate }}</h3>
                 <button
                   class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:opacity-60"
-                  [disabled]="!space.isAvailable">
+                  [disabled]="!space.isAvailable"
+                  [attr.aria-expanded]="showBookingForm"
+                  (click)="openBookingForm()">
                   {{ space.isAvailable ? ('SPACE_DETAILS.REQUEST_BOOKING' | translate) : ('SPACE_DETAILS.CURRENTLY_UNAVAILABLE' | translate) }}
                 </button>
                 <p class="mt-3 text-xs text-neutral-500 dark:text-neutral-400">{{ 'SPACE_DETAILS.NO_CHARGE_NOTE' | translate }}</p>
               </div>
             </div>
           </div>
+          @if (showBookingForm) {
+            <div class="mt-8">
+              <booking-form
+                [defaultSpaceId]="space.id"
+                [hourlyRate]="space.hourlyRate" />
+            </div>
+          }
           <!-- Schedule Section -->
           <app-space-availability [spaceId]="space.id"></app-space-availability>
         </div>

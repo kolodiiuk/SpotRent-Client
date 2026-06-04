@@ -1,16 +1,18 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BookingStatus } from '../../models/booking-status';
 import { PaymentStatus } from '../../models/payment-status';
 import { Booking } from '../../models/booking.model';
 import { BookingService } from '../../services/booking.service';
 import { LoaderComponent } from '../../../../app/shared/components/loader.component';
+import { LocalDatePipe, LocalTimePipe } from '../../../../app/shared/pipes';
 
 @Component({
   selector: 'booking-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, DatePipe, LoaderComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, LoaderComponent, LocalDatePipe, LocalTimePipe],
   templateUrl: 'booking-details.component.html',
   styleUrl: 'booking-details.component.css'
 })
@@ -23,6 +25,7 @@ export class BookingDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private bookingService = inject(BookingService);
+  private translate = inject(TranslateService);
 
   ngOnInit(): void {
     this.listLink = this.router.url.startsWith('/owner/') ? '/owner/bookings' : '/user/my-bookings';
@@ -30,7 +33,7 @@ export class BookingDetailsComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('id'));
       if (!id) {
-        this.error = 'Invalid booking id.';
+        this.error = this.translate.instant('USER_BOOKINGS.ERROR_INVALID_ID');
         this.booking = null;
         return;
       }
@@ -45,6 +48,14 @@ export class BookingDetailsComponent implements OnInit {
 
   getPaymentStatusLabel(status: PaymentStatus): string {
     return PaymentStatus[status];
+  }
+
+  getStatusKey(status: BookingStatus): string {
+    return `BOOKING_STATUS.${this.getStatusLabel(status).toUpperCase()}`;
+  }
+
+  getPaymentStatusKey(status: PaymentStatus): string {
+    return `PAYMENT_STATUS.${this.getPaymentStatusLabel(status).toUpperCase()}`;
   }
 
   getStatusClass(status: BookingStatus): string {
@@ -76,7 +87,7 @@ export class BookingDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load booking details', err);
-        this.error = 'Failed to load booking details.';
+        this.error = this.translate.instant('USER_BOOKINGS.ERROR_DETAILS');
         this.isLoading = false;
       }
     });

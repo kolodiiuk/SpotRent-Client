@@ -13,56 +13,79 @@
         <p class="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600 dark:text-primary-300">Space-level audit stream</p>
         <h1 class="mt-2 text-2xl font-bold text-neutral-900 dark:text-neutral-100">Space Access Logs</h1>
         <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
-        Endpoint scaffold: <code>GET /api/access-log/space/:spaceId</code>
+        Access events recorded for this space.
         </p>
       </div>
-      <span class="rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">UI only</span>
     </div>
   </div>
 
   @if (spaceId) {
-    <p class="mb-4 text-sm text-neutral-500 dark:text-neutral-400">Showing preview records for space #{{ spaceId }}</p>
+    <p class="mb-4 text-sm text-neutral-500 dark:text-neutral-400">Showing access records for space #{{ spaceId }}</p>
   } @else {
     <div class="mb-4 rounded-lg border border-danger-200 bg-danger-50 px-4 py-3 text-sm text-danger-700 dark:border-danger-900/50 dark:bg-danger-900/20 dark:text-danger-300">
       Invalid or missing space id in route.
     </div>
   }
 
-  <div class="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
-    <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-      <thead class="bg-neutral-100/90 dark:bg-neutral-800/90">
-      <tr>
-        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Time</th>
-        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Event</th>
-        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">User</th>
-        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Device</th>
-        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Result</th>
-      </tr>
-      </thead>
-      <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
-        @for (log of logsPreview; track log.id) {
-          <tr class="transition-colors hover:bg-neutral-100/70 dark:hover:bg-neutral-800/70">
-            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-              {{ log.timestamp | date:'medium' }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-              {{ getTypeLabel(log.accessType) }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-              {{ log.user?.firstName }} {{ log.user?.lastName }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
-              {{ log.device?.deviceName || 'Unknown device' }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
-              <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-                    [ngClass]="log.isSuccessful ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
-                {{ log.isSuccessful ? 'Success' : 'Denied' }}
-              </span>
-            </td>
+  @if (logs$ | async; as logs) {
+    @if (error && spaceId) {
+      <div class="layout-glass-card p-6">
+        <app-error [error]="error"></app-error>
+        <button
+          type="button"
+          class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+          (click)="loadSpaceAccessLogs()">
+          Try again
+        </button>
+      </div>
+    } @else if (spaceId) {
+      <div class="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
+        <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+          <thead class="bg-neutral-100/90 dark:bg-neutral-800/90">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Time</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Event</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">User</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Device</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Result</th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+            @if (logs.length === 0) {
+              <tr>
+                <td colspan="5" class="px-4 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                  No access logs recorded for this space.
+                </td>
+              </tr>
+            }
+
+            @for (log of logs; track log.id) {
+              <tr class="transition-colors hover:bg-neutral-100/70 dark:hover:bg-neutral-800/70">
+                <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+                  {{ log.timestamp | date:'medium' }}
+                </td>
+                <td class="whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                  {{ getTypeLabel(log.accessType) }}
+                </td>
+                <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+                  {{ log.user?.firstName || 'Unknown' }} {{ log.user?.lastName || '' }}
+                </td>
+                <td class="whitespace-nowrap px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300">
+                  {{ log.device?.deviceName || 'Unknown device' }}
+                </td>
+                <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+                  <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
+                        [ngClass]="log.isSuccessful ? 'bg-success-100 text-success-800 dark:bg-success-900/40 dark:text-success-300' : 'bg-danger-100 text-danger-800 dark:bg-danger-900/40 dark:text-danger-300'">
+                    {{ log.isSuccessful ? 'Success' : 'Denied' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  } @else {
+    <app-loader></app-loader>
+  }
 </div>

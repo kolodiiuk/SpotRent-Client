@@ -1,82 +1,66 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AccessLogEntry, AccessType, accessTypeLabel } from '../models/access-log.model';
-import { LockStatus } from '../../smart-locks/models/device.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { catchError, filter, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
+import { ErrorComponent } from '../../../app/shared/components/error/error.component';
+import { LoaderComponent } from '../../../app/shared/components/loader.component';
+import { AuthService } from '../../auth/services/auth.service';
+import { AccessLogEntry, accessTypeLabel } from '../models/access-log.model';
+import { AccessLogService } from '../services/access-log.service';
+import { LocalDatePipe, LocalTimePipe } from '../../../app/shared/pipes';
 
 @Component({
   selector: 'user-access-logs',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, ErrorComponent, LoaderComponent, LocalDatePipe, LocalTimePipe],
   templateUrl: 'user-access-logs.component.html',
   styleUrl: 'user-access-logs.component.css'
 })
-export class UserAccessLogsComponent {
-  logsPreview: AccessLogEntry[] = [
-    {
-      id: 9021,
-      userId: 17,
-      spaceId: 92,
-      deviceId: 7,
-      accessType: AccessType.Entry,
-      timestamp: '2026-05-12T09:05:00Z',
-      isSuccessful: true,
-      errorMessage: null,
-      user: null,
-      space: { id: 92, name: 'Skyline Focus Room' },
-      device: {
-        id: 7,
-        spaceId: 92,
-        deviceName: 'Door A',
-        status: LockStatus.Locked,
-        isOnline: true,
-        installedAt: '2026-01-20T12:00:00Z',
-        updatedAt: '2026-05-12T09:05:00Z'
-      }
-    },
-    {
-      id: 9022,
-      userId: 17,
-      spaceId: 45,
-      deviceId: 3,
-      accessType: AccessType.Exit,
-      timestamp: '2026-05-12T11:50:00Z',
-      isSuccessful: true,
-      errorMessage: null,
-      user: null,
-      space: { id: 45, name: 'North Wing Meeting Pod' },
-      device: {
-        id: 3,
-        spaceId: 45,
-        deviceName: 'Hall Gate',
-        status: LockStatus.Unlocked,
-        isOnline: true,
-        installedAt: '2026-02-11T10:20:00Z',
-        updatedAt: '2026-05-12T11:50:00Z'
-      }
-    },
-    {
-      id: 9023,
-      userId: 17,
-      spaceId: 45,
-      deviceId: 3,
-      accessType: AccessType.AccessDenied,
-      timestamp: '2026-05-14T07:20:00Z',
-      isSuccessful: false,
-      errorMessage: 'Subscription inactive',
-      user: null,
-      space: { id: 45, name: 'North Wing Meeting Pod' },
-      device: {
-        id: 3,
-        spaceId: 45,
-        deviceName: 'Hall Gate',
-        status: LockStatus.Error,
-        isOnline: true,
-        installedAt: '2026-02-11T10:20:00Z',
-        updatedAt: '2026-05-14T07:20:00Z'
-      }
-    }
-  ];
+export class UserAccessLogsComponent implements OnInit {
+  logs$!: Observable<AccessLogEntry[]>;
+  isLoading = false;
+  error = '';
+
+  private accessLogService = inject(AccessLogService);
+  private authService = inject(AuthService);
+  private translate = inject(TranslateService);
+
+  ngOnInit(): void {
+    this.loadUserAccessLogs();
+  }
+
+  loadUserAccessLogs(): void {
+    this.isLoading = true;
+    this.error = '';
+
+    this.logs$ = this.authService.user$.pipe(
+      filter(user => !!user),
+      switchMap(user => this.accessLogService.getUserAccessLogs(user!.id)),
+      tap(() => {
+        this.isLoading = false;
+      }),
+      catchError((err: unknown) => {
+        console.error('Failed to load user access logs', err);
+        this.error = this.translate.instant('USER_ACCESS_LOGS.ERROR_LOAD');
+        this.isLoading = false;
+        return of([]);
+      }),
+      shareReplay(1)
+    );
+  }
+
+  getDeniedCount(logs: AccessLogEntry[]): number {
+    return logs.filter(log => !log.isSuccessful).length;
+  }
+
+  getActiveSpaceCount(logs: AccessLogEntry[]): number {
+    return new Set(logs.map(log => log.spaceId).filter(spaceId => spaceId != null)).size;
+  }
 
   getTypeLabel = accessTypeLabel;
+
+  getTypeKey(type: number): string {
+    return `ACCESS_TYPE.${this.getTypeLabel(type).toUpperCase().replace(/ /g, '_')}`;
+  }
 }

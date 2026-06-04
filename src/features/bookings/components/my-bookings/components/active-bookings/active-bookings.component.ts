@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { LocalDatePipe, LocalTimePipe } from '../../../../../../app/shared/pipes';
 import { Booking } from '../../../../models/booking.model';
 import { BookingStatus } from '../../../../models/booking-status';
 
 @Component({
   selector: 'active-bookings',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, LocalDatePipe, LocalTimePipe],
   templateUrl: 'active-bookings.component.html',
   styleUrl: 'active-bookings.component.css'
 })
@@ -28,5 +30,9 @@ export class ActiveBookingsComponent {
 
   getStatusLabel(status: BookingStatus): string {
     return BookingStatus[status];
+  }
+
+  getStatusKey(status: BookingStatus): string {
+    return `BOOKING_STATUS.${this.getStatusLabel(status).toUpperCase()}`;
   }
 }

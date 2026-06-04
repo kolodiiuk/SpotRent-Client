@@ -11,11 +11,12 @@ import { StringSpaceTypePipe } from '../../../../app/shared/pipes/string-space-t
 import { AttributeValue } from '../../models/attribute-value';
 import { LocalBooleanPipe } from '../../../../app/shared/pipes/local-boolean.pipe';
 import { LocalDatePipe } from '../../../../app/shared/pipes';
+import { BookingFormComponent } from '../../../bookings/components/booking-form/booking-form.component';
 
 @Component({
   selector: 'space-details',
   standalone: true,
-  imports: [RouterModule, SpaceAvailabilityComponent, AsyncPipe, TranslateModule, StringSpaceTypePipe, LocalBooleanPipe, LocalDatePipe],
+  imports: [RouterModule, SpaceAvailabilityComponent, AsyncPipe, TranslateModule, StringSpaceTypePipe, LocalBooleanPipe, LocalDatePipe, BookingFormComponent],
   templateUrl: './space-details.component.html',
   styleUrl: './space-details.component.css'
 })
@@ -24,6 +25,7 @@ export class SpaceDetailsComponent implements OnInit {
   space$!: Observable<Space | null>;
   isLoading = false;
   errorKey = '';
+  showBookingForm = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +39,7 @@ export class SpaceDetailsComponent implements OnInit {
       distinctUntilChanged(),
       tap((id) => {
         this.spaceId = id;
+        this.showBookingForm = false;
       }),
       switchMap(id => {
         this.isLoading = true;
@@ -99,5 +102,9 @@ export class SpaceDetailsComponent implements OnInit {
     }
 
     return `${space.ownerDto.firstName} ${space.ownerDto.lastName}`.trim();
+  }
+
+  openBookingForm(): void {
+    this.showBookingForm = true;
   }
 }

@@ -125,9 +125,15 @@ import { SubscriptionPlan } from '../../../subscription-plans/models/subscriptio
               Cancel
             </button>
             @if (isEditMode) {
-              <button type="button" (click)="deactivate()" class="rounded-lg bg-yellow-50 px-5 py-2 font-medium text-yellow-700 hover:bg-yellow-100">
-                Deactivate
-              </button>
+              @if (plan?.isActive) {
+                <button type="button" (click)="deactivate()" class="rounded-lg bg-yellow-50 px-5 py-2 font-medium text-yellow-700 hover:bg-yellow-100">
+                  Deactivate
+                </button>
+              } @else {
+                <button type="button" (click)="activate()" class="rounded-lg bg-emerald-50 px-5 py-2 font-medium text-emerald-700 hover:bg-emerald-100">
+                  Activate
+                </button>
+              }
             }
             @if (isEditMode) {
               <button type="button" (click)="delete()" class="rounded-lg bg-danger-50 dark:bg-danger-900/30 px-5 py-2 font-medium text-danger-700 dark:text-danger-300 hover:bg-danger-100 dark:hover:bg-danger-900/50">
@@ -290,6 +296,24 @@ export class SubscriptionPlanForm implements OnInit {
       error: (err) => {
         console.error('Failed to deactivate subscription plan', err);
         this.error = 'Failed to deactivate subscription plan.';
+      }
+    });
+  }
+
+  activate(): void {
+    if (!this.planId) {
+      return;
+    }
+
+    if (!confirm('Activate this subscription plan?')) {
+      return;
+    }
+
+    this.planService.activatePlan(this.planId).subscribe({
+      next: () => this.router.navigate(['/owner/subscription-plans']),
+      error: (err) => {
+        console.error('Failed to activate subscription plan', err);
+        this.error = 'Failed to activate subscription plan.';
       }
     });
   }

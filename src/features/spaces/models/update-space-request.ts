@@ -1,6 +1,7 @@
 import {AttributeValue} from './attribute-value';
 import {SpaceType} from './space-type';
 import {WorkingHours} from './working-hours';
+import {CreateSpaceAddressRequest} from './space-address';
 
 export interface UpdateSpaceRequest {
   name: string;
@@ -10,7 +11,8 @@ export interface UpdateSpaceRequest {
   capacity: number;
   areaSqm: number;
   hourlyRate: number;
-  addressId: number;
+  addressId?: number;
+  address?: CreateSpaceAddressRequest;
   imageUrl?: string;
   isAvailable: boolean;
   ownerId: number;

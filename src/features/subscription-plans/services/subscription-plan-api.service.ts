@@ -49,6 +49,11 @@ export class SubscriptionPlanApiService {
     return this.http.put<void>(url, {});
   }
 
+  activateSubscriptionPlan(id: number): Observable<void> {
+    const url = `${this.apiUrl}/activate/${id}`;
+    return this.http.put<void>(url, {});
+  }
+
   deleteSubscriptionPlan(id: number): Observable<void> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url);

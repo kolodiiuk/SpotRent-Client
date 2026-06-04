@@ -86,10 +86,17 @@
                   </td>
                   <td class="px-6 py-4 text-right">
                     <div class="inline-flex gap-2">
-                      <button (click)="deactivate(plan.id, $event)"
-                              class="rounded-md bg-yellow-50 px-3 py-1.5 text-xs font-medium text-yellow-700 hover:bg-yellow-100">
-                        Deactivate
-                      </button>
+                      @if (plan.isActive) {
+                        <button (click)="deactivate(plan.id, $event)"
+                                class="rounded-md bg-yellow-50 px-3 py-1.5 text-xs font-medium text-yellow-700 hover:bg-yellow-100">
+                          Deactivate
+                        </button>
+                      } @else {
+                        <button (click)="activate(plan.id, $event)"
+                                class="rounded-md bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100">
+                          Activate
+                        </button>
+                      }
                       <button (click)="deletePlan(plan.id, $event)"
                               class="rounded-md bg-danger-50 dark:bg-danger-900/30 px-3 py-1.5 text-xs font-medium text-danger-700 dark:text-danger-300 hover:bg-danger-100 dark:hover:bg-danger-900/50">
                         Delete

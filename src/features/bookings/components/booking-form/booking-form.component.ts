@@ -1,41 +1,44 @@
 import { CommonModule } from '@angular/common';
-import {Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CreateBookingPayload } from '../../models/create-booking-payload';
 import { BookingCreationResponse } from '../../models/booking.model';
+import { BookingService } from '../../services/booking.service';
+import { submitLiqPayCheckout } from '../../../../app/shared/utils/liqpay-checkout';
+import { LocaleService } from '../../../../app/services/locale.service';
+import { LocalDatePipe, LocalTimePipe } from '../../../../app/shared/pipes';
 
-type BookingSubmitState = 'idle' | 'invalid' | 'subscription-covered' | 'payment-required';
+type BookingSubmitState = 'idle' | 'invalid' | 'subscription-covered' | 'payment-required' | 'api-error';
 
 @Component({
   selector: 'booking-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, LocalDatePipe, LocalTimePipe],
   templateUrl: 'booking-form.component.html',
   styleUrl: 'booking-form.component.css'
 })
-export class BookingFormComponent implements OnChanges {
+export class BookingFormComponent {
   @Input() defaultSpaceId: number | null = null;
-  @Input() isSpaceAvailable = true;
   @Input() hourlyRate: number | null = null;
 
   submitState: BookingSubmitState = 'idle';
   submitMessage = '';
+  isSubmitting = false;
   pendingLiqPayPayload: BookingCreationResponse['liqPayPaymentData'] | null = null;
 
   private fb = inject(FormBuilder);
+  private bookingService = inject(BookingService);
+  private router = inject(Router);
+  private translate = inject(TranslateService);
+  readonly locale = inject(LocaleService);
 
   readonly form = this.fb.nonNullable.group({
-    spaceId: [0, [Validators.required, Validators.min(1)]],
     startTime: ['', Validators.required],
-    endTime: ['', Validators.required],
-    // Temporary placeholder switch to model post-create flow branches.
-    hasSubscriptionForSpace: [true]
+    endTime: ['', Validators.required]
   });
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['defaultSpaceId'] && this.defaultSpaceId && this.defaultSpaceId > 0) {
-      this.form.patchValue({ spaceId: this.defaultSpaceId });
-    }
-  }
 
   get estimatedTotal(): number | null {
     if (this.hourlyRate == null) {
@@ -52,56 +55,109 @@ export class BookingFormComponent implements OnChanges {
     return Math.round(hours * this.hourlyRate * 100) / 100;
   }
 
+  get selectedStartTime(): string {
+    return this.form.controls.startTime.value;
+  }
+
+  get selectedEndTime(): string {
+    return this.form.controls.endTime.value;
+  }
+
   onSubmit(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
     this.form.markAllAsTouched();
     this.submitState = 'idle';
     this.submitMessage = '';
     this.pendingLiqPayPayload = null;
 
-    if (!this.isSpaceAvailable || this.form.invalid) {
+    if (!this.defaultSpaceId || this.defaultSpaceId < 1 || this.form.invalid) {
       this.submitState = 'invalid';
-      this.submitMessage = 'Fill required fields and ensure the selected space is available.';
+      this.submitMessage = this.translate.instant('BOOKING_FORM.ERROR_REQUIRED_TIMES');
       return;
     }
 
     const payload = this.buildPayload();
-    this.processCreateBookingFlow(payload, this.form.controls.hasSubscriptionForSpace.value);
+    this.processCreateBookingFlow(payload);
   }
 
   private buildPayload(): CreateBookingPayload {
     return {
-      spaceId: this.form.controls.spaceId.value,
+      spaceId: this.defaultSpaceId!,
       startTime: this.toIsoString(this.form.controls.startTime.value),
       endTime: this.toIsoString(this.form.controls.endTime.value)
     };
   }
 
-  private processCreateBookingFlow(payload: CreateBookingPayload, hasSubscriptionForSpace: boolean): void {
-    // TODO: replace this placeholder with:
-    // bookingService.createBooking(payload).subscribe(response => this.handleCreateBookingResponse(response, hasSubscriptionForSpace));
-    const draftResponse: BookingCreationResponse = {
-      bookingId: 0,
-      liqPayPaymentData: null
-    };
-
-    this.handleCreateBookingResponse(draftResponse, hasSubscriptionForSpace);
+  private processCreateBookingFlow(payload: CreateBookingPayload): void {
+    this.isSubmitting = true;
+    this.bookingService.createBooking(payload)
+      .pipe(finalize(() => {
+        this.isSubmitting = false;
+      }))
+      .subscribe({
+        next: response => this.handleCreateBookingResponse(response),
+        error: error => this.handleCreateBookingError(error)
+      });
   }
 
-  private handleCreateBookingResponse(
-    response: BookingCreationResponse,
-    hasSubscriptionForSpace: boolean
-  ): void {
-    if (hasSubscriptionForSpace) {
-      this.submitState = 'subscription-covered';
-      this.submitMessage =
-        'Booking will proceed without payment redirect when an active space subscription exists.';
+  private handleCreateBookingResponse(response: BookingCreationResponse): void {
+    this.pendingLiqPayPayload = response.liqPayPaymentData ?? null;
+    if (this.pendingLiqPayPayload) {
+      this.submitState = 'payment-required';
+      this.submitMessage = this.translate.instant('BOOKING_FORM.PAYMENT_REQUIRED');
+      submitLiqPayCheckout(this.pendingLiqPayPayload);
       return;
     }
 
-    this.submitState = 'payment-required';
-    this.pendingLiqPayPayload = response.liqPayPaymentData ?? null;
-    this.submitMessage =
-      'Payment is required. TODO: redirect user to LiqPay page using response.liqPayPaymentData.';
+    this.submitState = 'subscription-covered';
+    this.submitMessage = this.translate.instant('BOOKING_FORM.SUBSCRIPTION_COVERED');
+    void this.router.navigate(['/user/my-bookings', response.bookingId]);
+  }
+
+  private handleCreateBookingError(error: unknown): void {
+    this.submitState = 'api-error';
+    this.submitMessage = this.mapCreateBookingError(error);
+  }
+
+  private mapCreateBookingError(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return this.translate.instant('BOOKING_FORM.ERROR_CREATE');
+    }
+
+    if (typeof error.error === 'string' && error.error.trim()) {
+      return error.error;
+    }
+
+    if (error.error?.message) {
+      return error.error.message;
+    }
+
+    if (error.status === 400) {
+      return this.translate.instant('BOOKING_FORM.ERROR_INVALID_REQUEST');
+    }
+
+    if (error.status === 401) {
+      return this.translate.instant('BOOKING_FORM.ERROR_UNAUTHORIZED');
+    }
+
+    return this.translate.instant('BOOKING_FORM.ERROR_CREATE');
+  }
+
+  get submitMessageClasses(): string {
+    const baseClasses = 'mt-4 rounded-md border px-3 py-2 text-sm';
+    switch (this.submitState) {
+      case 'subscription-covered':
+        return `${baseClasses} border-success-200 dark:border-success-900/50 bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300`;
+      case 'payment-required':
+        return `${baseClasses} border-warning-200 dark:border-warning-900/50 bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-300`;
+      case 'api-error':
+        return `${baseClasses} border-danger-200 dark:border-danger-900/50 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300`;
+      default:
+        return `${baseClasses} border-neutral-300 dark:border-neutral-700 bg-neutral-100/80 dark:bg-neutral-800/70 text-neutral-700 dark:text-neutral-300`;
+    }
   }
 
   private toIsoString(value: string): string {

@@ -1,7 +1,7 @@
 <div class="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
   <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">Subscription History</h1>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">{{ 'USER_SUBSCRIPTIONS.HISTORY_TITLE' | translate }}</h1>
     </div>
   </div>
 
@@ -12,20 +12,19 @@
       <app-loader></app-loader>
     } @else if (history.length === 0) {
       <div class="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 p-12 text-center shadow-md backdrop-blur-sm">
-        <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">No history yet</h2>
-        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Historical subscription activity will appear here once you have previous
-        plans.</p>
+        <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.NO_HISTORY' | translate }}</h2>
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.NO_HISTORY_TEXT' | translate }}</p>
       </div>
     } @else {
       <div class="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/85 dark:bg-neutral-900/85 shadow-md backdrop-blur-sm">
         <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
           <thead class="bg-neutral-100/80 dark:bg-neutral-800/80">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Plan</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Active</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Started</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Expires</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_SUBSCRIPTIONS.PLAN' | translate }}</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_SUBSCRIPTIONS.STATUS' | translate }}</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'COMMON.ACTIVE' | translate }}</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_SUBSCRIPTIONS.STARTED' | translate }}</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">{{ 'USER_SUBSCRIPTIONS.EXPIRES' | translate }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -33,7 +32,7 @@
               <tr class="hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80">
                 <td class="px-6 py-4">
                   <p class="font-semibold text-neutral-900 dark:text-neutral-100">{{ item.subscriptionPlanName }}</p>
-                  <p class="text-xs text-neutral-500 dark:text-neutral-400">Plan ID: {{ item.subscriptionPlanId }}</p>
+                  <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.PLAN_ID' | translate }}: {{ item.subscriptionPlanId }}</p>
                 </td>
                 <td class="px-6 py-4">
                   <span
@@ -46,12 +45,14 @@
                     [class.text-red-700]="subscriptionStatusVariant(item.subscriptionStatus) === 'danger'"
                     [class.bg-sky-100]="subscriptionStatusVariant(item.subscriptionStatus) === 'info'"
                     [class.text-sky-700]="subscriptionStatusVariant(item.subscriptionStatus) === 'info'">
-                    {{ subscriptionStatusTokens(item.subscriptionStatus).join(', ') }}
+                    @for (key of getSubscriptionStatusKeys(item.subscriptionStatus); track key; let last = $last) {
+                      {{ key | translate }}{{ last ? '' : ', ' }}
+                    }
                   </span>
                 </td>
-                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ item.isActive ? 'Yes' : 'No' }}</td>
-                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ item.startedAt | date:'mediumDate' }}</td>
-                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ item.expiresAt | date:'mediumDate' }}</td>
+                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ (item.isActive ? 'COMMON.YES' : 'COMMON.NO') | translate }}</td>
+                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ item.startedAt | localDate }}</td>
+                <td class="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ item.expiresAt | localDate }}</td>
               </tr>
             }
           </tbody>

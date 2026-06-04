@@ -1,7 +1,7 @@
 <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
   <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">My Subscriptions</h1>
+      <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 md:text-3xl">{{ 'USER_SUBSCRIPTIONS.MY_SUBSCRIPTIONS' | translate }}</h1>
     </div>
   </div>
 
@@ -12,13 +12,12 @@
       <app-loader></app-loader>
     } @else if (subscriptions.length === 0) {
       <div class="layout-glass-card p-12 text-center">
-        <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">No subscriptions yet</h2>
-        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Choose a plan from the public catalog to create
-          one.</p>
+        <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ 'USER_SUBSCRIPTIONS.NO_SUBSCRIPTIONS' | translate }}</h2>
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ 'USER_SUBSCRIPTIONS.NO_SUBSCRIPTIONS_TEXT' | translate }}</p>
         <div class="mt-6">
           <a routerLink="/subscription-plans"
              class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
-            View plans
+            {{ 'USER_SUBSCRIPTIONS.VIEW_PLANS' | translate }}
           </a>
         </div>
       </div>
@@ -42,26 +41,26 @@
                 [class.text-red-700]="subscriptionStatusVariant(item.subscription.status) === 'danger'"
                 [class.bg-sky-100]="subscriptionStatusVariant(item.subscription.status) === 'info'"
                 [class.text-sky-700]="subscriptionStatusVariant(item.subscription.status) === 'info'">
-              {{ subscriptionStatusTokens(item.subscription.status).join(', ') }}
+              @for (key of getSubscriptionStatusKeys(item.subscription.status); track key; let last = $last) {
+                {{ key | translate }}{{ last ? '' : ', ' }}
+              }
             </span>
             </div>
 
             <div class="mt-5 grid grid-cols-1 gap-3 text-sm text-neutral-700 dark:text-neutral-300 sm:grid-cols-2">
-              <p><span class="font-medium">Price:</span> {{ item.plan.price }}</p>
-              <p><span class="font-medium">Included hours:</span> {{ item.plan.includedHours }}</p>
-              <p><span class="font-medium">Start:</span> {{ item.subscription.startDate | date:'mediumDate' }}</p>
-              <p><span class="font-medium">End:</span> {{ item.subscription.endDate | date:'mediumDate' }}</p>
-              <p><span class="font-medium">Payment:</span> {{ paymentStatusLabel(item.subscription.paymentStatus) }}</p>
-              <p><span class="font-medium">Hours used:</span> {{ item.subscription.hoursUsed }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.PRICE' | translate }}:</span> {{ item.plan.price }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.INCLUDED_HOURS' | translate }}:</span> {{ item.plan.includedHours }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.START' | translate }}:</span> {{ item.subscription.startDate | localDate }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.END' | translate }}:</span> {{ item.subscription.endDate | localDate }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.PAYMENT' | translate }}:</span> {{ getPaymentStatusKey(item.subscription.paymentStatus) | translate }}</p>
+              <p><span class="font-medium">{{ 'USER_SUBSCRIPTIONS.HOURS_USED' | translate }}:</span> {{ item.subscription.hoursUsed }}</p>
             </div>
 
             <div class="mt-6 flex flex-wrap gap-3">
               <a [routerLink]="['/user/subscriptions', item.subscription.id]"
-                 class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">View
-                details</a>
+                 class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">{{ 'USER_SUBSCRIPTIONS.VIEW_DETAILS' | translate }}</a>
               <a [routerLink]="['/user/subscriptions', item.subscription.id, 'change']"
-                 class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">Change
-                plan</a>
+                 class="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800">{{ 'USER_SUBSCRIPTIONS.CHANGE_PLAN' | translate }}</a>
             </div>
           </article>
         }

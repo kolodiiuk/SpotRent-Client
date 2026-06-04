@@ -1,0 +1,13 @@
+<form
+  class="mt-4 flex justify-end"
+  method="POST"
+  [attr.action]="checkoutUrl"
+  target="_self">
+  <input type="hidden" name="data" [value]="paymentData().data" />
+  <input type="hidden" name="signature" [value]="paymentData().signature" />
+  <button
+    type="submit"
+    class="rounded-lg bg-warning-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:bg-warning-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-warning-400 focus:ring-offset-2 dark:focus:ring-offset-neutral-900">
+    Pay with LiqPay
+  </button>
+</form>

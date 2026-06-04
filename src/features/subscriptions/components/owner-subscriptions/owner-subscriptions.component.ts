@@ -70,6 +70,25 @@ export class OwnerSubscriptionsComponent implements OnInit {
     });
   }
 
+  activate(planId: number, event: Event) {
+    event.stopPropagation();
+    const confirmed = confirm('Activate this subscription plan?');
+    if (!confirmed) {
+      return;
+    }
+
+    this.planService.activatePlan(planId).subscribe({
+      next: () => {
+        this.actionMessage = 'Subscription plan activated.';
+        this.loadPlans();
+      },
+      error: (err) => {
+        console.error('Failed to activate plan', err);
+        this.error = 'Failed to activate subscription plan.';
+      }
+    });
+  }
+
   deletePlan(planId: number, event: Event) {
     event.stopPropagation();
     const confirmed = confirm('Delete this subscription plan permanently?');

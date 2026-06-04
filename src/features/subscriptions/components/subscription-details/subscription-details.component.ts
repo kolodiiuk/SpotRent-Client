@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserSubscriptionService } from '../../services/user-subscription.service';
 import { SubscriptionWithPlan } from '../../models/subscription-view.model';
 import {
@@ -10,11 +11,12 @@ import {
 } from '../../models/subscription-dto.model';
 import { ErrorComponent } from "../../../../app/shared/components/error/error.component";
 import { LoaderComponent } from "../../../../app/shared/components/loader.component";
+import { LocalDatePipe, LocalTimePipe } from '../../../../app/shared/pipes';
 
 @Component({
   selector: 'app-subscription-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, ErrorComponent, LoaderComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, ErrorComponent, LoaderComponent, LocalDatePipe, LocalTimePipe],
   templateUrl: 'subscription-details.component.html'
 })
 export class SubscriptionDetailsComponent implements OnInit {
@@ -28,14 +30,15 @@ export class SubscriptionDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userSubscriptionService: UserSubscriptionService
+    private userSubscriptionService: UserSubscriptionService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('id'));
       if (!id) {
-        this.error = 'Invalid subscription id.';
+        this.error = this.translate.instant('USER_SUBSCRIPTIONS.ERROR_INVALID_ID');
         return;
       }
 
@@ -56,9 +59,17 @@ export class SubscriptionDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load subscription details', err);
-        this.error = 'Failed to load subscription details.';
+        this.error = this.translate.instant('USER_SUBSCRIPTIONS.ERROR_DETAILS');
         this.isLoading = false;
       }
     });
+  }
+
+  getSubscriptionStatusKeys(status: number): string[] {
+    return this.subscriptionStatusTokens(status).map(token => `SUBSCRIPTION_STATUS.${token.toUpperCase().replace(/ /g, '_')}`);
+  }
+
+  getPaymentStatusKey(status: number): string {
+    return `PAYMENT_STATUS.${this.paymentStatusLabel(status).toUpperCase().replace(/ /g, '_')}`;
   }
 }

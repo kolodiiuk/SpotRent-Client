@@ -4,10 +4,13 @@ import { SubscriptionPlan } from '../../models/subscription-plan';
 import { SubscriptionPlanService } from '../../services/subsription-plan.service';
 import { UserSubscriptionService } from '../../../subscriptions/services/user-subscription.service';
 import { AuthService } from '../../../auth/services/auth.service';
-import {catchError, finalize, Observable, of} from 'rxjs';
+import {catchError, finalize, Observable, of, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {Duration} from '../../models/duration';
+import {LiqPayPaymentData} from '../../../subscriptions/models/liq-pay-payment-data';
+import {HttpErrorResponse} from '@angular/common/http';
+import {submitLiqPayCheckout} from '../../../../app/shared/utils/liqpay-checkout';
 
 @Component({
   selector: 'app-subscription-plan-details',
@@ -20,6 +23,7 @@ export class SubscriptionPlanDetailsComponent implements OnInit {
   isLoading = false;
   isSubmitting = false;
   error = '';
+  pendingLiqPayPayload: LiqPayPaymentData | null = null;
   durationLabelKeys: Record<Duration, string> = {
     [Duration.Week]: 'SUBSCRIPTION_DURATION.WEEK',
     [Duration.TwoWeeks]: 'SUBSCRIPTION_DURATION.TWO_WEEKS',
@@ -60,11 +64,16 @@ export class SubscriptionPlanDetailsComponent implements OnInit {
     this.isLoading = true;
     this.error = '';
     this.plan = null;
+    this.pendingLiqPayPayload = null;
 
     this.plan$ = this.planService.getPlanDetails(this.planId).pipe(
+      tap((plan) => {
+        this.plan = plan;
+      }),
       catchError(err => {
         this.error = 'SUBSCRIPTION_PLAN_DETAILS.ERROR_LOAD';
         this.isLoading = false;
+        this.plan = null;
         return of(null);
       }),
       finalize(() => {
@@ -74,6 +83,10 @@ export class SubscriptionPlanDetailsComponent implements OnInit {
   }
 
   subscribe(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
     if (!this.planId) {
       return;
     }
@@ -90,18 +103,33 @@ export class SubscriptionPlanDetailsComponent implements OnInit {
 
     this.isSubmitting = true;
     this.error = '';
+    this.pendingLiqPayPayload = null;
 
     this.subscriptionFacade.createSubscriptionForPlan(this.planId).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        this.router.navigate(['/user/subscriptions', response.subscriptionId]);
+        this.pendingLiqPayPayload = response.liqPayPaymentData ?? null;
+        if (this.pendingLiqPayPayload) {
+          submitLiqPayCheckout(this.pendingLiqPayPayload);
+          return;
+        }
+
+        void this.router.navigate(['/user/subscriptions', response.subscriptionId]);
       },
       error: (err) => {
         console.error('Failed to create subscription', err);
-        this.error = 'SUBSCRIPTION_PLAN_DETAILS.ERROR_SUBSCRIBE';
+        this.error = this.getSubscriptionError(err);
         this.isSubmitting = false;
       }
     });
+  }
+
+  private getSubscriptionError(error: unknown): string {
+    if (error instanceof HttpErrorResponse && typeof error.error === 'string' && error.error.trim()) {
+      return error.error;
+    }
+
+    return 'SUBSCRIPTION_PLAN_DETAILS.ERROR_SUBSCRIBE';
   }
 
   getDurationLabelKey(duration: Duration | string | number | null | undefined): string {
